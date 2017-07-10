@@ -11,15 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PageController@getIndex');
+Route::get('contact', 'PageController@getContact');
+Route::post('contact', 'PageController@postContact');
 
 Route::resource('projects', 'ProjectController');
 Route::resource('sprints', 'SprintController');
 Route::resource('tasks', 'TaskController');
-Route::resource('subtasks', 'SubtaskController');
 Route::resource('profile', 'ProfileController');
 
 Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
