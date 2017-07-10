@@ -20,3 +20,6 @@ Route::resource('sprints', 'SprintController');
 Route::resource('tasks', 'TaskController');
 Route::resource('subtasks', 'SubtaskController');
 Route::resource('profile', 'ProfileController');
+
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
