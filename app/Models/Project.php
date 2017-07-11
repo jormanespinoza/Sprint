@@ -8,10 +8,10 @@ class Project extends Model
 {
     public function users()
     {
-        $this->hasToMany('App\Models\User');
+        $this->belongsToMany('App\Models\User');
     }
 
     public function sprints() {
-        $this->hasToMany('App\Models\Sprint');
+        $this->hasMany('App\Models\Sprint');
     }
 }
