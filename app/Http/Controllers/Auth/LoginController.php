@@ -36,4 +36,36 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * Get the post register / login redirect path.
+     *
+     * @return string
+     */
+    public function redirectPath()
+    {
+        switch (auth()->user()->role_id)
+        {
+            case 1:
+                # Administrators
+                return '/admin';
+                break;
+            case 2:
+                # Leaders
+                return '/leader';
+                break;
+            case 3:
+                # Developers
+                return '/developer';
+                break;
+            case 4:
+                # Clients
+                return '/client';
+                break;
+            default:
+                return '/dashboard';
+                break;
+        }
+        return '/';
+    }
 }

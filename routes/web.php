@@ -15,7 +15,14 @@ Route::get('/', 'PageController@getIndex');
 Route::get('contact', 'PageController@getContact');
 Route::post('contact', 'PageController@postContact');
 
-Route::resource('projects', 'ProjectController');
+Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() {
+    Route::get('/', function(){
+        return view('users.administrator.index');
+    });
+    Route::resource('users', 'UserController');
+    Route::resource('projects', 'ProjectController');
+});
+
 Route::resource('sprints', 'SprintController');
 Route::resource('tasks', 'TaskController');
 Route::resource('profile', 'ProfileController');

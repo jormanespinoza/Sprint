@@ -5,9 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 use Mail;
+use Purifier;
 
 class PageController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth')->except('getIndex');
+    }
+
     public function getIndex()
     {
         return view('pages.welcome');
@@ -29,14 +40,14 @@ class PageController extends Controller
         $data = [
             'email'=> $request->email,
             'subject' => $request->subject,
-            'bodyMessage' => $request->message
+            'bodyMessage' => Purifier::clean($request->message)
         ];
 
         Mail::send('emails.contact', $data, function ($message) use ($data) {
             $message->from($data['email']);
             $message->to('espinoza-dev@gmail.com');
             $message->subject($data['subject']);
-        }); // Mail:queue();
+        });
 
         Session::flash('success', 'Tu mensaje ha sido enviado con éxito!');
         return redirect('/');
