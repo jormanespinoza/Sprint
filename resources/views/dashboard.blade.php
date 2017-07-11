@@ -7,12 +7,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     @if(Auth::user()->role_id === 1)
-                        3D Sprint - Panel de Administración
+                        Panel de Administración
                     @else
-                        3D Sprint - Proyecto
+                        Proyectos
                     @endif
                 </div>
-                
+
                 <div class="panel-body">
                     @if(Auth::user()->role_id === 1)
                         Ingresaste como Administrador | Nivel de Usuario: {{ Auth::user()->role_id }}

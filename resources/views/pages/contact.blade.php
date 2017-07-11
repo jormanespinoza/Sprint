@@ -14,7 +14,7 @@
                 <h1>Formulario de Contacto</h1>
                 <p>Puedes ingresar observaciones mediante el siguiente formulario</p>
                 <hr>
-                <form action="{{ url('contact') }}" method="POST" data-parsley-validate="">
+                <form action="{{ url('contact') }}" method="POST" data-parsley-validate="" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label name="email">Correo Electrónico:</label>
@@ -44,19 +44,7 @@
     {!! Html::script('plugins/trumbowyg/langs/es.min.js') !!}
     <script>
         $('textarea').trumbowyg({
-            lang: 'es',
-            btns: [
-                ['viewHTML'],
-                ['formatting'],
-                'btnGrp-semantic',
-                ['superscript', 'subscript'],
-                ['link'],
-                'btnGrp-justify',
-                'btnGrp-lists',
-                ['horizontalRule'],
-                ['removeformat'],
-                ['fullscreen']
-            ]
+            lang: 'es'
         });
     </script>
 @endsection
