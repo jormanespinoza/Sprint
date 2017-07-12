@@ -22,7 +22,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
     Route::resource('users', 'UserController');
     Route::get('users/{id}/destroy', [
         'uses' => 'UserController@destroy',
-        'as' => 'admin.users.destroy'
+        'as' => 'users.destroy'
 	]);
     Route::resource('projects', 'ProjectController');
 });
