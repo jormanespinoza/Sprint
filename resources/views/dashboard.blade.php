@@ -15,16 +15,16 @@
 
                 <div class="panel-body">
                     @if(Auth::user()->role_id === 1)
-                        Ingresaste como Administrador | Nivel de Usuario: {{ Auth::user()->role_id }}
+                        Ingresaste como {{ $role }} | Nivel de Usuario: {{ Auth::user()->role_id }}
                     @endif
                     @if(Auth::user()->role_id === 2)
-                        Ingresaste como Líder | Nivel de Usuario: {{ Auth::user()->role_id }}
+                        Ingresaste como {{ $role }} | Nivel de Usuario: {{ Auth::user()->role_id }}
                     @endif
                     @if(Auth::user()->role_id === 3)
-                         Ingresaste como Desarrollador | Nivel de Usuario: {{ Auth::user()->role_id }}
+                         Ingresaste como {{ $role }} | Nivel de Usuario: {{ Auth::user()->role_id }}
                      @endif
                      @if(Auth::user()->role_id === 4)
-                        Ingresaste como Cliente | Nivel de Usuario: {{ Auth::user()->role_id }}
+                        Ingresaste como {{ $role }} | Nivel de Usuario: {{ Auth::user()->role_id }}
                     @endif
                 </div>
             </div>

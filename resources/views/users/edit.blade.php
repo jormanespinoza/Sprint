@@ -1,21 +1,22 @@
 @extends('layouts.app')
 
+@section('title', '| Crear Usuario')
+
 @section('content')
-<div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading">Registrarse</div>
+            
+            
+            <div class="panel-heading">Crear Usuario</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}" novalidate>
+                    {!! Form::model($user, ['route' => ['users.update', $user->id], 'class' => 'form-horizontal', 'novalidate' => '']) !!}
                         {{ csrf_field() }}
-
+                        {{ Form::hidden('_method', 'PUT') }}
                         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-                            <label for="first_name" class="col-md-4 control-label">Nombre</label>
-
+                            {{ Form::label('first_name', 'Nombre', ['class' => 'col-md-4 control-label', 'for' => 'first_name'])}}
                             <div class="col-md-6">
-                                <input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" required autofocus>
-
+                                {{ Form::text('first_name', null, ['class' => 'form-control', 'for' => 'first_name', 'required' => '']) }}
                                 @if ($errors->has('first_name'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('first_name') }}</strong>
@@ -25,10 +26,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-                            <label for="last_name" class="col-md-4 control-label">Apellido</label>
-
+                            {{ Form::label('last_name', 'Apellido', ['class' => 'col-md-4 control-label', 'for' => 'last_name'])}}
                             <div class="col-md-6">
-                                <input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" required>
+                                {{ Form::text('last_name', null, ['class' => 'form-control', 'for' => 'last_name', 'required' => '']) }}
 
                                 @if ($errors->has('last_name'))
                                     <span class="help-block">
@@ -39,10 +39,9 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Correo Electrónico</label>
-
+                            {{ Form::label('email', 'Correo Electrónico', ['class' => 'col-md-4 control-label', 'for' => 'email'])}}
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                {{ Form::email('email', $user->email, ['class' => 'form-control', 'disabled' => 'disabled']) }}
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -52,39 +51,31 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Contraseña</label>
-
+                        <div class="form-group{{ $errors->has('role_id') ? ' has-error' : '' }}">
+                            {{ Form::label('role_id', 'Nivel de Acceso', ['class' => 'col-md-4 control-label', 'for' => 'role_id']) }}
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                                @if (Auth::user()->id == $user->id)
+                                    {{ Form::select('role_id', ['1' => 'Administrador'], null, ['class' => 'form-control']) }}
+                                @else
+                                    {{ Form::select('role_id', $roles, null, ['class' => 'form-control']) }}
+                                @endif
 
-                                @if ($errors->has('password'))
+                                @if ($errors->has('role_id'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
+                                        <strong>{{ $errors->first('role_id') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirmar Contraseña</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Registrar
-                                </button>
+                                {{ Form::submit('Registrar', ['class' => 'btn btn-primary']) }}
                             </div>
                         </div>
-                    </form>
+                    {{ Form::close() }}
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

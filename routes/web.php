@@ -17,7 +17,7 @@ Route::post('contact', 'PageController@postContact');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() {
     Route::get('/', function(){
-        return view('users.administrator.index');
+        return view('roles.administrator.index');
     });
     Route::resource('users', 'UserController');
     Route::resource('projects', 'ProjectController');

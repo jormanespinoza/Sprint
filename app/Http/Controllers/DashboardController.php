@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -23,6 +26,11 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        $user_role = Auth::user()->role_id;
+        $role = Role::where('id', $user_role)->first();
+        $role_name = $role->name;
+
+        return view('dashboard')
+            ->with('role', $role_name);
     }
 }

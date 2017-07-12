@@ -1,15 +1,17 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Registrarse</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}" novalidate>
-                        {{ csrf_field() }}
+@section('title', '| Crear Usuario')
 
+@section('content')
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+            
+            
+            <div class="panel-heading">Crear Usuario</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" method="POST" action="{{route('users.store') }}" novalidate>
+                        {{ csrf_field() }}
                         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
                             <label for="first_name" class="col-md-4 control-label">Nombre</label>
 
@@ -52,6 +54,24 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('role_id') ? ' has-error' : '' }}">
+                            <label for="role_id" class="col-md-4 control-label">Nivel</label>
+
+                            <div class="col-md-6">
+                                <select id="role_id" type="" class="form-control" name="role_id" value="{{ old('role_id') }}" required>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id}}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @if ($errors->has('role_id'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('role_id') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-md-4 control-label">Contraseña</label>
 
@@ -86,5 +106,4 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
