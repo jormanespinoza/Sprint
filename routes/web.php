@@ -15,20 +15,18 @@ Route::get('/', 'PageController@getIndex');
 Route::get('contact', 'PageController@getContact');
 Route::post('contact', 'PageController@postContact');
 
+// Administrator Routes
 Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() {
     Route::get('/', function(){
         return view('roles.administrator.index');
     });
     Route::resource('users', 'UserController');
-    Route::get('users/{id}/destroy', [
-        'uses' => 'UserController@destroy',
-        'as' => 'users.destroy'
-	]);
     Route::resource('projects', 'ProjectController');
 });
 
 Route::resource('sprints', 'SprintController');
 Route::resource('tasks', 'TaskController');
+
 Route::resource('profile', 'ProfileController');
 
 Auth::routes();

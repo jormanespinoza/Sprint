@@ -6,12 +6,12 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-            
-            
-            <div class="panel-heading">Crear Usuario</div>
+                <div class="panel-heading">Crear Usuario</div>
+
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{route('users.store') }}" novalidate>
                         {{ csrf_field() }}
+
                         <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
                             <label for="first_name" class="col-md-4 control-label">Nombre</label>
 

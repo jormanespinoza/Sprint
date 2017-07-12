@@ -31,7 +31,9 @@
                         <textarea id="message" name="message" class="form-control" placeholder="Ingresa tu mensaje aquí..." required></textarea>
                     </div>
 
-                    <input type="submit" class="btn btn-success" value="Enviar Mensaje">
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-block btn-success" value="Enviar Mensaje">
+                    </div>
                 </form>
             </div>
         </div>

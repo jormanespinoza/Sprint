@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Role;
 
 class UserTableSeeder extends Seeder
 {
@@ -36,7 +35,6 @@ class UserTableSeeder extends Seeder
         $leader->role_id = 2;
         $leader->password = bcrypt('leader');
         $leader->save();
-        
 
         $administrator = new User();
         $administrator->first_name = 'Jorman';

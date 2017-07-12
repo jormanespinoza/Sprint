@@ -3,7 +3,7 @@
 @section('title', 'Usuario: ' . $user->first_name)
 
 @section('content')
-    <div class="row panel">
+    <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="row">
                 <div class="col-md-4">
@@ -42,21 +42,56 @@
         </div>
     </div>
     <div class="row nav">
-        <div class="col-md-8 col-xs-8 col-xs-offset-2">
-            <a href="{{ route('users.edit', $user->id) }}">
-                <div class="col-md-5 col-xs-5 well text-center">
-                    <span class="glyphicon glyphicon-edit"></span> Editar
-                </div>
-            </a>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="row">
+                <div class="pull-right">
+                    <a href="{{ route('users.edit', $user->id) }}" class="well text-center">
+                        <span class="glyphicon glyphicon-edit"></span> Editar
+                    </a>
 
-            @if (Auth::user()->id != $user->id)
-                <a href="{{ route('users.destroy', $user->id) }}" onclick="return confirm('¿Está seguro de que desea eliminar el usuario?')" title="Eliminar">
-                    <div class="col-md-5 col-md-offset-1 col-xs-5 col-xs-offset-1 well text-center">
-                        <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
-                    </div>
-                </a>
-            @endif
-            
+                    @if (Auth::user()->id != $user->id)
+                        <a href="" class="well text-center" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
+                        </a>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
+    {{-- Confirmation Modal   --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="confirmationModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">3D Sprint - Confirmación</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Seguro deseas eliminar este usuario?</p>
+                </div>
+                <div class="modal-footer">
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                        </li>
+
+                        <li>
+                            {{ Form::open(['route' => ['users.destroy', $user->id]]) }}
+                                {{ Form::hidden('_method', 'DELETE') }}
+                                {{ Form::submit('Sí', ['class' => 'btn btn-danger']) }}
+                            {{ Form::close() }}
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+@endsection
+
+@section('scripts')
+    <script>
+        $('#confirmationModal').on('shown.bs.modal', function () {
+            $('#delete-button').focus()
+        })
+    </script>
 @endsection

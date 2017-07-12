@@ -4,17 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Role;
+use Session;
+use Purifier;
 
 class ProjectController extends Controller
 {
-    /*
-     * Middleware
-     */
-     public function __construct()
-    {
-        $this->middleware('administrator');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +18,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return 'Projects';
+        // code
     }
 
     /**
@@ -32,7 +28,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('projects.create');
     }
 
     /**
@@ -43,7 +39,18 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name'          => 'required|string|min:2|max:255',
+            'description'   => 'required|min:4'
+        ]);
+
+        $project = new Project;
+        $project->name          = $request->name;
+        $project->description   = Purifier::clean($request->description);
+        $project->save();
+
+        Session::flash('success', 'El proyecto fue generado de forma satisfactoria');
+        return redirect()->route('projects.show', $project->id);
     }
 
     /**
@@ -52,9 +59,10 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project)
+    public function show($id)
     {
-        //
+        $project = Project::find($id);
+        return view('projects.show')->with('project', $project);
     }
 
     /**
@@ -63,7 +71,7 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project)
+    public function edit(Project $id)
     {
         //
     }
@@ -75,7 +83,7 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, Project $id)
     {
         //
     }
@@ -86,7 +94,7 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project)
+    public function destroy(Project $id)
     {
         //
     }

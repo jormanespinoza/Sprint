@@ -62,7 +62,7 @@ class UserController extends Controller
 
         // send notification and redirects to a view
         Session::flash('success', 'El usuario ha sido creado satistoriamente.');
-        return redirect()->route('users.show', $user->id);
+        return redirect()->route('users.index');
     }
 
     /**

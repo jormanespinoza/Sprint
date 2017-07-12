@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Traits\DatesTranslator;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, DatesTranslator;
 
     /**
      * The attributes that are mass assignable.
