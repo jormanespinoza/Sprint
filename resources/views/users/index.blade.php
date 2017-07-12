@@ -56,7 +56,7 @@
                                         <td>
                                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-xs btn-default" title="Ver"><span class="glyphicon glyphicon-zoom-in"></span></a>
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-xs btn-warning" title="Editar"><span class="glyphicon glyphicon-edit"></span></a>
-                                            <a href="{{ route('users.destroy', $user->id) }}" onclick="return confirm('¿Está seguro de que desea eliminar el usuario?')" class="btn btn-xs btn-danger" title="Eliminar"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                                            <a href="{{ route('admin.users.destroy', $user->id) }}" onclick="return confirm('¿Está seguro de que desea eliminar el usuario?')" class="btn btn-xs btn-danger" title="Eliminar"><span class="glyphicon glyphicon-remove-sign"></span></a>
                                         </td>
                                     </tr>
                                 @endforeach

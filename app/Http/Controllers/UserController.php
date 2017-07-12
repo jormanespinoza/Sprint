@@ -55,6 +55,7 @@ class UserController extends Controller
         $user->email        = $request->email;
         $user->role_id      = $request->role_id;
         $user->password     = bcrypt($request->password);
+        $user->remember_token = $request['_token'];
 
         // save user
         $user->save();
@@ -132,6 +133,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+
+        Session::flash('success', 'El usuario fue eliminado del sistema de manera exitosa.');
+        return redirect()->route('users.index');
     }
 }

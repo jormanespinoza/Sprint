@@ -20,6 +20,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
         return view('roles.administrator.index');
     });
     Route::resource('users', 'UserController');
+    Route::get('users/{id}/destroy', [
+        'uses' => 'UserController@destroy',
+        'as' => 'admin.users.destroy'
+	]);
     Route::resource('projects', 'ProjectController');
 });
 
