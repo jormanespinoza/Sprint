@@ -1,13 +1,11 @@
 @extends('layouts.app')
 
-@section('title', '| Crear Usuario')
+@section('title', '| Editar Usuario')
 
 @section('content')
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-            
-            
             <div class="panel-heading">Crear Usuario</div>
                 <div class="panel-body">
                     {!! Form::model($user, ['route' => ['users.update', $user->id], 'class' => 'form-horizontal', 'novalidate' => '']) !!}

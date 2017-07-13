@@ -136,7 +136,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
 
-        Session::flash('success', 'El usuario fue eliminado del sistema de manera exitosa.');
+        Session::flash('success', 'El usuario fue eliminado de manera exitosa.');
         return redirect()->route('users.index');
     }
 }

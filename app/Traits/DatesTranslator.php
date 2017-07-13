@@ -11,7 +11,7 @@ trait DatesTranslator
         return new Date($date);
     }
 
-    public function getUpdateddAtAttribute($date)
+    public function getUpdatedAtAttribute($date)
     {
         return new Date($date);
     }

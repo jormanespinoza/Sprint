@@ -81,7 +81,7 @@
                     <h4 class="modal-title">3D Sprint - Confirmación</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Seguro deseas eliminar este usuario?</p>
+                    <p>¿Seguro deseas eliminar el usuario de <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>?</p>
                 </div>
                 <div class="modal-footer">
                     <ul class="list-inline">

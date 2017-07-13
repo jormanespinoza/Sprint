@@ -18,7 +18,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // code
+        $projects = Project::orderBy('created_at', 'desc')->paginate(10);
+        return view('projects.index')->with('projects', $projects);
     }
 
     /**
@@ -66,14 +67,14 @@ class ProjectController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
      *
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $id)
+    public function edit($id)
     {
-        //
+        $project = Project::find($id);
+        return view('projects.edit')->with('project', $project);
     }
 
     /**
@@ -83,9 +84,20 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $id)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name'          => 'required|string|min:2|max:255',
+            'description'   => 'required|min:4'
+        ]);
+
+        $project = Project::find($id);
+        $project->name          = $request->name;
+        $project->description   = Purifier::clean($request->description);
+        $project->save();
+
+        Session::flash('success', 'El proyecto fue actualizado sin problemas.');
+        return redirect()->route('projects.show', $project->id);
     }
 
     /**
@@ -94,8 +106,12 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $id)
+    public function destroy($id)
     {
-        //
+        $project = Project::find($id);
+        $project->delete();
+
+        Session::flash('success', 'El proyecto fue eliminado de manera exitosa.');
+        return redirect()->route('projects.index');
     }
 }

@@ -38,27 +38,24 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="row nav">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="row">
-                <div class="pull-right">
-                    <a href="{{ route('users.edit', $user->id) }}" class="well text-center">
-                        <span class="glyphicon glyphicon-edit"></span> Editar
-                    </a>
-
-                    @if (Auth::user()->id != $user->id)
-                        <a href="" class="well text-center" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                            <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
+                <div class="col-md-8 col-md-offset-4">
+                    <div class="text-right" style="padding: 20px;">
+                        <a href="{{ route('users.edit', $user->id) }}" class="well text-center">
+                            <span class="glyphicon glyphicon-edit"></span> Editar
                         </a>
-                    @endif
+
+                        @if (Auth::user()->id != $user->id)
+                            <a href="" class="well text-center" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                                <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
+                            </a>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    {{-- Confirmation Modal   --}}
+
+    {{-- Confirmation Modal --}}
     <div class="modal fade" tabindex="-1" role="dialog" id="confirmationModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
