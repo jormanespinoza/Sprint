@@ -44,28 +44,10 @@ class LoginController extends Controller
      */
     public function redirectPath()
     {
-        switch (auth()->user()->role_id)
-        {
-            case 1:
-                # Administrators
-                return '/admin';
-                break;
-            case 2:
-                # Leaders
-                return '/leader';
-                break;
-            case 3:
-                # Developers
-                return '/developer';
-                break;
-            case 4:
-                # Clients
-                return '/client';
-                break;
-            default:
-                return '/dashboard';
-                break;
+        if (auth()->user()->role->id == 1) {
+            return '/admin';
+        }else {
+            return '/dashboard';
         }
-        return '/';
     }
 }

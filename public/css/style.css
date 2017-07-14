@@ -1,10 +1,16 @@
+/*
+    # This is the custom 3D Sprint's stylesheet
+    -------------------------------------------
+*/
+
 .logo-login {
     width: 55px;
     height: 55px;
 }
 
 .heading-title {
-    margin-top: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 .show-actions-btn {

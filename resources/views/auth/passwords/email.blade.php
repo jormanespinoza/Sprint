@@ -22,8 +22,10 @@
                             <label for="email" class="col-md-4 control-label">Correo Electrónico</label>
 
                             <div class="col-md-6">
+                            <div class="input-group">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
+                                <span class="input-group-addon" id="email"><span class="glyphicon glyphicon-envelope"></span></span>
+                            </div>
                                 @if ($errors->has('email'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>

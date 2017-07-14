@@ -36,4 +36,18 @@ class ResetPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+
+    /**
+     * Get the post register / login redirect path.
+     *
+     * @return string
+     */
+    public function redirectPath()
+    {
+        if (auth()->user()->role->id == 1) {
+            return '/admin';
+        }else {
+            return '/dashboard';
+        }
+    }
 }

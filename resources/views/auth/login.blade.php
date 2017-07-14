@@ -36,7 +36,7 @@
                             <a class="pull-right" href="{{ route('password.request') }}">
                                 ¿Olvidaste tu contraseña?
                             </a>
-                             <div class="input-group">
+                            <div class="input-group">
                                 <span class="input-group-addon" id="password"><span class="glyphicon glyphicon-lock"></span></span>
                                 <input id="password" type="password" class="form-control" name="password" required>
                             </div>
