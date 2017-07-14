@@ -26,11 +26,7 @@
                             {{ Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])}}
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-3">
-                                {{ Form::submit('Generar', ['class' => 'btn btn-primary btn-block'])}}
-                            </div>
-                        </div>
+                        {{ Form::submit('Generar', ['class' => 'btn btn-primary btn-block'])}}
                     {{ Form::close() }}
                 </div>
             </div>

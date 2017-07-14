@@ -51,7 +51,7 @@ class ProjectController extends Controller
         $project->save();
 
         Session::flash('success', 'El proyecto fue generado de forma satisfactoria');
-        return redirect()->route('projects.show', $project->id);
+        return redirect()->route('projects.index');
     }
 
     /**

@@ -63,6 +63,7 @@
                                         <td>
                                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-xs btn-default" title="Ver"><span class="glyphicon glyphicon-zoom-in"></span></a>
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-xs btn-warning" title="Editar"><span class="glyphicon glyphicon-edit"></span></a>
+
                                             @if(Auth::user()->id == $user->id)
                                                 <button type="button" class="btn btn-xs btn-danger" title="Acción Deshabilitada" disabled>
                                                     <span class="glyphicon glyphicon-remove-sign"></span>
@@ -114,13 +115,4 @@
             </div>
         </div>
     </div>
-   
-@endsection
-
-@section('scripts')
-    <script>
-        $('##confirmationModal-{{ $user->id }}').on('shown.bs.modal', function () {
-            $('#delete-button').focus();
-        })
-    </script>
 @endsection

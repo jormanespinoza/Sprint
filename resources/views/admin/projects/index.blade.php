@@ -88,11 +88,3 @@
         </div>
     </div>
 @endsection
-
-@section('scripts')
-    <script>
-        $('#confirmationModal-{{ $project->id }}').on('shown.bs.modal', function () {
-            $('#delete-button').focus()
-        })
-    </script>
-@endsection
