@@ -16,7 +16,10 @@
                             <label for="first_name" class="col-md-4 control-label">Nombre</label>
 
                             <div class="col-md-6">
-                                <input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" required autofocus>
+                                <div class="input-group">
+                                    <input id="first_name" type="text" class="form-control" name="first_name" value="{{ old('first_name') }}" required autofocus>
+                                    <span class="input-group-addon" id="first_name"><span class="glyphicon glyphicon-tag"></span></span>
+                                </div>
 
                                 @if ($errors->has('first_name'))
                                     <span class="help-block">
@@ -30,7 +33,10 @@
                             <label for="last_name" class="col-md-4 control-label">Apellido</label>
 
                             <div class="col-md-6">
-                                <input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" required>
+                                <div class="input-group">
+                                    <input id="last_name" type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" required>
+                                    <span class="input-group-addon" id="last_name"><span class="glyphicon glyphicon-tags"></span></span>
+                                </div>
 
                                 @if ($errors->has('last_name'))
                                     <span class="help-block">
@@ -44,7 +50,10 @@
                             <label for="email" class="col-md-4 control-label">Correo Electrónico</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                <div class="input-group">
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                                    <span class="input-group-addon" id="email"><span class="glyphicon glyphicon-envelope"></span></span>
+                                </div>
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -58,11 +67,14 @@
                             <label for="role_id" class="col-md-4 control-label">Nivel</label>
 
                             <div class="col-md-6">
-                                <select id="role_id" type="" class="form-control" name="role_id" value="{{ old('role_id') }}" required>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="input-group">
+                                    <select id="role_id" type="" class="form-control" name="role_id" value="{{ old('role_id') }}" required>
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="input-group-addon" id="role_id"><span class="glyphicon glyphicon-list-alt"></span></span>
+                                </div>
 
                                 @if ($errors->has('role_id'))
                                     <span class="help-block">
@@ -76,7 +88,10 @@
                             <label for="password" class="col-md-4 control-label">Contraseña</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                                <div class="input-group">
+                                    <input id="password" type="password" class="form-control" name="password" required>
+                                    <span class="input-group-addon" id="password"><span class="glyphicon glyphicon-lock"></span></span>
+                                </div>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
@@ -90,13 +105,16 @@
                             <label for="password-confirm" class="col-md-4 control-label">Confirmar Contraseña</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <div class="input-group">
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                    <span class="input-group-addon" id="password"><span class="glyphicon glyphicon-repeat"></span></span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-block btn-primary">
                                     Registrar
                                 </button>
                             </div>

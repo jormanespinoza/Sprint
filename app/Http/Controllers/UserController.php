@@ -107,14 +107,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
+
         // validate user's fields
+        if ($user->email != $request->input('email')) {
+            $this->validate($request, [
+                'first_name'    => 'required|string|alpha|max:255',
+                'last_name'     => 'required|string|alpha|max:255',
+                'email'         => 'required|string|email|max:255|unique:users'
+            ]);
+            $user->email    = $request->input('email');
+        }
+
         $this->validate($request, [
             'first_name'    => 'required|string|alpha|max:255',
-            'last_name'     => 'required|string|alpha|max:255'
+            'last_name'     => 'required|string|alpha|max:255',
         ]);
 
         // update user
-        $user = User::find($id);
         $user->first_name   = $request->input('first_name');
         $user->last_name    = $request->input('last_name');
         $user->role_id      = $request->input('role_id');
