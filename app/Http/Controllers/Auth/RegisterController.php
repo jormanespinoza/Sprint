@@ -40,6 +40,12 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        $roles = Role::orderBy('id', 'desc')->get();
+        return view("auth.register")->with('roles', $roles);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -68,7 +74,7 @@ class RegisterController extends Controller
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'role_id' => 4,
+            'role_id' => $data['role_id'],
             'password' => bcrypt($data['password']),
         ]);
     }
