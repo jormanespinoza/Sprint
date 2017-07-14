@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::orderBy('last_name', 'asc')->paginate(10);
-        return view('users.index')->with('users', $users);
+        return view('admin.users.index')->with('users', $users);
     }
 
     /**
@@ -28,7 +28,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::orderBy('id', 'desc')->get();
-        return view('users.create')->with('roles', $roles);
+        return view('admin.users.create')->with('roles', $roles);
     }
 
     /**
@@ -74,7 +74,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        return view('users.show')->with('user', $user);
+        return view('admin.users.show')->with('user', $user);
     }
 
     /**
@@ -93,7 +93,7 @@ class UserController extends Controller
             $roles_fetch[$role->id] = $role->name;
         }
 
-        return view('users.edit')
+        return view('admin.users.edit')
             ->with('user', $user)
             ->with('roles', $roles_fetch);
     }

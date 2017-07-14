@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Usuario: ' . $user->first_name)
+@section('title', '| Usuario: ' . $user->first_name)
 
 @section('content')
     <div class="row">
@@ -28,7 +28,7 @@
                         @endphp
                     <p><span class="label {{ $label_class }}">{{ $user->role->name }}</span></p> 
                 </div>
-                <div class="col-md-8">
+                {{--  <div class="col-md-8">
                     <div class="panel">
                         <div class="panel-heading">Información de Perfil</div>
                             <div class="panel-body">
@@ -37,7 +37,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>  --}}
                 <div class="col-md-8 col-md-offset-4">
                     <div class="show-actions-btn text-right">
                         <a href="{{ route('users.edit', $user->id) }}" class="well text-center">
@@ -83,12 +83,4 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-@endsection
-
-@section('scripts')
-    <script>
-        $('#confirmationModal').on('shown.bs.modal', function () {
-            $('#delete-button').focus()
-        })
-    </script>
 @endsection

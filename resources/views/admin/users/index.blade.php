@@ -63,7 +63,44 @@
                                         <td>
                                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-xs btn-default" title="Ver"><span class="glyphicon glyphicon-zoom-in"></span></a>
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-xs btn-warning" title="Editar"><span class="glyphicon glyphicon-edit"></span></a>
-                                            <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirmationModal" title="Eliminar"><span class="glyphicon glyphicon-remove-sign"></span></button>
+                                            @if(Auth::user()->id == $user->id)
+                                                <button type="button" class="btn btn-xs btn-danger" title="Acción Deshabilitada" disabled>
+                                                    <span class="glyphicon glyphicon-remove-sign"></span>
+                                                </button>
+                                            @else
+                                                <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" role="button" data-target="#confirmationModal-{{ $user->id }}" title="Eliminar">
+                                                    <span class="glyphicon glyphicon-remove-sign"></span>
+                                                </button>
+                                            @endif
+
+                                            {{-- Confirmation Modal --}}
+                                            <div class="modal fade" tabindex="-1" role="dialog" id="confirmationModal-{{ $user->id }}">
+                                                <div class="modal-dialog" role="dialog" id="model-{{ $user->id }}">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                            <h4 class="modal-title">3D Sprint - Confirmación</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>¿Seguro deseas eliminar el usuario de <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <ul class="list-inline">
+                                                                <li>
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                                </li>
+
+                                                                <li>
+                                                                    {{ Form::open(['route' => ['users.destroy', $user->id]]) }}
+                                                                        {{ Form::hidden('_method', 'DELETE') }}
+                                                                        {{ Form::submit('Sí', ['class' => 'btn btn-danger']) }}
+                                                                    {{ Form::close() }}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div><!-- /.modal -->
                                         </td>
                                     </tr>
                                 @endforeach
@@ -77,41 +114,13 @@
             </div>
         </div>
     </div>
-
-    {{-- Confirmation Modal   --}}
-    <div class="modal fade" tabindex="-1" role="dialog" id="confirmationModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">3D Sprint - Confirmación</h4>
-                </div>
-                <div class="modal-body">
-                    <p>¿Seguro deseas eliminar el usuario de <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>?</p>
-                </div>
-                <div class="modal-footer">
-                    <ul class="list-inline">
-                        <li>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                        </li>
-
-                        <li>
-                            {{ Form::open(['route' => ['users.destroy', $user->id]]) }}
-                                {{ Form::hidden('_method', 'DELETE') }}
-                                {{ Form::submit('Sí', ['class' => 'btn btn-danger']) }}
-                            {{ Form::close() }}
-                        </li>
-                    </ul>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+   
 @endsection
 
 @section('scripts')
     <script>
-        $('#confirmationModal').on('shown.bs.modal', function () {
-            $('#delete-button').focus()
+        $('##confirmationModal-{{ $user->id }}').on('shown.bs.modal', function () {
+            $('#delete-button').focus();
         })
     </script>
 @endsection

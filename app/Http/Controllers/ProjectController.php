@@ -19,7 +19,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::orderBy('created_at', 'desc')->paginate(10);
-        return view('projects.index')->with('projects', $projects);
+        return view('admin.projects.index')->with('projects', $projects);
     }
 
     /**
@@ -29,7 +29,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projects.create');
+        return view('admin.projects.create');
     }
 
     /**
@@ -63,7 +63,7 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::find($id);
-        return view('projects.show')->with('project', $project);
+        return view('admin.projects.show')->with('project', $project);
     }
 
     /**
@@ -74,7 +74,7 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $project = Project::find($id);
-        return view('projects.edit')->with('project', $project);
+        return view('admin.projects.edit')->with('project', $project);
     }
 
     /**
