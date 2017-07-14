@@ -18,7 +18,10 @@
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="control-label">Correo Electrónico</label>
-                            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="email"><span class="glyphicon glyphicon-envelope"></span></span>
+                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" aria-describedby="basic-addon1" required autofocus>
+                            </div>
 
                             @if ($errors->has('email'))
                                 <span class="help-block">
@@ -33,7 +36,10 @@
                             <a class="pull-right" href="{{ route('password.request') }}">
                                 ¿Olvidaste tu contraseña?
                             </a>
-                            <input id="password" type="password" class="form-control" name="password" required>
+                             <div class="input-group">
+                                <span class="input-group-addon" id="password"><span class="glyphicon glyphicon-lock"></span></span>
+                                <input id="password" type="password" class="form-control" name="password" required>
+                            </div>
 
                             @if ($errors->has('password'))
                                 <span class="help-block">

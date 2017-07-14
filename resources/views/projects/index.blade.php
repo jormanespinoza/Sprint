@@ -15,7 +15,7 @@
                         </div>
                        <div class="col-md-4 col-xs-4">
                             <span class="pull-right">
-                                <a href="{{ Route('users.create') }}" class="btn btn-block btn-primary" title="Crear Proyecto">
+                                <a href="{{ Route('projects.create') }}" class="btn btn-block btn-primary" title="Crear Proyecto">
                                     <span class="glyphicon glyphicon-briefcase"></span> Nuevo
                                 </a>
                             </span>

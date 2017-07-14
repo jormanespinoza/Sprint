@@ -11,4 +11,4 @@
 <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 @yield('stylesheets')
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://bootswatch.com/slate/bootstrap.min.css">
+{{--  <link rel="stylesheet" href="https://bootswatch.com/slate/bootstrap.min.css">  --}}
