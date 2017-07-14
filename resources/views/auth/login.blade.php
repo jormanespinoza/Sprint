@@ -5,6 +5,12 @@
 @section('content')
     <div class="row">
         <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+            <div class="text-center" style="margin-bottom: 20px;">
+                <a href="{{ url('/') }}">
+                    <img src="{{ url('images/logo.png')}}" class="logo-login" alt="Logo de 3D Sprint">
+                </a>
+                <h4>Ingresa a 3D Sprint</h4>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-body">
                     <form class="form" method="POST" action="{{ route('login') }}" novalidate>
