@@ -2,3 +2,11 @@
     width: 55px;
     height: 55px;
 }
+
+.heading-title {
+    margin-top: 10px;
+}
+
+.show-actions-btn {
+    padding: 20px;
+}

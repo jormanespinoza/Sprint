@@ -31,7 +31,7 @@
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="control-label">Contraseña</label>
                             <a class="pull-right" href="{{ route('password.request') }}">
-                                ¿Olvidaste tu Contraseña?
+                                ¿Olvidaste tu contraseña?
                             </a>
                             <input id="password" type="password" class="form-control" name="password" required>
 

@@ -8,11 +8,17 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-md-10">
-                            Lista de Proyectos | <span class="label label-primary">Total {{ count($projects) }} </span>
+                        <div class="col-md-8 col-xs-8">
+                            <div class="heading-title">
+                                Lista de Proyectos | <span class="label label-primary">Total {{ count($projects) }} </span>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <a href="{{ Route('users.create') }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pawn"></span> Crear Proyecto</a>
+                       <div class="col-md-4 col-xs-4">
+                            <span class="pull-right">
+                                <a href="{{ Route('users.create') }}" class="btn btn-block btn-primary" title="Crear Proyecto">
+                                    <span class="glyphicon glyphicon-briefcase"></span> Nuevo
+                                </a>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -33,7 +39,7 @@
                                         <td>{{ $project->name }}</td>
                                         <td>{{ substr(strip_tags($project->description), 0, 75) }} {{ strlen(strip_tags($project->description)) > 75 ? '...' : '' }}</td>
                                         <td>
-                                            <a href="{{ route('projects.show', $project->id) }}" class="btn btn-xs btn-default" title="Ver"><span class="glyphicon glyphicon-zoom-in"></span></a>
+                                            <a href="{{ route('projects.show', $project->id) }}" class="btn btn-xs btn-default" title="Abrir"><span class="glyphicon glyphicon-folder-open"></span></a>
                                             <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-xs btn-warning" title="Editar"><span class="glyphicon glyphicon-edit"></span></a>
                                             <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirmationModal" title="Eliminar"><span class="glyphicon glyphicon-remove-sign"></span></button>
                                         </td>

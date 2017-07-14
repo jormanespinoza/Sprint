@@ -8,11 +8,17 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-md-10">
-                            Listado de Usuarios | <span class="label label-primary">Total {{ count($users) }} </span>
+                        <div class="col-md-8 col-xs-8">
+                            <div class="heading-title">
+                                Listado de Usuarios | <span class="label label-primary">Total {{ count($users) }} </span>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <a href="{{ Route('users.create') }}" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-pawn"></span> Crear Usuario</a>
+                        <div class="col-md-4 col-xs-4">
+                            <span class="pull-right">
+                                <a href="{{ Route('users.create') }}" class="btn btn-block btn-primary" title="Crear Usuario">
+                                    <span class="glyphicon glyphicon-user"></span> Nuevo
+                                </a>
+                            </span>
                         </div>
                     </div>
                 </div>

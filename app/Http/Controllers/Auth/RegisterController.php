@@ -43,7 +43,13 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         $roles = Role::orderBy('id', 'desc')->get();
-        return view("auth.register")->with('roles', $roles);
+        $roles_fetch = [];
+        foreach($roles as $role) {
+            if ($role->id != 1) {
+                $roles_fetch[$role->id] = $role->name;
+            }
+        }
+        return view("auth.register")->with('roles', $roles_fetch);
     }
 
     /**

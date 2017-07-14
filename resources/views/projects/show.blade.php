@@ -11,7 +11,7 @@
     </p>
     <div class="row">
         <div class="col-md-8 col-md-offset-4">
-            <div class="text-right" style="padding: 20px;">
+            <div class="show-actions-btn text-right">
                 <a href="{{ route('projects.edit', $project->id) }}" class="well text-center">
                     <span class="glyphicon glyphicon-edit"></span> Editar
                 </a>

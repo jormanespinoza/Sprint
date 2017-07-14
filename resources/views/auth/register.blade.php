@@ -58,13 +58,7 @@
                             <label for="role_id" class="col-md-4 control-label">Rol</label>
 
                             <div class="col-md-6">
-                                <select id="role_id" type="" class="form-control" name="role_id" value="{{ old('role_id') }}" required>
-                                    @foreach($roles as $role)
-                                        @if ($role->id != 1)
-                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                                {{ Form::select('role_id', $roles, null, ['class' => 'form-control']) }}
 
                                 @if ($errors->has('role_id'))
                                     <span class="help-block">
