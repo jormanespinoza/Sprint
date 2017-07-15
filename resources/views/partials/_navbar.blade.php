@@ -20,7 +20,7 @@
                 @if (Auth::check())
                     <li class="{{ Request::is('dashboard') ? "active" : "" }} {{ Request::is('admin') ? "active" : "" }}">
                         @if (Auth::user()->role_id == 1)
-                            <a href="/admin">Escritorio</a>
+                            <a href="/admin">Panel Administrativo</a>
                         @else
                             <a href="/dashboard">Inicio</a>
                         @endif

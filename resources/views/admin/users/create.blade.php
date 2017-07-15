@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', '| Crear Usuario')
 
-@section('content')
+@section('data')
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
