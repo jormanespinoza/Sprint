@@ -18,7 +18,13 @@
             <!-- Left Side Of Navbar -->
             <ul class="nav navbar-nav">
                 @if (Auth::check())
-                    <li class="{{ Request::is('dashboard') ? "active" : "" }}"><a href="/dashboard">Inicio</a></li>
+                    <li class="{{ Request::is('dashboard') ? "active" : "" }} {{ Request::is('admin') ? "active" : "" }}">
+                        @if (Auth::user()->role_id == 1)
+                            <a href="/admin">Escritorio</a>
+                        @else
+                            <a href="/dashboard">Inicio</a>
+                        @endif
+                    </li>
                     <li class="{{ Request::is('contact') ? "active" : "" }}"><a href="/contact">Contacto</a></li>
                 @endif
             </ul>

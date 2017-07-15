@@ -34,7 +34,7 @@ class PageController extends Controller
         $this->validate($request, [
             'email' => 'required|email',
             'subject' => 'required|max:255',
-            'message' => 'required'
+            'message' => 'required|min:4'
         ]);
 
         $data = [
@@ -50,6 +50,9 @@ class PageController extends Controller
         });
 
         Session::flash('success', 'Tu mensaje ha sido enviado con éxito!');
-        return redirect('/');
+        if (auth()->user()->role_id == 1) {
+            return redirect('/admin');
+        }
+        return redirect('/dashboard');
     }
 }

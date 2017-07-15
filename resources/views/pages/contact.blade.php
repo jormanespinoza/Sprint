@@ -16,19 +16,16 @@
                 <hr>
                 <form action="{{ url('contact') }}" method="POST" data-parsley-validate="" enctype="multipart/form-data">
                     {{ csrf_field() }}
-                    <div class="form-group">
-                        <label name="email">Correo Electrónico:</label>
-                        <input type="email" id="email" name="email" class="form-control" required>
-                    </div>
+                    <input type="hidden" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}">
 
                     <div class="form-group">
-                        <label name="subject">Asunto:</label>
+                        <label name="subject">Asunto</label>
                         <input type="text" id="subject" name="subject" class="form-control" required max-length="255">
                     </div>
 
                     <div class="form-group">
-                        <label name="message">Mensaje:</label>
-                        <textarea id="message" name="message" class="form-control" placeholder="Ingresa tu mensaje aquí..." required></textarea>
+                        <label name="message">Mensaje</label>
+                        <textarea id="message" name="message" class="form-control" placeholder="Ingresa tu mensaje aquí..." required minlength="4"></textarea>
                     </div>
 
                     <div class="text-center">
