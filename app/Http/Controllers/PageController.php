@@ -29,6 +29,11 @@ class PageController extends Controller
         return view('pages.contact');
     }
 
+    public function getAdminContact()
+    {
+        return view('admin.contact');
+    }
+
     public function postContact(Request $request)
     {
         $this->validate($request, [
@@ -49,10 +54,34 @@ class PageController extends Controller
             $message->subject($data['subject']);
         });
 
-        Session::flash('success', 'Tu mensaje ha sido enviado con éxito!');
+        Session::flash('success', 'Tu mensaje ha sido enviado sin problemas!');
         if (auth()->user()->role_id == 1) {
             return redirect('/admin');
         }
         return redirect('/dashboard');
+    }
+
+    public function postAdminContact(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'subject' => 'required|max:255',
+            'message' => 'required|min:4'
+        ]);
+
+        $data = [
+            'email'=> $request->email,
+            'subject' => $request->subject,
+            'bodyMessage' => Purifier::clean($request->message)
+        ];
+
+        Mail::send('emails.contact', $data, function ($message) use ($data) {
+            $message->from($data['email']);
+            $message->to('espinoza-dev@gmail.com');
+            $message->subject($data['subject']);
+        });
+
+        Session::flash('success', 'Tu mensaje ha sido enviado sin problemas!');
+        return redirect('/admin');
     }
 }

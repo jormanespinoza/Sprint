@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', '| Crear Proyecto')
 
@@ -7,29 +7,31 @@
     {!! Html::style('plugins/trumbowyg/ui/trumbowyg.css') !!}
 @endsection
 
-@section('content')
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Crear Nuevo Proyecto</div>
-                <div class="panel-body">
-                    {{ Form::open(['route' => 'projects.store', 'class' => 'form-vertical', 'data-parsley-validate' => '']) }}
-                        {{ csrf_field() }}
+@section('data')
+    <ol class="breadcrumb">
+        <li><a href="{{ url('admin') }}">Inicio</a></li>
+        <li><a href="{{ url('admin/projects') }}">Proyectos</a></li>
+        <li class="active">Nuevo Proyecto</li>
+    </ol>
 
-                        <div class="form-group">
-                            {{ Form::label('name', 'Nombre del Proyecto:', ['class' => 'control-label', 'for' => 'name']) }}
-                            {{ Form::text('name', null, ['class' => 'form-control', 'required' => '', 'minlength' => '2', 'maxlength' => '255']) }}
-                        </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Crear Nuevo Proyecto</div>
+        <div class="panel-body">
+            {{ Form::open(['route' => 'projects.store', 'class' => 'form-vertical', 'data-parsley-validate' => '']) }}
+                {{ csrf_field() }}
 
-                        <div class="form-group">
-                            {{ Form::label('description', 'Descripción Proyecto:', ['class' => 'control-label', 'for' => 'description']) }}
-                            {{ Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])}}
-                        </div>
-
-                        {{ Form::submit('Generar', ['class' => 'btn btn-primary btn-block'])}}
-                    {{ Form::close() }}
+                <div class="form-group">
+                    {{ Form::label('name', 'Nombre del Proyecto:', ['class' => 'control-label', 'for' => 'name']) }}
+                    {{ Form::text('name', null, ['class' => 'form-control', 'required' => '', 'minlength' => '2', 'maxlength' => '255']) }}
                 </div>
-            </div>
+
+                <div class="form-group">
+                    {{ Form::label('description', 'Descripción Proyecto:', ['class' => 'control-label', 'for' => 'description']) }}
+                    {{ Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])}}
+                </div>
+
+                {{ Form::submit('Generar', ['class' => 'btn btn-primary btn-block'])}}
+            {{ Form::close() }}
         </div>
     </div>
 @endsection

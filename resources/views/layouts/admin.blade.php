@@ -7,23 +7,24 @@
 
     <body>
         <div id="app">
-            @include('partials._navbar')
-
             <div id="wrapper" class="toggled">
                 <!-- Sidebar -->
                 @include('partials._sidebar')
-                <!-- /#sidebar-wrapper -->
 
                 <!-- Page Content -->
                 <div id="page-content-wrapper">
                     <div class="container-fluid">
-                        @yield('data')
-                        <!-- Footer -->
-                        @include('partials._footer')
-                        <!-- /#page-content-wrapper -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @include('partials._messages')
+                                @yield('data')
+                            </div>
+                        </div>
                     </div>
+                    <!-- Footer -->
+                        @include('partials._footer')
                 </div>
-            </div>
+            </div><!-- /#page-content-wrapper -->
             @include('partials._javascripts')
         </div>
         @yield('scripts')
@@ -40,6 +41,7 @@
                 $("#wrapper").removeClass("toggled");
                 $("#menu-show").show();
             });
+
             $("#menu-show").click(function(e) {
                 e.preventDefault();
                 $("#wrapper").addClass("toggled");

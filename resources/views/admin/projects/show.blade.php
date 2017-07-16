@@ -1,8 +1,14 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', '| Proyecto ' . $project->name)
 
-@section('content')
+@section('data')
+    <ol class="breadcrumb">
+        <li><a href="{{ url('admin') }}">Inicio</a></li>
+        <li><a href="{{ url('admin/projects') }}">Proyectos</a></li>
+        <li class="active">{{ $project->name }}</li>
+    </ol>
+
     <h1>{{ $project->name }}</h1>
     <div class="well">{!! $project->description !!}</div>
     <p class="text-right">

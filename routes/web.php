@@ -22,6 +22,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
     });
     Route::resource('users', 'UserController');
     Route::resource('projects', 'ProjectController');
+    Route::get('contact', 'PageController@getAdminContact');
+    Route::post('contact', 'PageController@postAdminContact');
 });
 
 Route::resource('sprints', 'SprintController');
