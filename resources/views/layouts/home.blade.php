@@ -8,7 +8,6 @@
     <body>
         <div id="app" class="welcome-view">
             @include('partials._navbar')
-
             <div class="container-fluid">
                 @yield('content')
             </div>
