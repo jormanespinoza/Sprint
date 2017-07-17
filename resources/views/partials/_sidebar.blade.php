@@ -2,7 +2,8 @@
     <ul class="sidebar-nav">
         <li class="sidebar-brand">
             <a class="navbar-brand" href="{{ url('/admin') }}">
-                <span><img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint" class="logo-navbar"></span> 3D Sprint
+                <span><img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint" class="logo-navbar"></span> 
+                {{ config('app.name', 'Laravel') }}
             </a>
         </li>
         <li class="dropdown">

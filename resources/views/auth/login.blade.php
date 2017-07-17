@@ -9,7 +9,7 @@
                 <a href="{{ url('/') }}">
                     <img src="{{ url('images/logo.png')}}" class="logo-login" alt="Logo de 3D Sprint">
                 </a>
-                <h4>Ingresa a 3D Sprint</h4>
+                <h4><strong>Ingresa a {{ config('app.name', 'Laravel') }}</strong></h4>
             </div>
             <div class="panel panel-default">
                 <div class="panel-body">
