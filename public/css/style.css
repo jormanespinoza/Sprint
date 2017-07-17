@@ -42,12 +42,6 @@
     list-style-type: none;
 }
 
-@media (max-width:480px) {
-    .breadcrumb {
-        font-size: 11px;
-    }
-}
-
 .user-image {
     width: 25px;
     height: 25px;
@@ -56,4 +50,13 @@
 .admin-image {
     width: 30px;
     height: 30px;
+}
+
+@media (max-width:480px) {
+    .breadcrumb {
+        font-size: 11px;
+    }
+    .app-title {
+        font-size : 30px;
+    }
 }

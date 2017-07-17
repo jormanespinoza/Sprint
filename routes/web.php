@@ -29,5 +29,6 @@ Route::resource('tasks', 'TaskController');
 
 Route::resource('profile', 'ProfileController');
 
+// Authentication Routes
 Auth::routes();
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

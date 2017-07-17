@@ -6,7 +6,7 @@
     <div class="jumbotron">
         <div class="container-fluid">
             <div class="{{ Auth::guest() ? 'col-md-8' : 'col-md-12' }} text-left">
-                <h1> <img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint">{{ config('app.name', 'Laravel') }}</h1>
+                <h1 class="app-title"> <img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint">{{ config('app.name', 'Laravel') }}</h1>
                 <p>
                     Aplicación desarrollada por el equipo de <a href="http//3dlinkweb.com" target="_blank">3D Link</a>, encargada de la gestión de los proyectos de cada uno de los desarrolladores de la empresa.
                 </p>
