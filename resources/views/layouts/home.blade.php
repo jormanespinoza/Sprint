@@ -6,15 +6,13 @@
     </head>
 
     <body>
-        <div id="app">
+        <div id="app" class="welcome-view">
             @include('partials._navbar')
 
-            <div class="container">
-                @include('partials._messages')
+            <div class="container-fluid">
                 @yield('content')
-                @include('partials._footer')
             </div>
-
+            @include('partials._footer')
             @include('partials._javascripts')
         </div>
         @yield('scripts')

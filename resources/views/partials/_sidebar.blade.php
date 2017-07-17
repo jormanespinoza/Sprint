@@ -2,7 +2,7 @@
     <ul class="sidebar-nav">
         <li class="sidebar-brand">
             <a class="navbar-brand" href="{{ url('/admin') }}">
-                3D String
+                <span><img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint" class="logo-navbar"></span> 3D String
             </a>
         </li>
         <li class="dropdown">

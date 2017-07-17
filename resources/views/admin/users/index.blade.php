@@ -63,7 +63,7 @@
                                                 break;
                                         }
                                     @endphp
-                                    <span class="label {{ $label_class }}">{{ $user->role->name }}</span>
+                                    <span class="label {{ $label_class }}"><b>{{ $user->role->name }}</b></span>
                                 </td>
                                 <td>
                                     <a href="{{ route('users.show', $user->id) }}" class="btn btn-xs btn-default" title="Ver"><span class="glyphicon glyphicon-zoom-in"></span></a>

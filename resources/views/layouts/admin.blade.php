@@ -30,11 +30,9 @@
         @yield('scripts')
         <!-- Menu Toggle Script -->
         <script>
-            $(function() {
-                if ($("#wrapper").hasClass("toggled")) {
-                    $("#menu-show").hide();
-                }
-            });
+            if ($("#wrapper").hasClass("toggled")) {
+                $("#menu-show").hide();
+            }
 
             $("#menu-hide").click(function(e) {
                 e.preventDefault();

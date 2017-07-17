@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-static-top">
-    <div class="container-fluid">
+    <div class="container">
         <div class="navbar-header">
             <!-- Collapsed Hamburger -->
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
@@ -21,6 +21,7 @@
                 }
             @endphp
             <a class="navbar-brand" href="{{ url($dashboard) }}">
+                <span><img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint" class="logo-navbar"></span>
                 {{ config('app.name', 'Laravel') }}
             </a>
         </div>
