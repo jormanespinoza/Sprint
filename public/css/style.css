@@ -24,3 +24,32 @@
 .show-actions-btn {
     padding: 20px;
 }
+
+.sidebar-profile-item {
+    padding: 5px 0;
+}
+
+.breadcrumb > li a {
+    text-decoration: none;
+}
+
+.user-system-errors {
+    list-style: none;
+    list-style-type: none;
+}
+
+@media (max-width:480px) {
+    .breadcrumb {
+        font-size: 11px;
+    }
+}
+
+.user-image {
+    width: 25px;
+    height: 25px;
+}
+
+.admin-image {
+    width: 40px;
+    height: 40px;
+}

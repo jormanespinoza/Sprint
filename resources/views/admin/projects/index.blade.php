@@ -4,8 +4,10 @@
 
 @section('data')
     <ol class="breadcrumb">
-        <li><a href="{{ url('admin') }}"><a href="{{ url('admin') }}">Inicio</a></li>
-        <li class="active">Proyectos</a></li>
+        <li>
+            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+        </li>
+        <li class="active"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a></li>
     </ol>
 
     <div class="panel panel-default">
@@ -19,7 +21,7 @@
                 <div class="col-md-4 col-xs-4">
                     <span class="pull-right">
                         <a href="{{ Route('projects.create') }}" class="btn btn-sm btn-primary" title="Crear Proyecto">
-                            <span class="glyphicon glyphicon-briefcase"></span> Nuevo
+                            <span class="glyphicon glyphicon-folder-close"></span> Nuevo
                         </a>
                     </span>
                 </div>

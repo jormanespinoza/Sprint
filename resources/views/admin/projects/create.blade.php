@@ -9,9 +9,15 @@
 
 @section('data')
     <ol class="breadcrumb">
-        <li><a href="{{ url('admin') }}">Inicio</a></li>
-        <li><a href="{{ url('admin/projects') }}">Proyectos</a></li>
-        <li class="active">Nuevo Proyecto</li>
+         <li>
+            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+        </li>
+        <li>
+            <a href="{{ url('admin/projects') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
+        </li>
+        <li class="active">
+            <span class="glyphicon glyphicon-file"></span> Nuevo Proyecto
+        </li>
     </ol>
 
     <div class="panel panel-default">
@@ -21,12 +27,12 @@
                 {{ csrf_field() }}
 
                 <div class="form-group">
-                    {{ Form::label('name', 'Nombre del Proyecto:', ['class' => 'control-label', 'for' => 'name']) }}
+                    {{ Form::label('name', 'Nombre', ['class' => 'control-label', 'for' => 'name']) }}
                     {{ Form::text('name', null, ['class' => 'form-control', 'required' => '', 'minlength' => '2', 'maxlength' => '255']) }}
                 </div>
 
                 <div class="form-group">
-                    {{ Form::label('description', 'Descripción Proyecto:', ['class' => 'control-label', 'for' => 'description']) }}
+                    {{ Form::label('description', 'Descripción', ['class' => 'control-label', 'for' => 'description']) }}
                     {{ Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])}}
                 </div>
 

@@ -4,9 +4,15 @@
 
 @section('data')
     <ol class="breadcrumb">
-        <li><a href="{{ url('admin') }}">Inicio</a></li>
-        <li><a href="{{ url('admin/projects') }}">Proyectos</a></li>
-        <li class="active">{{ $project->name }}</li>
+        <li>
+            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+        </li>
+        <li>
+            <a href="{{ url('admin/projects') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
+        </li>
+        <li class="active">
+            <span class="glyphicon glyphicon-folder-open"></span> {{ $project->name }}
+        </li>
     </ol>
 
     <h1>{{ $project->name }}</h1>

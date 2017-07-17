@@ -9,9 +9,15 @@
 
 @section('data')
     <ol class="breadcrumb">
-        <li><a href="{{ url('admin') }}">Inicio</a></li>
-        <li><a href="{{ url('admin/projects') }}">Proyectos</a></li>
-        <li class="active">Editar Proyecto</li>
+        <li>
+            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+        </li>
+        <li>
+            <a href="{{ url('admin/projects') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
+        </li>
+        <li class="active">
+            <span class="glyphicon glyphicon-edit"></span> Editar Proyecto
+        </li>
     </ol>
 
     <div class="panel panel-default">

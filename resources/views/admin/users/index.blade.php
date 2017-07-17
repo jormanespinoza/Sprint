@@ -4,8 +4,10 @@
 
 @section('data')
     <ol class="breadcrumb">
-        <li><a href="{{ url('admin') }}"><a href="{{ url('admin') }}">Inicio</a></li>
-        <li class="active">Usuarios</a></li>
+        <li>
+            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+        </li>
+        <li class="active"><span class="glyphicon glyphicon-user"></span> Usuarios</a></li>
     </ol>
 
     <div class="panel panel-default">

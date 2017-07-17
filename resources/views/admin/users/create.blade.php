@@ -4,9 +4,15 @@
 
 @section('data')
     <ol class="breadcrumb">
-        <li><a href="{{ url('admin') }}">Inicio</a></li>
-        <li><a href="{{ url('admin/users') }}">Usuarios</a></li>
-        <li class="active">Nuevo Usuario</li>
+        <li>
+            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+        </li>
+        <li>
+            <a href="{{ url('admin/users') }}"><span class="glyphicon glyphicon-user"></span> Usuarios</a>
+        </li>
+        <li class="active">
+            <span class="glyphicon glyphicon-log-in"></span> Nuevo Usuario
+        </li>
     </ol>
 
     <div class="panel panel-default">
