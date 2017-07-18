@@ -20,7 +20,8 @@
             <div class="row">
                 <div class="col-md-8 col-xs-8">
                     <div class="heading-title">
-                        Lista de Proyectos | <span class="label label-primary">Total {{ count($projects) }} </span>
+                        Lista de Proyectos | <span class="label label-primary">
+                            <strong>Total {{ count($all_projects) }}</strong></span>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-4">

@@ -16,7 +16,8 @@
             <div class="row">
                 <div class="col-md-8 col-xs-8">
                     <div class="heading-title">
-                        Listado de Usuarios | <span class="label label-primary">Total {{ count($users) }} </span>
+                        Listado de Usuarios | <span class="label label-primary">
+                        <strong>Total {{ count($all_users) }}</strong></span>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-4">
