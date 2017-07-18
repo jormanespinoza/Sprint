@@ -11,7 +11,7 @@ class AdminController extends Controller
 {
     public function getInfo() {
         $users = User::orderBy('last_name', 'desc')->get();
-        $projects = Project::orderBy('name', 'asc')->paginate(10);
+        $projects = Project::orderBy('name', 'asc')->paginate(6);
         $clients = [];
         $developers = [];
         $leaders = [];

@@ -9,7 +9,10 @@
 
 @section('data')
     <ol class="breadcrumb">
-        <li><a href="{{ url('admin') }}"><a href="{{ url('admin') }}">Inicio</a></li>
+        @include('partials._toggle_menu')
+        <li>
+            <a href="{{ url('admin') }}"><a href="{{ url('admin') }}">Inicio</a>
+        </li>
         <li class="active">Contacto</a></li>
     </ol>
     <h1>Formulario de Contacto</h1>

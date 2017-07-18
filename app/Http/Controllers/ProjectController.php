@@ -29,7 +29,28 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $users = User::orderBy('last_name', 'desc')->get();
+        // Get all users
+        $clients = [];
+        $developers = [];
+        $leaders = [];
+
+        foreach ($users as $user) {
+            if ($user->role_id == 4) {
+                $clients[] = $user;
+            }
+            if ($user->role_id == 3) {
+                $developers[] = $user;
+            }
+            if ($user->role_id == 2) {
+                $leaders[] = $user;
+            }
+        }
+
+        return view('admin.projects.create')
+            ->with('clients', $clients)
+            ->with('developers', $developers)
+            ->with('leaders', $leaders);
     }
 
     /**
@@ -50,8 +71,15 @@ class ProjectController extends Controller
         $project->description   = Purifier::clean($request->description);
         $project->save();
 
-        Session::flash('success', 'El proyecto fue generado de forma satisfactoria');
-        return redirect()->route('projects.index');
+        // Fetch assigned user
+        $users = [];
+        $users = array_merge($request->leaders, $request->developers, $request->clients);
+
+        // sync project/users relationship
+        $project->users()->sync($users, false);
+
+        Session::flash('success', 'El proyecto fue generado sin problemas');
+        return redirect()->route('projects.show', $project->id);
     }
 
     /**
@@ -63,7 +91,30 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::find($id);
-        return view('admin.projects.show')->with('project', $project);
+        // obtain related users to the project
+        $users = $project->users()->orderBy('last_name', 'desc')->get();
+        // check if there are assigned users to the project
+        $assigned_leader = false;
+        $assigned_developer = false;
+        $assigned_client = false;
+        foreach($users as $user) {
+            if ($user->role_id == 2) {
+                $assigned_leader = true;
+            }
+            if ($user->role_id == 3) {
+                $assigned_developer = true;
+            }
+            if ($user->role_id == 4) {
+                $assigned_client = true;
+            }
+        }
+
+        // return view with data
+        return view('admin.projects.show')
+            ->with('project', $project)
+            ->with('assigned_leader', $assigned_leader)
+            ->with('assigned_developer', $assigned_developer)
+            ->with('assigned_client', $assigned_client);
     }
 
     /**
@@ -74,7 +125,31 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $project = Project::find($id);
-        return view('admin.projects.edit')->with('project', $project);
+        $users = User::orderBy('last_name', 'desc')->get();
+
+        // Get all users
+        $clients = [];
+        $developers = [];
+        $leaders = [];
+
+        foreach ($users as $user) {
+            // Get All Users
+            if ($user->role_id == 4) {
+                $clients[$user->id] = $user->last_name. ' ' . $user->first_name;
+            }
+            if ($user->role_id == 3) {
+                $developers[$user->id] = $user->last_name . ' ' . $user->first_name;
+            }
+            if ($user->role_id == 2) {
+                $leaders[$user->id] = $user->last_name . ' ' . $user->first_name;
+            }
+        }
+
+        return view('admin.projects.edit')
+            ->with('project', $project)
+            ->with('clients', $clients)
+            ->with('developers', $developers)
+            ->with('leaders', $leaders);
     }
 
     /**

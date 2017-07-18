@@ -13,7 +13,6 @@
             </a>
             <ul class="dropdown-menu" role="menu">
                 <li><a href="{{ route('dashboard')}}"><span class="glyphicon glyphicon-cog"></span> Perfil</a></li>
-                <li role="separator" class="divider"></li>
                 <li>
                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
@@ -39,10 +38,9 @@
             <a href="{{ url('admin/contact') }}"> <span class="glyphicon glyphicon-envelope"></span> Contacto</a>
         </li>
         <li>
-            <a href="#menu-hide" id="menu-hide" class="btn btn-md btn-default pull-right"><span class="glyphicon glyphicon-menu-left"></span></a>
+            <a href="#menu-hide" id="menu-hide" class="btn btn-sm btn-default pull-right">
+                <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-hamburger">
+            </a>
         </li>
     </ul>
-</div>
-<div class="show-menu">
-    <a href="#menu-show" class="btn btn-sm btn-default" id="menu-show">Menú <span class="glyphicon glyphicon-menu-right"></a>
 </div>

@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <!-- Footer -->
-                        @include('partials._footer')
+                    @include('partials._footer')
                 </div>
             </div><!-- /#page-content-wrapper -->
             @include('partials._javascripts')

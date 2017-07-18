@@ -4,6 +4,7 @@
 
 @section('data')
     <ol class="breadcrumb">
+        @include('partials._toggle_menu')
         <li>
             <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
         </li>
@@ -11,7 +12,7 @@
             <a href="{{ url('admin/users') }}"><span class="glyphicon glyphicon-user"></span> Usuarios</a>
         </li>
         <li class="active">
-            <span class="glyphicon glyphicon-log-in"></span> Nuevo Usuario
+            <span class="glyphicon glyphicon-log-in"></span> Nuevo
         </li>
     </ol>
 

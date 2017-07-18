@@ -4,6 +4,7 @@
 
 @section('data')
     <ol class="breadcrumb">
+        @include('partials._toggle_menu')
         <li>
             <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
         </li>
@@ -15,22 +16,126 @@
         </li>
     </ol>
 
-    <h1>{{ $project->name }}</h1>
-    <div class="well">{!! $project->description !!}</div>
-    <p class="text-right">
-        <strong>Creado:</strong> {{ $project->created_at->diffForHumans() }} | 
-        <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
-    </p>
-    <div class="row">
-        <div class="col-md-8 col-md-offset-4">
-            <div class="show-actions-btn text-right">
-                <a href="{{ route('projects.edit', $project->id) }}" class="well text-center">
-                    <span class="glyphicon glyphicon-edit"></span> Editar
-                </a>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-8 col-xs-6">
+                    <div class="heading-title">
+                        <span style="text-transform: uppercase;">Proyecto {{ $project->name }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-6">
+                    <div class="pull-right">
+                        <a class="btn btn-sm btn-danger" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                            <span class="glyphicon glyphicon-remove-sign"></span>
+                        </a>
+                    </div>
+                     <div class="pull-right">
+                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-warning" title="Editar">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <a href="" class="well text-center" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                    <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
-                </a>
+    <div class="well" title="Descripción del Proyecto">
+        {!! $project->description !!}
+    </div>
+
+    <div class="col-md-4">
+        <h5>
+            <span class="glyphicon glyphicon-tags text-right"></span> Asignar Usuarios
+        </h5>
+        <hr>
+        <div class="well">
+            <button type="button" class="btn btn-block btn-primary">
+                <span class="glyphicon glyphicon-bookmark"></span> Líder de Proyecto
+            </button>
+            <button type="button" class="btn btn-block btn-info">
+                <span class="glyphicon glyphicon-cog"></span> Desarrollador
+            </button>
+            <button type="button" class="btn btn-block btn-default">
+                <span class="glyphicon glyphicon-user"></span> Cliente
+            </button>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h5>
+            <span class="glyphicon glyphicon-list-alt"></span> Información del Proyecto
+        </h5>
+        <hr>
+        <div class="well">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h4><strong class="label label-primary">Líder de Proyecto</strong></h4>
+                    @if($assigned_leader)
+                        <ul class="list-group">
+                            @foreach($project->users as $user)
+                                @if($user->role_id == 2)
+                                    <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
+                                            {{ $user->last_name }} {{ $user->first_name }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="alert alert-default">
+                            <span class="glyphicon glyphicon-info-sign"></span>De momento no se encuentra asignado un líder de proyecto. 
+                        </div>
+                    @endif
+                </div>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h4><strong class="label label-info">Desarrollador</strong></h4>
+                    @if($assigned_developer)
+                        <ul class="list-group">
+                            @foreach($project->users as $user)
+                                @if($user->role_id == 3)
+                                    <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
+                                            {{ $user->last_name }} {{ $user->first_name }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="alert alert-default">
+                            <span class="glyphicon glyphicon-info-sign"></span>De momento no se encuentra asignado un desarrolador para el proyecto. 
+                        </div>
+                    @endif
+                </div>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h4><strong class="label label-default">Cliente</strong></h4>
+                    @if($assigned_client)
+                        <ul class="list-group">
+                            @foreach($project->users as $user)
+                                @if($user->role_id == 4)
+                                    <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
+                                            {{ $user->last_name }} {{ $user->first_name }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="alert alert-default">
+                            <span class="glyphicon glyphicon-info-sign"></span>De momento no se encuentra asignado un cliente para el proyecto. 
+                        </div>
+                    @endif
+                </div>
+            </div>
+            <hr>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <strong>Creado:</strong> {{ $project->created_at->diffForHumans() }}
+                </div>
+                <div class="list-group-item">
+                    <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
+                </div>
             </div>
         </div>
     </div>

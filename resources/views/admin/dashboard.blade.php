@@ -4,13 +4,15 @@
 
 @section('data')
     <ol class="breadcrumb">
+        @include('partials._toggle_menu')
         <li class="active">
             <span class="glyphicon glyphicon-th-large"></span> Inicio
         </li>
     </ol>
      <div class="col-md-7">
         <h5>
-            <a href="/admin/projects"><span class="glyphicon glyphicon-folder-close"> Proyectos</a> | 
+            <a href="/admin/projects" class="admin-dashboard-link">
+                <span class="glyphicon glyphicon-folder-close"></span> Proyectos</a> | 
             <small>Total <span class="badge">{{ count($projects) }}</span></small>
         </h5>
         <hr>
@@ -33,7 +35,7 @@
 
     <div class="col-md-5">
         <h5>
-            <a href="/admin/users"><span class="glyphicon glyphicon-tags"> Usuarios</a> | 
+            <a href="/admin/users" class="admin-dashboard-link"><span class="glyphicon glyphicon-tags"></span> Usuarios</a> | 
             <small>Total <span class="badge">{{ count($leaders) + count($developers) + count($clients)  }}</span></small>
         </h5>
         <hr>

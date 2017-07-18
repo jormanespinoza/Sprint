@@ -15,4 +15,5 @@
 @yield('stylesheets')
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+{{--  <link rel="stylesheet" href="https://bootswatch.com/sandstone/bootstrap.min.css">  --}}
 {{-- <link rel="stylesheet" href="https://bootswatch.com/slate/bootstrap.min.css"> --}}
