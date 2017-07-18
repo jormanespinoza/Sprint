@@ -12,10 +12,14 @@
     <ol class="breadcrumb">
         @include('partials._toggle_menu')
          <li>
-            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+            <a href="{{ url('admin') }}">
+                <span class="glyphicon glyphicon-th-large"></span> Inicio
+            </a>
         </li>
         <li>
-            <a href="{{ url('admin/projects') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
+            <a href="{{ url('admin/projects') }}">
+                <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+            </a>
         </li>
         <li class="active">
             <span class="glyphicon glyphicon-file"></span> Nuevo
@@ -40,7 +44,7 @@
 
                <div class="form-group" title="Asignar uno o más líderes de proyecto">
                     {{ Form::label('leaders', 'Líder de Proyecto') }}
-                    <select name="leaders[]" class="form-control js-select2" multiple="multiple">
+                    <select name="leaders[]" class="form-control js-select2-leader" multiple="multiple">
                         @foreach($leaders as $leader)
                             <option value="{{ $leader->id }}">{{ $leader->last_name }} {{ $leader->first_name }}</option>
                         @endforeach
@@ -49,7 +53,7 @@
 
                 <div class="form-group" title="Asignar uno o más desarrolladores para el proyecto">
                     {{ Form::label('developers', 'Desarrollador') }}
-                    <select name="developers[]" class="form-control js-select2" multiple="multiple">
+                    <select name="developers[]" class="form-control js-select2-developer" multiple="multiple">
                         @foreach($developers as $developer)
                             <option value="{{ $developer->id }}">{{ $developer->last_name }} {{ $developer->first_name }}</option>
                         @endforeach
@@ -58,7 +62,7 @@
 
                 <div class="form-group" title="Asignar uno o más clientes al proyecto">
                     {{ Form::label('clients', 'Cliente') }}
-                    <select name="clients[]" class="form-control js-select2" multiple="multiple">
+                    <select name="clients[]" class="form-control js-select2-client" multiple="multiple">
                         @foreach($clients as $client)
                             <option value="{{ $client->id }}">{{ $client->last_name }} {{ $client->first_name }}</option>
                         @endforeach
@@ -81,7 +85,15 @@
             lang: 'es'
         });
         $(document).ready(function() {
-            $(".js-select2").select2();
+            $(".js-select2-leader").select2({
+                placeholder: "Selecciona uno o más líderes de proyecto..."
+            });
+             $(".js-select2-developer").select2({
+                placeholder: "Selecciona uno o más desarrolladores para el proyecto..."
+            });
+             $(".js-select2-client").select2({
+                placeholder: "Selecciona uno o más clientes para el proyecto..."
+            });
         });
     </script>
 @endsection

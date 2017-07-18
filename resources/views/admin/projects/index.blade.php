@@ -6,9 +6,13 @@
     <ol class="breadcrumb">
         @include('partials._toggle_menu')
         <li>
-            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+            <a href="{{ url('admin') }}">
+                <span class="glyphicon glyphicon-th-large"></span> Inicio
+            </a>
         </li>
-        <li class="active"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a></li>
+        <li class="active">
+            <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+        </li>
     </ol>
 
     <div class="panel panel-default">

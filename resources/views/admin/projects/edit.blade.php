@@ -12,13 +12,17 @@
     <ol class="breadcrumb">
         @include('partials._toggle_menu')
         <li>
-            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+            <a href="{{ url('admin') }}">
+                <span class="glyphicon glyphicon-th-large"></span> Inicio
+            </a>
         </li>
         <li>
-            <a href="{{ url('admin/projects') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
+            <a href="{{ url('admin/projects') }}">
+                <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+            </a>
         </li>
         <li class="active">
-            <span class="glyphicon glyphicon-edit"></span> Editar Proyecto
+            <span class="glyphicon glyphicon-edit"></span> Actualizar Proyecto
         </li>
     </ol>
 
@@ -39,14 +43,20 @@
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])!!}
                 </div>
 
-                {{--  <div class="form-group">
-                    {{ Form::label('leaders', 'Líderes de Proyecto') }}
-                    <select name="leaders[]" class="form-control js-select2" multiple="multiple">
-                        @foreach($leaders as $leader)
-                            <option value="{{ $leader->id }}">{{ $leader->last_name }} {{ $leader->first_name }}</option>
-                        @endforeach
-                    </select>
-                </div>  --}}
+                <div class="form-group">
+                    {{ Form::label('leaders', 'Líder de Proyecto') }}
+                    {{ Form::select('users[]', $leaders, null, ['class' => 'form-control js-select2', 'multiple' => 'multiple']) }}
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('developers', 'Desarrollador') }}
+                    {{ Form::select('users[]', $developers, null, ['class' => 'form-control js-select2', 'multiple' => 'multiple']) }}
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('client', 'Cliente') }}
+                    {{ Form::select('users[]', $clients, null, ['class' => 'form-control js-select2', 'multiple' => 'multiple']) }}
+                </div>
 
                 {{ Form::submit('Actualizar Proyecto', ['class' => 'btn btn-block btn-primary']) }}
 

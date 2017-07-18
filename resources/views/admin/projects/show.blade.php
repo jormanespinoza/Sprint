@@ -6,10 +6,14 @@
     <ol class="breadcrumb">
         @include('partials._toggle_menu')
         <li>
-            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+            <a href="{{ url('admin') }}">
+                <span class="glyphicon glyphicon-th-large"></span> Inicio
+            </a>
         </li>
         <li>
-            <a href="{{ url('admin/projects') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
+            <a href="{{ url('admin/projects') }}">
+                <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+            </a>
         </li>
         <li class="active">
             <span class="glyphicon glyphicon-folder-open"></span> {{ $project->name }}
@@ -20,18 +24,28 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-8 col-xs-6">
-                    <div class="heading-title">
-                        <span style="text-transform: uppercase;">Proyecto {{ $project->name }}</span>
+                    <div class="project-title">
+                        <span>{{ $project->name }}</span>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-6">
                     <div class="pull-right">
-                        <a class="btn btn-sm btn-danger" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                        {{-- Web View --}}
+                        <a class="btn btn-block btn-default actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
+                        </a>
+                        {{-- Mobile View --}}
+                         <a class="btn btn-sm btn-default actions-show-project-mobile" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
                             <span class="glyphicon glyphicon-remove-sign"></span>
                         </a>
                     </div>
                      <div class="pull-right">
-                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-warning" title="Editar">
+                        {{-- Web View --}}
+                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-block btn-default actions-show-project-web" title="Editar">
+                            <span class="glyphicon glyphicon-edit"></span> Editar
+                        </a>
+                        {{-- Mobile View --}}
+                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-default actions-show-project-mobile" title="Editar">
                             <span class="glyphicon glyphicon-edit"></span>
                         </a>
                     </div>
@@ -76,7 +90,7 @@
                             @foreach($project->users as $user)
                                 @if($user->role_id == 2)
                                     <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
-                                            {{ $user->last_name }} {{ $user->first_name }}
+                                            <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
                                     </a>
                                 @endif
                             @endforeach
@@ -96,7 +110,7 @@
                             @foreach($project->users as $user)
                                 @if($user->role_id == 3)
                                     <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
-                                            {{ $user->last_name }} {{ $user->first_name }}
+                                            <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
                                     </a>
                                 @endif
                             @endforeach
@@ -116,7 +130,7 @@
                             @foreach($project->users as $user)
                                 @if($user->role_id == 4)
                                     <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
-                                            {{ $user->last_name }} {{ $user->first_name }}
+                                            <span class="glyphicon glyphicon-user"></span> {{ $user->last_name }} {{ $user->first_name }}
                                     </a>
                                 @endif
                             @endforeach

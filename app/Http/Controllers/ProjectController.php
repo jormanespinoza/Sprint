@@ -18,7 +18,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::orderBy('created_at', 'desc')->paginate(10);
+        $projects = Project::orderBy('created_at', 'desc')->paginate(6);
         return view('admin.projects.index')->with('projects', $projects);
     }
 
@@ -71,7 +71,7 @@ class ProjectController extends Controller
         $project->description   = Purifier::clean($request->description);
         $project->save();
 
-        // Fetch assigned user
+        // Fetch assigned users from form
         $users = [];
         $users = array_merge($request->leaders, $request->developers, $request->clients);
 
@@ -126,11 +126,19 @@ class ProjectController extends Controller
     {
         $project = Project::find($id);
         $users = User::orderBy('last_name', 'desc')->get();
+        $fetch_users = $project->users()->orderBy('last_name')->get();
 
         // Get all users
         $clients = [];
         $developers = [];
         $leaders = [];
+
+        // Get assigned users
+        $assigned_users = [];
+
+        foreach ($fetch_users as $user) {
+            $assigned_users[$user->id] = $user->last_name. ' ' . $user->first_name;
+        }
 
         foreach ($users as $user) {
             // Get All Users
@@ -149,7 +157,8 @@ class ProjectController extends Controller
             ->with('project', $project)
             ->with('clients', $clients)
             ->with('developers', $developers)
-            ->with('leaders', $leaders);
+            ->with('leaders', $leaders)
+            ->with('users', $assigned_users);
     }
 
     /**
@@ -166,10 +175,15 @@ class ProjectController extends Controller
             'description'   => 'required|min:4'
         ]);
 
+        // dd($request->users);
+
         $project = Project::find($id);
-        $project->name          = $request->name;
-        $project->description   = Purifier::clean($request->description);
+        $project->name          = $request->input('name');
+        $project->description   = Purifier::clean($request->input('description'));
         $project->save();
+
+        // sync project/users relationship
+        $project->users()->sync($request->users);
 
         Session::flash('success', 'El proyecto fue actualizado sin problemas.');
         return redirect()->route('projects.show', $project->id);
