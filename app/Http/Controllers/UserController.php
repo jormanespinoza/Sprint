@@ -148,6 +148,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+        $user->projects()->detach();
         $user->delete();
 
         Session::flash('success', 'El usuario fue eliminado de manera exitosa.');

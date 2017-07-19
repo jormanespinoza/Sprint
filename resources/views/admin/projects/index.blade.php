@@ -71,13 +71,15 @@
                                                 <div class="modal-footer">
                                                     <ul class="list-inline">
                                                         <li>
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                                <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                            </button>
                                                         </li>
 
                                                         <li>
                                                             {{ Form::open(['route' => ['projects.destroy', $project->id]]) }}
                                                                 {{ Form::hidden('_method', 'DELETE') }}
-                                                                {{ Form::submit('Sí', ['class' => 'btn btn-danger']) }}
+                                                                {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
                                                             {{ Form::close() }}
                                                         </li>
                                                     </ul>

@@ -29,12 +29,13 @@ class DashboardController extends Controller
     {
         $user_role = Auth::user()->role_id;
         $role = Role::where('id', $user_role)->first();
+        $all_projects = Project::all();
         $role_name = $role->name;
 
         // redirect with data if the user is an admin
         if ($user_role == 1) {
             $users = User::orderBy('last_name', 'desc')->get();
-            $projects = Project::orderBy('name', 'asc')->paginate(6);
+            $projects = Project::orderBy('created', 'desc')->paginate(6);
             $clients = [];
             $developers = [];
             $leaders = [];
@@ -55,7 +56,8 @@ class DashboardController extends Controller
                 ->with('clients', $clients)
                 ->with('developers', $developers)
                 ->with('leaders', $leaders)
-                ->with('projects', $projects);
+                ->with('projects', $projects)
+                ->with('all_projects', $all_projects);
         }
 
         // redirect to users' dashboard

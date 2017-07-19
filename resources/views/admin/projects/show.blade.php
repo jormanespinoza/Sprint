@@ -2,6 +2,10 @@
 
 @section('title', '| Proyecto ' . $project->name)
 
+@section('stylesheets')
+    {!! Html::style('css/select2.min.css') !!}
+@endsection
+
 @section('data')
     <ol class="breadcrumb">
         @include('partials._toggle_menu')
@@ -32,11 +36,11 @@
                     <div class="pull-right">
                         {{-- Web View --}}
                         <a class="btn btn-block btn-default actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                            <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
+                            <span class="glyphicon glyphicon-remove-circle"></span> Eliminar
                         </a>
                         {{-- Mobile View --}}
                          <a class="btn btn-sm btn-default actions-show-project-mobile" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                            <span class="glyphicon glyphicon-remove-sign"></span>
+                            <span class="glyphicon glyphicon-remove-circle"></span>
                         </a>
                     </div>
                      <div class="pull-right">
@@ -60,25 +64,40 @@
 
     <div class="col-md-4">
         <h5>
-            <span class="glyphicon glyphicon-tags text-right"></span> Asignar Usuarios
+            <span class="glyphicon glyphicon-tags"></span> <strong>Asignar Usuarios</strong>
         </h5>
         <hr>
         <div class="well">
-            <button type="button" class="btn btn-block btn-primary">
-                <span class="glyphicon glyphicon-bookmark"></span> Líder de Proyecto
+            <button type="button" class="btn btn-block btn-primary" data-toggle="modal" role="button" data-target="#updateLeadersModal-{{ $project->id }}">
+                <span class="glyphicon glyphicon-bookmark"></span> Líder de Proyecto <span class="glyphicon glyphicon-pushpin pull-right"></span>
             </button>
-            <button type="button" class="btn btn-block btn-info">
-                <span class="glyphicon glyphicon-cog"></span> Desarrollador
+            <button type="button" class="btn btn-block btn-info" data-toggle="modal" role="button" data-target="#updateDevelopersModal-{{ $project->id }}">
+                <span class="glyphicon glyphicon-cog"></span> Desarrollador <span class="glyphicon glyphicon-pushpin pull-right"></span>
             </button>
-            <button type="button" class="btn btn-block btn-default">
-                <span class="glyphicon glyphicon-user"></span> Cliente
+            <button type="button" class="btn btn-block btn-default" data-toggle="modal" role="button" data-target="#updateClientsModal-{{ $project->id }}">
+                <span class="glyphicon glyphicon-user"></span> Cliente <span class="glyphicon glyphicon-pushpin pull-right"></span>
             </button>
+        </div>
+
+        <h5>
+            <span class="glyphicon glyphicon-list-alt"></span> <strong>Información del Proyecto</strong>
+        </h5>
+        <hr>
+        <div class="well">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <strong>Creado:</strong> {{ $project->created_at->diffForHumans() }}
+                </div>
+                <div class="list-group-item">
+                    <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="col-md-8">
         <h5>
-            <span class="glyphicon glyphicon-list-alt"></span> Información del Proyecto
+            <span class="glyphicon glyphicon-list-alt"></span> <strong>Personal Asignado</strong>
         </h5>
         <hr>
         <div class="well">
@@ -91,13 +110,14 @@
                                 @if($user->role_id == 2)
                                     <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
                                             <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                            <span class="glyphicon glyphicon-link pull-right"></span>
                                     </a>
                                 @endif
                             @endforeach
                         </ul>
                     @else
                         <div class="alert alert-default">
-                            <span class="glyphicon glyphicon-info-sign"></span>De momento no se encuentra asignado un líder de proyecto. 
+                            <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>líder</strong> asignado al proyecto. 
                         </div>
                     @endif
                 </div>
@@ -111,13 +131,14 @@
                                 @if($user->role_id == 3)
                                     <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
                                             <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                            <span class="glyphicon glyphicon-link pull-right"></span>
                                     </a>
                                 @endif
                             @endforeach
                         </ul>
                     @else
                         <div class="alert alert-default">
-                            <span class="glyphicon glyphicon-info-sign"></span>De momento no se encuentra asignado un desarrolador para el proyecto. 
+                            <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>desarrollador</strong> asignado al proyecto. 
                         </div>
                     @endif
                 </div>
@@ -131,24 +152,16 @@
                                 @if($user->role_id == 4)
                                     <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
                                             <span class="glyphicon glyphicon-user"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                            <span class="glyphicon glyphicon-link pull-right"></span>
                                     </a>
                                 @endif
                             @endforeach
                         </ul>
                     @else
                         <div class="alert alert-default">
-                            <span class="glyphicon glyphicon-info-sign"></span>De momento no se encuentra asignado un cliente para el proyecto. 
+                            <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>cliente</strong> asignado al proyecto. 
                         </div>
                     @endif
-                </div>
-            </div>
-            <hr>
-            <div class="list-group">
-                <div class="list-group-item">
-                    <strong>Creado:</strong> {{ $project->created_at->diffForHumans() }}
-                </div>
-                <div class="list-group-item">
-                    <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
                 </div>
             </div>
         </div>
@@ -160,7 +173,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">3D Sprint - Confirmación</h4>
+                    <h4 class="modal-title">Confirmación</h4>
                 </div>
                 <div class="modal-body">
                     <p>¿Seguro deseas eliminar este proyecto?</p>
@@ -168,13 +181,15 @@
                 <div class="modal-footer">
                     <ul class="list-inline">
                         <li>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-remove-sign"></i> No
+                            </button>
                         </li>
 
                         <li>
                             {{ Form::open(['route' => ['projects.destroy', $project->id]]) }}
                                 {{ Form::hidden('_method', 'DELETE') }}
-                                {{ Form::submit('Sí', ['class' => 'btn btn-danger']) }}
+                                {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
                             {{ Form::close() }}
                         </li>
                     </ul>
@@ -182,4 +197,118 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    {{-- Update Leaders Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="updateLeadersModal-{{ $project->id }}">
+        <div class="modal-dialog" role="dialog" id="model-{{ $project->id }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-bookmark"></span> Asignar Líderes de Proyecto</h4>
+                </div>
+                <div class="modal-body">
+                    {!! Form::model($project, ['route' => ['projects.updateAssignedUsers', $project->id]]) !!}
+                        {{ csrf_field() }}
+                        {{ Form::hidden('_method', 'PUT') }}
+                        <div class="form-group">
+                            {{ Form::select('users[]', $leaders, null, ['class' => 'form-control js-select2', 'multiple' => 'multiple', 'style' => 'width: 100%;']) }}
+                            {{ Form::select('users[]', $developers, null, ['multiple' => 'multiple', 'class' => 'modal-select-hidden']) }}
+                            {{ Form::select('users[]', $clients, null, ['multiple' => 'multiple', 'class' => 'modal-select-hidden']) }}
+                        </div>
+                        <div class="text-right">
+                            <ul class="list-inline">
+                                <li>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        <span class="glyphicon glyphicon-floppy-remove"></span> Cancelar
+                                    </button>
+                                </li>
+                                <li>
+                                    {{ Form::button('<i class="glyphicon glyphicon-floppy-saved"></i> Actualizar', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
+                                </li>
+                            </ul>
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    {{-- Update Developers Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="updateDevelopersModal-{{ $project->id }}">
+        <div class="modal-dialog" role="dialog" id="model-{{ $project->id }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span> Asignar Desarrolladores</h4>
+                </div>
+                <div class="modal-body">
+                    {!! Form::model($project, ['route' => ['projects.updateAssignedUsers', $project->id]]) !!}
+                        {{ csrf_field() }}
+                        {{ Form::hidden('_method', 'PUT') }}
+                        <div class="form-group">
+                            {{ Form::select('users[]', $leaders, null, ['multiple' => 'multiple', 'class' => 'modal-select-hidden']) }}
+                            {{ Form::select('users[]', $developers, null, ['class' => 'js-select2', 'multiple' => 'multiple', 'style' => 'width: 100%;']) }}
+                            {{ Form::select('users[]', $clients, null, ['multiple' => 'multiple', 'class' => 'modal-select-hidden']) }}
+                        </div>
+                        <div class="text-right">
+                            <ul class="list-inline">
+                                <li>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        <span class="glyphicon glyphicon-floppy-remove"></span> Cancelar
+                                    </button>
+                                </li>
+                                <li>
+                                    {{ Form::button('<i class="glyphicon glyphicon-floppy-saved"></i> Actualizar', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
+                                </li>
+                            </ul>
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    {{-- Update Developers Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="updateClientsModal-{{ $project->id }}">
+        <div class="modal-dialog" role="dialog" id="model-{{ $project->id }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-user"></span> Asignar Clientes</h4>
+                </div>
+                <div class="modal-body">
+                    {!! Form::model($project, ['route' => ['projects.updateAssignedUsers', $project->id]]) !!}
+                        {{ csrf_field() }}
+                        {{ Form::hidden('_method', 'PUT') }}
+                        <div class="form-group">
+                            {{ Form::select('users[]', $leaders, null, ['multiple' => 'multiple', 'class' => 'modal-select-hidden']) }}
+                            {{ Form::select('users[]', $developers, null, ['multiple' => 'multiple', 'class' => 'modal-select-hidden']) }}
+                            {{ Form::select('users[]', $clients, null, ['class' => 'form-control js-select2', 'multiple' => 'multiple', 'style' => 'width: 100%;']) }}
+                        </div>
+                        <div class="text-right">
+                            <ul class="list-inline">
+                                <li>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        <span class="glyphicon glyphicon-floppy-remove"></span> Cancelar
+                                    </button>
+                                </li>
+                                <li>
+                                    {{ Form::button('<i class="glyphicon glyphicon-floppy-saved"></i> Actualizar', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
+                                </li>
+                            </ul>
+                        </div>
+                    {{ Form::close() }}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+@endsection
+
+@section('scripts')
+    {!! Html::script('js/select2.min.js') !!}
+    <script>
+        $(document).ready(function() {
+            $(".js-select2").select2();
+        });
+    </script>
 @endsection

@@ -86,13 +86,16 @@
         });
         $(document).ready(function() {
             $(".js-select2-leader").select2({
-                placeholder: "Selecciona uno o más líderes de proyecto..."
+                placeholder: "Selecciona uno o más líderes de proyecto...",
+                allowClear: true
             });
              $(".js-select2-developer").select2({
-                placeholder: "Selecciona uno o más desarrolladores para el proyecto..."
+                placeholder: "Selecciona uno o más desarrolladores para el proyecto...",
+                allowClear: true
             });
              $(".js-select2-client").select2({
-                placeholder: "Selecciona uno o más clientes para el proyecto..."
+                placeholder: "Selecciona uno o más clientes para el proyecto...",
+                allowClear: true
             });
         });
     </script>

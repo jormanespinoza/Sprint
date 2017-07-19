@@ -10,7 +10,7 @@
     <div class="alert alert-danger" role="alert">
         <ul class="user-system-errors">
             @foreach($errors->all() as $error)
-                <li><span class="glyphicon glyphicon-info-sign"></span> {{ $error }}</li>
+                <li><span class="glyphicon glyphicon-alert"></span> {{ $error }}</li>
             @endforeach
         </ul>
     </div>

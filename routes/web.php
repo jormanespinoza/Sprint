@@ -20,6 +20,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
     Route::get('/', 'AdminController@getInfo');
     Route::resource('users', 'UserController');
     Route::resource('projects', 'ProjectController');
+    Route::put('projects/{project}/update', ['uses' => 'ProjectController@updateAssignedUsers', 'as' => 'projects.updateAssignedUsers']);
     Route::get('contact', 'PageController@getAdminContact');
     Route::post('contact', 'PageController@postAdminContact');
 });

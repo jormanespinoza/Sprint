@@ -70,6 +70,14 @@ h5 a.admin-dashboard-link {
     display: none !important;
 }
 
+.modal-select {
+    width: 100% !important;
+}
+
+.modal-select-hidden {
+    display: none !important;
+}
+
 @media (max-width: 480px) {
     .breadcrumb {
         font-size: 8.5px;

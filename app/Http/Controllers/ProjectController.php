@@ -101,6 +101,7 @@ class ProjectController extends Controller
         $assigned_leader = false;
         $assigned_developer = false;
         $assigned_client = false;
+
         foreach($users as $user) {
             if ($user->role_id == 2) {
                 $assigned_leader = true;
@@ -113,12 +114,45 @@ class ProjectController extends Controller
             }
         }
 
+        // For users asignment
+        $users = User::orderBy('last_name', 'desc')->get();
+        $fetch_users = $project->users()->orderBy('last_name')->get();
+
+        // Get all users
+        $clients = [];
+        $developers = [];
+        $leaders = [];
+
+        // Get assigned users
+        $assigned_users = [];
+
+        foreach ($fetch_users as $user) {
+            $assigned_users[$user->id] = $user->last_name. ' ' . $user->first_name;
+        }
+
+        foreach ($users as $user) {
+            // Get All Users
+            if ($user->role_id == 4) {
+                $clients[$user->id] = $user->last_name. ' ' . $user->first_name;
+            }
+            if ($user->role_id == 3) {
+                $developers[$user->id] = $user->last_name . ' ' . $user->first_name;
+            }
+            if ($user->role_id == 2) {
+                $leaders[$user->id] = $user->last_name . ' ' . $user->first_name;
+            }
+        }
+
         // return view with data
         return view('admin.projects.show')
             ->with('project', $project)
             ->with('assigned_leader', $assigned_leader)
             ->with('assigned_developer', $assigned_developer)
-            ->with('assigned_client', $assigned_client);
+            ->with('assigned_client', $assigned_client)
+            ->with('clients', $clients)
+            ->with('developers', $developers)
+            ->with('leaders', $leaders)
+            ->with('users', $assigned_users);
     }
 
     /**
@@ -194,6 +228,23 @@ class ProjectController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAssignedUsers(Request $request, $id)
+    {
+        $project = Project::find($id);
+        // sync project/users relationship
+        $project->users()->sync($request->users);
+
+        Session::flash('success', 'El proyecto fue actualizado sin problemas.');
+        return redirect()->route('projects.show', $project->id);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Project  $project
@@ -202,9 +253,10 @@ class ProjectController extends Controller
     public function destroy($id)
     {
         $project = Project::find($id);
+        $project->users()->detach();
         $project->delete();
 
-        Session::flash('success', 'El proyecto fue eliminado de manera exitosa.');
+        Session::flash('success', 'El proyecto fue eliminado sin problemas.');
         return redirect()->route('projects.index');
     }
 }
