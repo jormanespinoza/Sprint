@@ -8,7 +8,9 @@
         <li>
             <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
         </li>
-        <li class="active"><span class="glyphicon glyphicon-user"></span> Usuarios</a></li>
+        <li class="active">
+            <span class="glyphicon glyphicon-user"></span> Usuarios
+        </li>
     </ol>
 
     <div class="panel panel-default">
@@ -87,7 +89,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title">3D Sprint - Confirmación</h4>
+                                                    <h4 class="modal-title">Confirmación</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <p>¿Seguro deseas eliminar el usuario de <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>?</p>

@@ -25,9 +25,8 @@
                     </a>
                 @endforeach
             @else
-                <p class="list-group-item list-group-item-action">De momento no se encuentran proyectos generados.</p>
+                <p class="list-group-item list-group-item-action">No se encuentran proyectos generados en el sistema.</p>
             @endif
-            
         </div>
         <div class="text-center">
             {{ $projects->links() }}

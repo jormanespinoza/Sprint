@@ -5,15 +5,16 @@
 @section('content')
     <div class="jumbotron">
         <div class="container-fluid">
-            <div class="{{ Auth::guest() ? 'col-md-8' : 'col-md-12' }} text-left">
+            <div class="col-md-8 text-left">
                 <h1 class="app-title"> <img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint">{{ config('app.name', 'Laravel') }}</h1>
-                <p>
-                    Aplicación desarrollada por el equipo de <a href="http//3dlinkweb.com" target="_blank">3D Link</a>, encargada de la gestión de los proyectos de cada uno de los desarrolladores de la empresa.
-                </p>
-                <p>
-                    Cada cliente podrá acceder a sus respectivos proyectos, observar las tareas pendientes, fechas, tiempo estimado de las actividades, enviar mensajes y observaciones referentes a cada una de las etapas.
-                </p>
+                <h2>
+                    Gestión de Proyectos 
+                    <a type="button" data-toggle="modal" data-target="#informationModal" title="información de Aplicación">
+                        <small><span class="glyphicon glyphicon-info-sign"></span></small>
+                    </a>
+                </h2> 
             </div>
+
             @if(Auth::guest())
                 <div class="col-md-4">
                     <!-- Sign In Form -->
@@ -80,4 +81,33 @@
             @endif
          </div>
     </div>
+
+    {{-- Information Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="informationModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">3D Sprint</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Aplicación desarrollada por el equipo de <a href="http//3dlinkweb.com" target="_blank">3D Link</a>, encargada de la gestión de los proyectos de cada uno de los desarrolladores de la empresa.
+                    </p>
+                    <p>
+                        Cada cliente podrá acceder a sus respectivos proyectos, observar las tareas pendientes, fechas, tiempo estimado de las actividades, enviar mensajes y observaciones referentes a cada una de las etapas.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-ok-sign"></i> Perfecto
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
