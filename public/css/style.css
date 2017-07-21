@@ -56,6 +56,14 @@ h5 a.admin-dashboard-link {
     height: 30px;
 }
 
+.username {
+    margin-top: 0px;
+}
+
+.place {
+    margin-bottom: -10px;
+}
+
 .project-title {
     text-transform: uppercase;
     margin-top: 10px;

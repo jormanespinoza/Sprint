@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Profile;
 use Session;
+use Propaganistas\LaravelIntl\Facades\Country;
 
 class UserController extends Controller
 {
@@ -64,6 +66,11 @@ class UserController extends Controller
         // save user
         $user->save();
 
+        // create user profile
+        $profile = new Profile;
+        $profile->user_id = $user->id;
+        $profile->save();
+
         // send notification and redirects to a view
         Session::flash('success', 'El usuario ha sido creado satisfactoriamente.');
         return redirect()->route('users.index');
@@ -91,6 +98,8 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $roles = Role::orderBy('id', 'desc')->get();
+        $profile = $user->profile;
+
         // generate an associative array for select field
         $roles_fetch = [];
         foreach($roles as $role) {
@@ -99,6 +108,7 @@ class UserController extends Controller
 
         return view('admin.users.edit')
             ->with('user', $user)
+            ->with('profile', $profile)
             ->with('roles', $roles_fetch);
     }
 
@@ -148,7 +158,9 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+        $profile = $user->profile;
         $user->projects()->detach();
+        $profile->delete();
         $user->delete();
 
         Session::flash('success', 'El usuario fue eliminado de manera exitosa.');

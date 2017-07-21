@@ -165,6 +165,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
+        Propaganistas\LaravelPhone\LaravelPhoneServiceProvider::class,
+        Propaganistas\LaravelIntl\IntlServiceProvider::class,
 
         /*
          * Package Service Providers...

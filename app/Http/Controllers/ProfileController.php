@@ -4,27 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Session;
+use Propaganistas\LaravelIntl\Facades\Country;
 
 class ProfileController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create a new controller instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->middleware('auth');
     }
 
     /**
@@ -44,7 +37,7 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
-    public function show(Profile $profile)
+    public function show($id)
     {
         //
     }
@@ -55,9 +48,9 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
-    public function edit(Profile $profile)
+    public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -67,19 +60,25 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Profile $profile)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $user = User::find($id);
+        $profile = $user->profile;
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Profile $profile)
-    {
-        //
+        // validate user's fields
+        if ($request->input('phone') != null) {
+            $this->validate($request, [
+                'phone' => 'phone:VE,US,CL,CO'
+            ]);
+        }
+
+        // update user's profile
+        $profile->phone = $request->input('phone');
+        $profile->bio = $request->input('bio');
+        $profile->save();
+
+        // redirect and send notification
+        Session::flash('success', 'Usuario actualizado sin problemas.');
+        return redirect()->route('users.show', $user->id);
     }
 }

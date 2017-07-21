@@ -35,7 +35,7 @@ class DashboardController extends Controller
         // redirect with data if the user is an admin
         if ($user_role == 1) {
             $users = User::orderBy('last_name', 'desc')->get();
-            $projects = Project::orderBy('created', 'desc')->paginate(6);
+            $projects = Project::orderBy('created_at', 'desc')->paginate(6);
             $clients = [];
             $developers = [];
             $leaders = [];

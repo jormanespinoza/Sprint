@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Profile;
 
 class UserTableSeeder extends Seeder
 {
@@ -19,6 +20,10 @@ class UserTableSeeder extends Seeder
         $client->role_id = 4;
         $client->password = bcrypt('client');
         $client->save();
+        $profile_client = new Profile();
+        $profile_client->user_id = 1;
+        $profile_client->save();
+
 
         $developer = new User();
         $developer->first_name = 'Alex';
@@ -27,6 +32,9 @@ class UserTableSeeder extends Seeder
         $developer->role_id = 3;
         $developer->password = bcrypt('developer');
         $developer->save();
+        $profile_developer = new Profile();
+        $profile_developer->user_id = 2;
+        $profile_developer->save();
 
         $leader = new User();
         $leader->first_name = 'Linus';
@@ -35,6 +43,9 @@ class UserTableSeeder extends Seeder
         $leader->role_id = 2;
         $leader->password = bcrypt('leader');
         $leader->save();
+        $profile_leader = new Profile();
+        $profile_leader->user_id = 3;
+        $profile_leader->save();
 
         $administrator = new User();
         $administrator->first_name = 'Jorman';
@@ -43,5 +54,8 @@ class UserTableSeeder extends Seeder
         $administrator->role_id = 1;
         $administrator->password = bcrypt('jespinoza');
         $administrator->save();
+        $profile_administrator = new Profile();
+        $profile_administrator->user_id = 4;
+        $profile_administrator->save();
     }
 }

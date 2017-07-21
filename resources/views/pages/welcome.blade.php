@@ -9,7 +9,7 @@
                 <h1 class="app-title"> <img src="{{ url('images/logo.png')}}" alt="Logo de 3D Sprint">{{ config('app.name', 'Laravel') }}</h1>
                 <h2>
                     Gestión de Proyectos 
-                    <a type="button" data-toggle="modal" data-target="#informationModal" title="información de Aplicación">
+                    <a type="button" data-toggle="modal" data-target="#informationModal" title="Información de la Aplicación">
                         <small><span class="glyphicon glyphicon-info-sign"></span></small>
                     </a>
                 </h2> 

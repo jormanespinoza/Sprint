@@ -10,7 +10,9 @@
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
-        "mews/purifier": "^2.0"
+        "mews/purifier": "^2.0",
+        "propaganistas/laravel-intl": "^1.2",
+        "propaganistas/laravel-phone": "^2.8"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

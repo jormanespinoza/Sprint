@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="form-group{{ $errors->has('role_id') ? ' has-error' : '' }}">
-                    <label for="role_id" class="col-md-4 control-label">Nivel</label>
+                    <label for="role_id" class="col-md-4 control-label">Rol</label>
 
                     <div class="col-md-6">
                         <div class="input-group">
