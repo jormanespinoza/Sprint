@@ -19,8 +19,7 @@ class Administrator
     {
         if (Auth::check() && Auth::user()->role_id == 1){
             return $next($request);
-        }else {
-            return redirect('/login');
         }
+        return redirect('/login');
     }
 }

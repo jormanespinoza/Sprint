@@ -30,7 +30,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
 
 Route::resource('sprints', 'SprintController');
 Route::resource('tasks', 'TaskController');
-Route::resource('profile', 'ProfileController', ['except' => ['index', 'create', 'destroy']]);
+Route::resource('profile', 'ProfileController', ['except' => ['index', 'create', 'store', 'destroy']]);
 
 // Authentication Routes
 Auth::routes();

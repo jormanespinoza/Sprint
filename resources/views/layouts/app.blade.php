@@ -8,13 +8,11 @@
     <body>
         <div id="app">
             @include('partials._navbar')
-
             <div class="container">
                 @include('partials._messages')
                 @yield('content')
-                @include('partials._footer')
             </div>
-
+            @include('partials._footer')
             @include('partials._javascripts')
         </div>
         @yield('scripts')

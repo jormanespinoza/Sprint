@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', '| Usuario: ' . $user->first_name)
+@section('title', '| '. $user->first_name)
 
 @section('data')
     <ol class="breadcrumb">

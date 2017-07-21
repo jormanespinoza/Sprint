@@ -28,24 +28,31 @@
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
-            <ul class="nav navbar-nav"></ul>
+            <ul class="nav navbar-nav">
+                
+            </ul>
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ route('login') }}"><span class="glyphicon glyphicon-log-in"></span> Ingresar</a></li>
-                    <li><a href="{{ route('register') }}"><span class="glyphicon glyphicon-check"></span> Registrarse</a></li>
+                    <li>
+                        <a href="{{ route('login') }}"><span class="glyphicon glyphicon-log-in"></span> Ingresar</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}"><span class="glyphicon glyphicon-check"></span> Registrarse</a>
+                    </li>
                 @else
+                    <li class="{{ Request::is('projects') ? "active" : "" }}"><a href="#">Proyectos</a></li>
                     <li class="{{ Request::is('contact') ? "active" : "" }}"><a href="/contact">Contacto</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                 <img src="{{ "https://www.gravatar.com/avatar/" . md5(strtolower(trim(Auth::user()->email))) . "?d=retro" }}" class="img-circle user-image" alt="Avatar">
-                                {{ Auth::user()->first_name }} <span class="caret"></span>
+                            <img src="{{ "https://www.gravatar.com/avatar/" . md5(strtolower(trim(Auth::user()->email))) . "?d=retro" }}" class="img-circle user-image" alt="Avatar">
+                            {{ Auth::user()->first_name }} <span class="caret"></span>
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ route('dashboard')}}"><span class="glyphicon glyphicon-cog"></span>  Perfil</a></li>
+                            <li><a href="{{ route('profile.show', Auth::user()->id) }}"><span class="glyphicon glyphicon-cog"></span>  Perfil</a></li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <a href="{{ route('logout') }}" onclick="event.preventDefault();
