@@ -44,7 +44,10 @@ class ProfileController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        return view('profile.edit')->with('user', $user);
+        if (auth()->user()->id == $user->id) {
+            return view('profile.edit')->with('user', $user);
+        }
+        return redirect('/login');
     }
 
     /**

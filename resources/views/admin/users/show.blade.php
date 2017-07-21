@@ -72,10 +72,35 @@
             <span class="glyphicon glyphicon-list-alt"></span> <span class="label {{ $label_class }}">
                 <strong>{{ $user->role->name }}</strong>
             </span>
-        </p> 
+        </p>
+
+        <div class="text-right">
+            <ul class="list-inline">
+                <li>
+                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-default">
+                        <span class="glyphicon glyphicon-edit"></span> Editar
+                    </a>
+
+                    @if (Auth::user()->id != $user->id)
+                        <a href="" class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
+                        </a>
+                    @endif
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="col-md-8">
+         @if($user->profile->bio != null)
+            <h5>
+                <span class="glyphicon glyphicon-file"></span> Información
+            </h5>
+            <hr>
+            <div class="well">
+                {!! $user->profile->bio !!}
+            </div>
+        @endif
         @if($user->role_id != 1)
             <h5 class="text-primary">
                 <span class="glyphicon glyphicon-folder-close"></span> Projectos Asignados
@@ -95,32 +120,7 @@
                     </p>
                 @endif
             </div>
-        @else
-            @if($user->profile->bio != null)
-                <div class="well">
-                    {!! $user->profile->bio !!}
-                </div>
-            @endif
         @endif
-    </div>
-
-    <div class="col-md-12">
-        <div class="text-right">
-            <ul class="list-inline">
-                <li>
-                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-edit"></span> Editar
-                    </a>
-               
-                    @if (Auth::user()->id != $user->id)
-                        <a href="" class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                            <span class="glyphicon glyphicon-remove-sign"></span> Eliminar
-                        </a>
-                    @endif
-                </li>
-            </ul>
-
-        </div>
     </div>
 
     {{-- Confirmation Modal --}}

@@ -68,48 +68,44 @@
             <span class="glyphicon glyphicon-list-alt"></span> <span class="label {{ $label_class }}">
                 <strong>{{ $user->role->name }}</strong>
             </span>
-        </p> 
+        </p>
+
+        <p class="pull-right">
+            <a href="{{ route('profile.edit', $user->id) }}" class="badge badge-default">
+                <span class="glyphicon glyphicon-edit"></span> Editar Perfil
+            </a>
+        </p>
+        <div class="clearfix"></div>
     </div>
 
     <div class="col-md-8">
-        @if($user->role_id != 1)
-            <h5 class="text-primary">
-                <span class="glyphicon glyphicon-folder-close"></span> Projectos Asignados
+        @if($user->profile->bio != null)
+            <h5>
+                <span class="glyphicon glyphicon-file"></span> Información
             </h5>
             <hr>
-            <div class="list-group">
-                @if(count($user->projects) > 0)
-                    @foreach($user->projects as $project)
-                        <a href="{{ route('projects.show', $project->id) }}" class="list-group-item list-group-item-action">
-                            <strong><span class="glyphicon glyphicon-file"></span> {{ $project->name }}</strong>
-                            <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
-                        </a>
-                    @endforeach
-                @else
-                    <p class="list-group-item list-group-item-action text-warning">
-                        <strong><span class="glyphicon glyphicon-alert"></span> No tiene proyectos asignados.</strong>
-                    </p>
-                @endif
+            <div class="well">
+                {!! $user->profile->bio !!}
             </div>
-        @else
-            @if($user->profile->bio != null)
-                <div class="well">
-                    {!! $user->profile->bio !!}
-                </div>
-            @endif
         @endif
-    </div>
 
-    <div class="col-md-12">
-        <div class="text-right">
-            <ul class="list-inline">
-                <li>
-                    <a href="{{ route('profile.edit', $user->id) }}" class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-edit"></span> Editar
+        <h5>
+            <span class="glyphicon glyphicon-folder-close"></span> Projectos Asignados
+        </h5>
+        <hr>
+        <div class="list-group">
+            @if(count($user->projects) > 0)
+                @foreach($user->projects as $project)
+                    <a href="{{ route('projects.show', $project->id) }}" class="list-group-item list-group-item-action">
+                        <strong><span class="glyphicon glyphicon-file"></span> {{ $project->name }}</strong>
+                        <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
                     </a>
-                </li>
-            </ul>
-
+                @endforeach
+            @else
+                <p class="list-group-item list-group-item-action text-warning">
+                    <strong><span class="glyphicon glyphicon-alert"></span> No tiene proyectos asignados.</strong>
+                </p>
+            @endif
         </div>
     </div>
 
@@ -183,7 +179,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Información del Usuario</h4>
+                    <h4 class="modal-title">Información de {{ $user->first_name }}</h4>
                 </div>
                 <div class="modal-body">
                     {!! $user->profile->bio !!}
