@@ -74,7 +74,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body text-center">
                             ¿Nuevo en 3D Sprint? | 
-                            <a class="text-right" href="{{ route('register') }}" data-ga-click="Sign in, switch to sign up">Crea una cuenta</a>
+                            <a class="text-right" href="{{ route('register') }}" data-ga-click="Sign in, switch to sign up">Regístrate aquí</a>
                         </div>
                     </div>
                 </div>

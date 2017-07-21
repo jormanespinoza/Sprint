@@ -2,6 +2,10 @@
 
 @section('title', '| Editar Perfil')
 
+@section('stylesheets')
+    {!! Html::style('plugins/trumbowyg/ui/trumbowyg.css') !!}
+@endsection
+
 @section('content')
     <ol class="breadcrumb">
         <li>
@@ -76,46 +80,66 @@
     </div>
 
     <div class="col-md-8">
-        @if($user->profile->bio != null)
-            <h5>
-                <span class="glyphicon glyphicon-file"></span> Información
-            </h5>
-            <hr>
-            <div class="well">
-                {!! $user->profile->bio !!}
+        {!! Form::model($user, ['route' => ['profile.update', $user->id], 'class' => 'form-horizontal', 'novalidate' => '']) !!}
+            {{ csrf_field() }}
+            {{ Form::hidden('_method', 'PUT') }}
+
+            <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
+                {{ Form::label('first_name', 'Nombre', ['class' => 'control-label', 'for' => 'phone'])}}
+                <div class="input-group">
+                    {{ Form::text('first_name', $user->first_name, ['class' => 'form-control', 'for' => 'phone', 'required' => '']) }}
+                    <span class="input-group-addon" id='first_name'><span class="glyphicon glyphicon-tag"></span></span>
+                </div>
+                @if ($errors->has('first_name'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('first_name') }}</strong>
+                    </span>
+                @endif
             </div>
-        @endif
 
-        <h5>
-            <span class="glyphicon glyphicon-folder-close"></span> Projectos Asignados
-        </h5>
-        <hr>
-        <div class="list-group">
-            @if(count($user->projects) > 0)
-                @foreach($user->projects as $project)
-                    <a href="{{ route('projects.show', $project->id) }}" class="list-group-item list-group-item-action">
-                        <strong><span class="glyphicon glyphicon-file"></span> {{ $project->name }}</strong>
-                        <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
-                    </a>
-                @endforeach
-            @else
-                <p class="list-group-item list-group-item-action text-warning">
-                    <strong><span class="glyphicon glyphicon-alert"></span> No tiene proyectos asignados.</strong>
-                </p>
-            @endif
-        </div>
-    </div>
+            <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
+                {{ Form::label('last_name', 'Apellido', ['class' => 'control-label', 'for' => 'last_name'])}}
+                <div class="input-group">
+                    {{ Form::text('last_name', $user->last_name, ['class' => 'form-control', 'for' => 'last_name', 'required' => '']) }}
+                    <span class="input-group-addon" id="last_name"><span class="glyphicon glyphicon-tags"></span></span>
+                </div>
 
-    <div class="col-md-12">
-        <div class="text-right">
-            <ul class="list-inline">
-                <li>
-                    <a href="{{ route('profile.edit', $user->id) }}" class="btn btn-sm btn-default">
-                        <span class="glyphicon glyphicon-edit"></span> Actualizar
-                    </a>
-                </li>
-            </ul>
-        </div>
+                @if ($errors->has('last_name'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('last_name') }}</strong>
+                    </span>
+                @endif
+            </div>
+
+            <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+                {{ Form::label('phone', 'Teléfono', ['class' => 'control-label', 'for' => 'phone'])}}
+                <div class="input-group">
+                    {{ Form::text('phone', $user->profile->phone, ['class' => 'form-control', 'for' => 'phone', 'placeholder' => '+584120000000']) }}
+                    <span class="input-group-addon" id='phone'><span class="glyphicon glyphicon-phone"></span></span>
+                </div>
+                @if ($errors->has('phone'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('phone') }}</strong>
+                    </span>
+                @endif
+            </div>
+
+            <div class="form-group">
+                <label name="bio" class="control-label" for="phone">Biografía</label>
+                {!! Form::textarea('bio', $user->profile->bio, ['class' => 'form-control', 'id' => 'bio', 'for' => 'bio', 'name' => 'bio'])!!}
+                @if ($errors->has('bio'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('bio') }}</strong>
+                    </span>
+                @endif
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group text-right">
+                    {{ Form::submit('Actualizar', ['class' => 'btn btn-sm btn-success']) }}
+                </div>
+            </div>
+        {{ Form::close() }}
     </div>
 
     {{-- Confirmation Modal --}}
@@ -205,4 +229,14 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+@endsection
+
+@section('scripts')
+    {!! Html::script('plugins/trumbowyg/trumbowyg.js') !!}
+    {!! Html::script('plugins/trumbowyg/langs/es.min.js') !!}
+    <script>
+        $('textarea').trumbowyg({
+            lang: 'es'
+        });
+    </script>
 @endsection

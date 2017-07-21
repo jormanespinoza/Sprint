@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Profile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Session;
 
 class RegisterController extends Controller
 {
@@ -76,12 +78,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'role_id' => $data['role_id'],
-            'password' => bcrypt($data['password']),
-        ]);
+        // create new user
+        $user = new User;
+        $user->first_name   = $data['first_name'];
+        $user->last_name    = $data['last_name'];
+        $user->email        = $data['email'];
+        $user->role_id      = $data['role_id'];
+        $user->password     = bcrypt($data['password']);
+
+        // save user
+        $user->save();
+
+        // create user profile
+        $profile = new Profile;
+        $profile->user_id = $user->id;
+        $profile->save();
+
+        // send notification and redirects to a view
+        Session::flash('success', 'Bienvenido a 3D Sprint!');
+        return $user;
     }
 }

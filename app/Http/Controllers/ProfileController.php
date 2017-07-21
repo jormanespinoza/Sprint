@@ -44,8 +44,11 @@ class ProfileController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
+        $profile = $user->profile;
         if (auth()->user()->id == $user->id) {
-            return view('profile.edit')->with('user', $user);
+            return view('profile.edit')
+                ->with('user', $user)
+                ->with('profile', $profile);
         }
         return redirect('/login');
     }
@@ -76,6 +79,10 @@ class ProfileController extends Controller
 
         // redirect and send notification
         Session::flash('success', 'Usuario actualizado sin problemas.');
-        return redirect()->route('users.show', $user->id);
+        // check if the auth user it's an admin or not
+        if(auth()->user()->role_id == 1) {
+            return redirect()->route('users.show', $user->id);
+        }
+        return redirect()->route('profile.show', $user->id);
     }
 }
