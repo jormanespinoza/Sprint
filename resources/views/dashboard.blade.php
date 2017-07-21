@@ -3,7 +3,6 @@
 @section('title', '| Escritorio')
 
 @section('content')
-<div class="container">
     <div class="panel panel-default">
         <div class="panel-heading">
             @if(Auth::user()->role_id === 1)
@@ -28,5 +27,4 @@
             @endif
         </div>
     </div>
-</div>
 @endsection

@@ -65,7 +65,19 @@ class ProfileController extends Controller
         $user = User::find($id);
         $profile = $user->profile;
 
-        // validate user's fields
+        // validate user's data fields
+        if(auth()->user()->role_id != 1) {
+            $this->validate($request, [
+                'first_name'    => 'required|string|alpha|max:255',
+                'last_name'     => 'required|string|alpha|max:255',
+            ]);
+
+            // update user general info
+            $user->first_name   = $request->input('first_name');
+            $user->last_name    = $request->input('last_name');
+            $user->save();
+        }
+
         if ($request->input('phone') != null) {
             $this->validate($request, [
                 'phone' => 'phone:VE,US,CL,CO'
