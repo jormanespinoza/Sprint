@@ -30,25 +30,28 @@
         {!! $project->description !!}
     </div>
 
-    <div class="col-md-8">
+    <div class="{{ Auth::user()->role_id == 4 ? "col-md-12" : "col-md-8" }}">
         <h5>
             <span class="glyphicon glyphicon-list"></span> <strong>Sprints</strong>
         </h5>
         <hr>
 
         <div class="well">
-            <div class="text-right">
-                <a href="{{ route('sprints.create', $project->id) }}" class="btn btn-sm btn-success text-right"><span class="glyphicon glyphicon-inbox"></span> Añadir Sprint</a>
-            </div>
-
-            <br>
+            @if(Auth::user()->role_id == 3)
+                <div class="btn-new-task text-right">
+                    <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-sm btn-success text-right"><span class="glyphicon glyphicon-inbox"></span> Añadir Sprint</a>
+                </div>
+            @endif
 
             @if(count($project->sprints) > 0)
                 <div class="list-group">
                 @foreach($project->sprints as $sprint)
-                    <a href="{{ route('sprints.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-action">
-                            <strong><span class="glyphicon glyphicon-inbox"></span> {{ $sprint->name }}</strong>
-                            <span class="glyphicon glyphicon-open-file pull-right" title="Abrir Proyecto"></span>
+                    <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-action">
+                        <strong><span class="glyphicon glyphicon-inbox"></span> {{ $sprint->name }}</strong>
+                        @if($sprint->edited && Auth::user()->role_id != 4)
+                            (Editado)
+                        @endif
+                        <span class="glyphicon glyphicon-open-file pull-right" title="Abrir Proyecto"></span>
                     </a>
                 @endforeach
             </div>
@@ -61,74 +64,76 @@
         </div>
     </div>
 
-    <div class="col-md-4">
-        <h5>
-            <span class="glyphicon glyphicon-list-alt"></span> <strong>Información del Proyecto</strong>
-        </h5>
-        <hr>
-        <div class="well">
-            <div class="list-group">
-                <div class="list-group-item">
-                    <h4><strong class="label label-primary">Líder de Proyecto</strong></h4>
-                    @if($assigned_leader)
-                        <ul class="list-group">
-                            @foreach($project->users as $user)
-                                @if($user->role_id == 2)
-                                    <div href="" class="list-group-item">
-                                            <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
-                                    </div>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="alert alert-default">
-                            <span class="glyphicon glyphicon-info-sign"></span>No hay <strong>líderes</strong> asignado al proyecto. 
-                        </div>
-                    @endif
+    @if(Auth::user()->role_id != 4)
+        <div class="col-md-4">
+            <h5>
+                <span class="glyphicon glyphicon-list-alt"></span> <strong>Información del Proyecto</strong>
+            </h5>
+            <hr>
+            <div class="well">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <h4><strong class="label label-primary">Líder de Proyecto</strong></h4>
+                        @if($assigned_leader)
+                            <ul class="list-group">
+                                @foreach($project->users as $user)
+                                    @if($user->role_id == 2)
+                                        <div href="" class="list-group-item">
+                                                <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="alert alert-default">
+                                <span class="glyphicon glyphicon-info-sign"></span>No hay <strong>líderes</strong> asignados al proyecto. 
+                            </div>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            <div class="list-group">
-                <div class="list-group-item">
-                    <h4><strong class="label label-info">Desarrollador</strong></h4>
-                    @if($assigned_developer)
-                        <ul class="list-group">
-                            @foreach($project->users as $user)
-                                @if($user->role_id == 3)
-                                    <div href="" class="list-group-item">
-                                            <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
-                                    </div>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="alert alert-default">
-                            <span class="glyphicon glyphicon-info-sign"></span>No hay <strong>desarrolladores</strong> asignado al proyecto. 
-                        </div>
-                    @endif
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <h4><strong class="label label-info">Desarrollador</strong></h4>
+                        @if($assigned_developer)
+                            <ul class="list-group">
+                                @foreach($project->users as $user)
+                                    @if($user->role_id == 3)
+                                        <div href="" class="list-group-item">
+                                                <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="alert alert-default">
+                                <span class="glyphicon glyphicon-info-sign"></span>No hay <strong>desarrolladores</strong> asignados al proyecto. 
+                            </div>
+                        @endif
+                    </div>
                 </div>
-            </div>
-            <div class="list-group">
-                <div class="list-group-item">
-                    <h4><strong class="label label-default">Cliente</strong></h4>
-                    @if($assigned_client)
-                        <ul class="list-group">
-                            @foreach($project->users as $user)
-                                @if($user->role_id == 4)
-                                    <div href="" class="list-group-item">
-                                            <span class="glyphicon glyphicon-user"></span> {{ $user->last_name }} {{ $user->first_name }}
-                                    </div>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="alert alert-default">
-                            <span class="glyphicon glyphicon-info-sign"></span>No hay <strong>clientes</strong> asignado al proyecto. 
-                        </div>
-                    @endif
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <h4><strong class="label label-default">Cliente</strong></h4>
+                        @if($assigned_client)
+                            <ul class="list-group">
+                                @foreach($project->users as $user)
+                                    @if($user->role_id == 4)
+                                        <div href="" class="list-group-item">
+                                                <span class="glyphicon glyphicon-user"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="alert alert-default">
+                                <span class="glyphicon glyphicon-info-sign"></span>No hay <strong>clientes</strong> asignados al proyecto. 
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @section('scripts')

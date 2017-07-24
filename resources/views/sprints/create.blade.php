@@ -26,7 +26,7 @@
     <h5><span class="glyphicon glyphicon-inbox"></span> Nuevo Sprint</h5>
     <hr>
     <div class="col-md-12">
-         {{ Form::open(['route' => ['sprints.store', $project->id]]) }}
+         {{ Form::open(['route' => ['sprint.store', $project->id]]) }}
             <div class="row">
                 <div class="col-md-9">
                     <div class="form-group">

@@ -28,7 +28,7 @@
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email" class="control-label">Correo Electrónico</label>
                                     <div class="input-group">
-                                        <span class="input-group-addon" id="email"><span class="glyphicon glyphicon-envelope"></span></span>
+                                        <span class="input-group-addon visible-md visible-lg" id="email"><span class="glyphicon glyphicon-envelope"></span></span>
                                         <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" aria-describedby="basic-addon1" required autofocus>
                                     </div>
 
@@ -46,7 +46,7 @@
                                         ¿Olvidaste tu contraseña?
                                     </a>
                                     <div class="input-group">
-                                        <span class="input-group-addon" id="password"><span class="glyphicon glyphicon-lock"></span></span>
+                                        <span class="input-group-addon visible-md visible-lg" id="password"><span class="glyphicon glyphicon-lock"></span></span>
                                         <input id="password" type="password" class="form-control" name="password" required>
                                     </div>
 

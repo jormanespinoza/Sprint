@@ -36,7 +36,7 @@ Route::get('contact', 'PageController@getContact');
 Route::post('contact', 'PageController@postContact');
 Route::get('project/{project}', 'ProjectController@show')->name('project.show');
 Route::group(['prefix' => 'project/{project}'], function() {
-    Route::resource('sprints', 'SprintController', ['except' => 'index']);
+    Route::resource('sprint', 'SprintController', ['except' => 'index']);
 });
-Route::resource('tasks', 'TaskController');
+Route::resource('task', 'TaskController');
 Route::resource('profile', 'ProfileController', ['except' => ['index', 'create', 'store', 'destroy']]);

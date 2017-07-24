@@ -86,12 +86,19 @@ h5 a.admin-dashboard-link {
     display: none !important;
 }
 
+.btn-new-task {
+    margin-bottom: 20px;
+}
+
 @media (max-width: 480px) {
     .breadcrumb {
         font-size: 8.5px;
     }
     .app-title {
         font-size: 30px;
+    }
+    .date-font-size {
+        font-size: 12px !important;
     }
 }
 
