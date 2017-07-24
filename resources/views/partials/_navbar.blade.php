@@ -43,7 +43,7 @@
                         <a href="{{ route('register') }}"><span class="glyphicon glyphicon-check"></span> Registrarse</a>
                     </li>
                 @else
-                    <li class="{{ Request::is('projects') ? "active" : "" }}"><a href="#">Proyectos</a></li>
+                    <li class="{{ Request::is('dashboard') ? "active" : "" }}"><a href="{{ url('/dashboard') }}">Proyectos</a></li>
                     <li class="{{ Request::is('contact') ? "active" : "" }}"><a href="/contact">Contacto</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

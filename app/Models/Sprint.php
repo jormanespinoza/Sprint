@@ -16,6 +16,6 @@ class Sprint extends Model
 
     public function tasks()
     {
-        $this->hastToMany('App\Models\Task');
+        $this->hasMany('App\Models\Task');
     }
 }

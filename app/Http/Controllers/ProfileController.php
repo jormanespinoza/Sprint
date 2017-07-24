@@ -90,7 +90,7 @@ class ProfileController extends Controller
         $profile->save();
 
         // redirect and send notification
-        Session::flash('success', 'Usuario actualizado sin problemas.');
+        Session::flash('success', 'Perfil actualizado sin problemas.');
         // check if the auth user it's an admin or not
         if(auth()->user()->role_id == 1) {
             return redirect()->route('users.show', $user->id);

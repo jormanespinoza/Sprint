@@ -115,9 +115,9 @@
                         </a>
                     @endforeach
                 @else
-                    <p class="list-group-item list-group-item-action text-warning">
+                    <div class="alert alert-warning">
                         <strong><span class="glyphicon glyphicon-alert"></span> No tiene proyectos asignados.</strong>
-                    </p>
+                    </div>
                 @endif
             </div>
         @endif

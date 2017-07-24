@@ -10,7 +10,7 @@
 @section('content')
     <ol class="breadcrumb">
         <li>
-            <a href="{{ url('dashboard') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+            <a href="{{ url('dashboard') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
         </li>
         <li class="active">
             <span class="glyphicon glyphicon-tag"></span> Contacto

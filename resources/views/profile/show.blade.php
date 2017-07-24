@@ -5,7 +5,7 @@
 @section('content')
     <ol class="breadcrumb">
         <li>
-            <a href="{{ url('dashboard') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+            <a href="{{ url('dashboard') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
         </li>
         <li class="active">
             <span class="glyphicon glyphicon-tag"></span> {{ $user->first_name }}
@@ -96,15 +96,15 @@
         <div class="list-group">
             @if(count($user->projects) > 0)
                 @foreach($user->projects as $project)
-                    <a href="{{ route('projects.show', $project->id) }}" class="list-group-item list-group-item-action">
+                    <a href="{{ route('project.show', $project->id) }}" class="list-group-item list-group-item-action">
                         <strong><span class="glyphicon glyphicon-file"></span> {{ $project->name }}</strong>
                         <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
                     </a>
                 @endforeach
             @else
-                <p class="list-group-item list-group-item-action text-warning">
-                    <strong><span class="glyphicon glyphicon-alert"></span> No tiene proyectos asignados.</strong>
-                </p>
+                <div class="alert alert-warning">
+                    <strong><span class="glyphicon glyphicon-alert"></span> No tienes proyectos asignados.</strong>
+                </div>
             @endif
         </div>
     </div>

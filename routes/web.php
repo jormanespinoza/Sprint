@@ -11,27 +11,32 @@
 |
 */
 
+// Home View
 Route::get('/', 'PageController@getIndex');
-Route::get('contact', 'PageController@getContact');
-Route::post('contact', 'PageController@postContact');
+
+// Authentication Routes
+Auth::routes();
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 // Administrator Routes
 Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() {
     Route::get('/', 'AdminController@getInfo');
     Route::resource('users', 'UserController');
-    Route::resource('projects', 'ProjectController');
+    Route::resource('projects', 'ProjectsController');
     Route::put('projects/{project}/update', [
-        'uses' => 'ProjectController@updateAssignedUsers',
+        'uses' => 'ProjectsController@updateAssignedUsers',
         'as' => 'projects.updateAssignedUsers'
     ]);
     Route::get('contact', 'PageController@getAdminContact');
     Route::post('contact', 'PageController@postAdminContact');
 });
 
-Route::resource('sprints', 'SprintController');
+// User's Routes
+Route::get('contact', 'PageController@getContact');
+Route::post('contact', 'PageController@postContact');
+Route::get('project/{project}', 'ProjectController@show')->name('project.show');
+Route::group(['prefix' => 'project/{project}'], function() {
+    Route::resource('sprints', 'SprintController', ['except' => 'index']);
+});
 Route::resource('tasks', 'TaskController');
 Route::resource('profile', 'ProfileController', ['except' => ['index', 'create', 'store', 'destroy']]);
-
-// Authentication Routes
-Auth::routes();
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

@@ -28,9 +28,6 @@ class DashboardController extends Controller
     public function index()
     {
         $user_role = Auth::user()->role_id;
-        $role = Role::where('id', $user_role)->first();
-        $all_projects = Project::all();
-        $role_name = $role->name;
 
         // redirect with data if the user is an admin
         if ($user_role == 1) {
@@ -60,8 +57,8 @@ class DashboardController extends Controller
                 ->with('all_projects', $all_projects);
         }
 
+        $user = User::find(auth()->user()->id);
         // redirect to users' dashboard
-        return view('dashboard')
-            ->with('role', $role_name);
+        return view('dashboard')->with('user', $user);
     }
 }

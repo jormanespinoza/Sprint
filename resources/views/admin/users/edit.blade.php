@@ -26,6 +26,7 @@
             {!! Form::model($user, ['route' => ['users.update', $user->id], 'class' => 'form-horizontal', 'novalidate' => '']) !!}
                 {{ csrf_field() }}
                 {{ Form::hidden('_method', 'PUT') }}
+
                 <div class="col col-md-6">
                     <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
                         {{ Form::label('first_name', 'Nombre', ['class' => 'control-label', 'for' => 'phone'])}}
