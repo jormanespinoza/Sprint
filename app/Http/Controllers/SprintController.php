@@ -60,6 +60,7 @@ class SprintController extends Controller
         $sprint->name = $request->name;
         $sprint->description = $request->description;
         $sprint->project_id = $project->id;
+        $sprint->user_id = $request->user_id;
         $sprint->starts_on = $request->starts_on;
         $sprint->ends_on = $request->ends_on;
         $sprint->save();
@@ -79,9 +80,26 @@ class SprintController extends Controller
         $sprint = Sprint::find($sprint_id);
         $project = Project::find($id);
 
-        return view('sprints.show')
-            ->with('sprint', $sprint)
-            ->with('project', $project);
+        $developers = [];
+
+        // fetch project's developers
+        foreach($project->users as $user) {
+            if ($user->role_id == 3) {
+                $developers[] = $user;
+            }
+        }
+
+        // check if the developer belongs to the project, so he could create new sprints
+        foreach($developers as $developer) {
+            if (auth()->user()->id == $developer->id) {
+                return view('sprints.show')
+                    ->with('sprint', $sprint)
+                    ->with('project', $project);
+            }
+        }
+
+        // return to dashboard if this developer or user does not belong to the project
+        return redirect('/login');
     }
 
     /**

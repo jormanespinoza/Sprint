@@ -38,6 +38,8 @@
                         {{ Form::label('description', 'Descripción') }}
                         {{ Form::textarea('description', null, ['class' => 'form-control']) }}
                     </div>
+
+                    {{ Form::hidden('user_id', $developer->id) }}
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
