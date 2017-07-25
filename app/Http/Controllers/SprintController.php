@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
 use Session;
+use Purifier;
 
 class SprintController extends Controller
 {
@@ -69,7 +70,7 @@ class SprintController extends Controller
 
         $sprint = new Sprint;
         $sprint->name = $request->name;
-        $sprint->description = $request->description;
+        $sprint->description = Purifier::clean($request->descriptio);
         $sprint->project_id = $project->id;
         $sprint->user_id = $request->user_id;
         $sprint->starts_on = $request->starts_on;
@@ -240,7 +241,7 @@ class SprintController extends Controller
         }
 
         $sprint->name = $request->input('name');
-        $sprint->description = $request->input('description');
+        $sprint->description = Purifier::clean($request->input('description'));
         $sprint->project_id = $project->id;
         $sprint->user_id = $sprint->user_id;
         $sprint->starts_on = $request->input('starts_on');

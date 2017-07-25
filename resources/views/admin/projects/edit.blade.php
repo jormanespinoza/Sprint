@@ -27,7 +27,7 @@
     </ol>
 
     <div class="panel panel-default">
-        <div class="panel-heading">Crear Nuevo Proyecto</div>
+        <div class="panel-heading">Editar Proyecto</div>
         <div class="panel-body">
             {!! Form::model($project, ['route' => ['projects.update', $project->id], 'class' => 'form-vertical', 'data-parsley-validate' => '']) !!}
                 {{ csrf_field() }}

@@ -27,6 +27,7 @@
     <hr>
     <div class="col-md-12">
          {{ Form::open(['route' => ['sprint.store', $project->id]]) }}
+            {{ csrf_field() }}
             <div class="row">
                 <div class="col-md-9">
                     <div class="form-group">
@@ -49,7 +50,7 @@
                 
                     <div class="form-group">
                         {{ Form::label('ends_on', 'Fecha de Cierre') }}
-                        {{ Form::date('ends_on', null, ['class' => 'form-control']) }}
+                        {{ Form::date('ends_on', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
                     </div>
                 </div>
 

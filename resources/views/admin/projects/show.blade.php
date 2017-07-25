@@ -116,7 +116,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <div class="alert alert-default">
+                        <div class="alert alert-warning">
                             <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>líder</strong> asignado al proyecto. 
                         </div>
                     @endif
@@ -137,7 +137,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <div class="alert alert-default">
+                        <div class="alert alert-warning">
                             <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>desarrollador</strong> asignado al proyecto. 
                         </div>
                     @endif
@@ -158,7 +158,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <div class="alert alert-default">
+                        <div class="alert alert-warning">
                             <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>cliente</strong> asignado al proyecto. 
                         </div>
                     @endif

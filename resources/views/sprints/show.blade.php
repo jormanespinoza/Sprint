@@ -5,7 +5,9 @@
 @section('content')
     <ol class="breadcrumb">
         <li>
-            <a href="{{ url('dashboard') }}"><span class="glyphicon glyphicon-folder-close"></span> Proyectos</a>
+            <a href="{{ url('dashboard') }}">
+                <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+            </a>
         </li>
         <li>
             <a href="{{ route('project.show', $project->id) }}">
@@ -21,7 +23,7 @@
             <span class="glyphicon glyphicon-open-file"></span> {{ $sprint->name }}
         </li>
     </ol>
-    
+
     <div class="panel panel-info">
         <div class="panel-heading">
             <div class="row">
@@ -29,7 +31,7 @@
                     <div class="{{ Auth::user()->role_id != 4 ? "project-title" : "" }}">
                         <span>{{ $sprint->name }}</span>
                         @if($sprint->edited && Auth::user()->role_id != 4)
-                            <span style="text-transform:none;">(Editado por: {{ $editor->first_name }})</span>
+                            <span style="text-transform:none;">(Editado por {{ $editor->first_name }})</span>
                         @endif
                     </div>
                 </div>
@@ -83,7 +85,7 @@
     <div class="well">
         @if(Auth::user()->role_id == 3)
             <div class="btn-new-task text-right">
-                <a href="" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-file"></span> Añadir Nueva Tarea</a>
+                <a href="{{ route('task.create', [$project->id, $sprint->id]) }}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-file"></span> Añadir Nueva Tarea</a>
             </div>
         @endif
 

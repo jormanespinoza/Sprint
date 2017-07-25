@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Models\Project;
+use App\Models\Sprint;
+use App\Models\User;
+use Session;
+use Purifier;
 
 class TaskController extends Controller
 {
@@ -18,23 +23,35 @@ class TaskController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($project_id, $sprint_id)
     {
-        //
+        $project = Project::find($project_id);
+        $sprint = Sprint::find($sprint_id);
+        $developers = [];
+
+        // fetch project's developers
+        foreach($project->users as $user) {
+            if ($user->role_id == 3) {
+                $developers[] = $user;
+            }
+        }
+
+        // check if the developer belongs to the project, so he could create new sprints and tasks
+        foreach($developers as $developer) {
+            if (auth()->user()->id == $developer->id) {
+                return view('tasks.create')
+                    ->with('developer', $developer)
+                    ->with('sprint', $sprint)
+                    ->with('project', $project);
+            }
+        }
+
+        // return to dashboard if this developer or user does not belong to the project
+        return redirect('/login');
     }
 
     /**
@@ -43,9 +60,9 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $project_id, $sprint_id)
     {
-        //
+        dd($request->request);
     }
 
     /**
