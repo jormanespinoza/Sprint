@@ -54,45 +54,43 @@
     <div class="clearfix"></div>
 
     <div class="{{ Auth::user()->role_id == 4 ? "col-md-12" : "col-md-8" }}">
-        <h5>
-            <span class="glyphicon glyphicon-list"></span> <strong>Sprints</strong>
-        </h5>
-        <hr>
-
-        <div class="well">
-            @if(Auth::user()->role_id == 2)
-                <div class="btn-new-task text-right">
-                    <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-sm btn-success text-right"><span class="glyphicon glyphicon-inbox"></span> Añadir Sprint</a>
-                </div>
-            @endif
-
-            @if(count($project->sprints) > 0)
-                <div class="list-group">
-                @foreach($project->sprints as $sprint)
-                    <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-action">
-                        <strong><span class="glyphicon glyphicon-inbox"></span> {{ $sprint->name }}</strong>
-                        @if($sprint->edited && Auth::user()->role_id != 4)
-                            (Editado)
-                        @endif
-                        <span class="glyphicon glyphicon-open-file pull-right" title="Abrir Proyecto"></span>
-                    </a>
-                @endforeach
+        <div class="row">
+            <div class="col-md-9">
+                <h5>
+                    <span class="glyphicon glyphicon-list"></span> <strong>Sprints</strong>
+                </h5>
             </div>
-            @else
-                <div class="alert alert-warning">
-                    <span class="glyphicon glyphicon-info-sign"></span> No se encuentran <strong>sprints</strong> generados.
-                </div>
-            @endif
-            
+            <div class="col-md-3">
+                @if(Auth::user()->role_id == 2)
+                    <div class="btn-new-task text-right">
+                        <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-sm btn-success text-right"><span class="glyphicon glyphicon-inbox"></span> Añadir Sprint</a>
+                    </div>
+                @endif
+            </div>
+            <hr>
         </div>
+
+        @if(count($project->sprints) > 0)
+            <div class="list-group">
+            @foreach($project->sprints as $sprint)
+                <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-action">
+                    <strong><span class="glyphicon glyphicon-inbox"></span> {{ $sprint->name }}</strong>
+                    @if($sprint->edited && Auth::user()->role_id != 4)
+                        (Editado)
+                    @endif
+                    <span class="glyphicon glyphicon-open-file pull-right" title="Ver Sprint"></span>
+                </a>
+            @endforeach
+        </div>
+        @else
+            <div class="alert alert-warning">
+                <span class="glyphicon glyphicon-info-sign"></span> No se encuentran <strong>sprints</strong> generados.
+            </div>
+        @endif
     </div>
 
     @if(Auth::user()->role_id != 4)
         <div class="col-md-4">
-            <h5>
-                <span class="glyphicon glyphicon-list-alt"></span> <strong>Información del Proyecto</strong>
-            </h5>
-            <hr>
             <div class="well">
                 <div class="list-group">
                     <div class="list-group-item">

@@ -134,10 +134,8 @@
                 @endif
             </div>
 
-            <div class="col-md-12">
-                <div class="form-group text-right">
-                    {{ Form::submit('Actualizar', ['class' => 'btn btn-sm btn-success']) }}
-                </div>
+            <div class="form-group text-right">
+                {{ Form::submit('Actualizar', ['class' => 'btn btn-block btn-success']) }}
             </div>
         {{ Form::close() }}
     </div>
