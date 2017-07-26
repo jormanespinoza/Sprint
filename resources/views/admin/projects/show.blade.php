@@ -62,7 +62,7 @@
         {!! $project->description !!}
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-5">
         <h5>
             <span class="glyphicon glyphicon-tags"></span> <strong>Asignar Usuarios</strong>
         </h5>
@@ -91,11 +91,17 @@
                 <div class="list-group-item">
                     <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
                 </div>
+                <div class="list-group-item">
+                    <strong>URL Desarrollo:</strong> <a href="{{ $project->develop_url }}" target="_blank">{{ $project->develop_url }}</a>
+                </div>
+                <div class="list-group-item">
+                    <strong>URL Producción:</strong> <a href="{{ $project->production_url }}" target="_blank">{{ $project->production_url }}</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-7">
         <h5>
             <span class="glyphicon glyphicon-list-alt"></span> <strong>Personal Asignado</strong>
         </h5>
@@ -109,8 +115,8 @@
                             @foreach($project->users as $user)
                                 @if($user->role_id == 2)
                                     <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
-                                            <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
-                                            <span class="glyphicon glyphicon-link pull-right"></span>
+                                        <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                        <span class="glyphicon glyphicon-link pull-right"></span>
                                     </a>
                                 @endif
                             @endforeach

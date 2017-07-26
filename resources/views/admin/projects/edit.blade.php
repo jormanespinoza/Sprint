@@ -43,6 +43,21 @@
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])!!}
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ Form::label('develop_url', 'URL Desarrollo', ['class' => 'control-label', 'for' => 'description']) }}
+                            {{ Form::text('develop_url', null, ['class' => 'form-control', 'for' => 'develop_url'])}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ Form::label('production_url', 'URL Producción', ['class' => 'control-label', 'for' => 'description']) }}
+                            {{ Form::text('production_url', null, ['class' => 'form-control', 'for' => 'production_url'])}}
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     {{ Form::label('leaders', 'Líder de Proyecto') }}
                     {{ Form::select('users[]', $leaders, null, ['class' => 'form-control js-select2', 'multiple' => 'multiple']) }}

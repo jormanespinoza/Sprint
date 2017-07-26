@@ -67,12 +67,17 @@ class ProjectsController extends Controller
     {
         $this->validate($request, [
             'name'          => 'required|string|min:2|max:255',
-            'description'   => 'required|min:4'
+            'description'   => 'required|min:4',
+            'develop_url'   => 'url',
+            'production_url'   => 'url'
+
         ]);
 
         $project = new Project;
-        $project->name          = $request->name;
-        $project->description   = Purifier::clean($request->description);
+        $project->name              = $request->name;
+        $project->description       = Purifier::clean($request->description);
+        $project->develop_url       = $request->develop_url;
+        $project->production_url    = $request->production_url;
         $project->save();
 
         // Fetch assigned users from form
@@ -210,14 +215,18 @@ class ProjectsController extends Controller
     {
         $this->validate($request, [
             'name'          => 'required|string|min:2|max:255',
-            'description'   => 'required|min:4'
+            'description'   => 'required|min:4',
+            'develop_url'   => 'url',
+            'production_url'   => 'url'
         ]);
 
         // dd($request->users);
 
         $project = Project::find($id);
-        $project->name          = $request->input('name');
-        $project->description   = Purifier::clean($request->input('description'));
+        $project->name              = $request->input('name');
+        $project->description       = Purifier::clean($request->input('description'));
+        $project->develop_url       = $request->input('develop_url');
+        $project->production_url    = $request->input('production_url');
         $project->save();
 
         // sync project/users relationship

@@ -42,6 +42,21 @@
                     {{ Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])}}
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ Form::label('develop_url', 'URL Desarrollo', ['class' => 'control-label', 'for' => 'description']) }}
+                            {{ Form::text('develop_url', null, ['class' => 'form-control', 'for' => 'develop_url', 'placeholder' => 'http://localhost:8080/'])}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ Form::label('production_url', 'URL Producción', ['class' => 'control-label', 'for' => 'description']) }}
+                            {{ Form::text('production_url', null, ['class' => 'form-control', 'for' => 'production_url', 'placeholder' => 'http://3dlinkweb.com/'])}}
+                        </div>
+                    </div>
+                </div>
+
                <div class="form-group" title="Asignar uno o más líderes de proyecto">
                     {{ Form::label('leaders', 'Líder de Proyecto') }}
                     <select name="leaders[]" class="form-control js-select2-leader" multiple="multiple">
