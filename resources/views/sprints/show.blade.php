@@ -84,7 +84,7 @@
     <hr>
 
     <div class="well">
-        @if(Auth::user()->role_id == 3)
+        @if(Auth::user()->role_id != 4)
             <div class="btn-new-task text-right">
                 <a href="{{ route('task.create', [$project->id, $sprint->id]) }}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-file"></span> Añadir Nueva Tarea</a>
             </div>

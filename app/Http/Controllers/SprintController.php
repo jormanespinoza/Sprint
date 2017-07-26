@@ -48,7 +48,7 @@ class SprintController extends Controller
         }
 
         // return to dashboard if this leader or user does not belong to the project
-        return redirect('/login');
+        return redirect('/dashboard');
     }
 
     /**
@@ -70,9 +70,8 @@ class SprintController extends Controller
 
         $sprint = new Sprint;
         $sprint->name = $request->name;
-        $sprint->description = Purifier::clean($request->descriptio);
+        $sprint->description = Purifier::clean($request->description);
         $sprint->project_id = $project->id;
-        $sprint->user_id = $request->user_id;
         $sprint->starts_on = $request->starts_on;
         $sprint->ends_on = $request->ends_on;
         $sprint->save();
@@ -156,7 +155,7 @@ class SprintController extends Controller
         }
 
         // return to dashboard if this developer or user does not belong to the project
-        return redirect('/login');
+        return redirect('/dashboard');
     }
 
     /**
@@ -212,7 +211,7 @@ class SprintController extends Controller
         }
 
         // return to dashboard if this developer or user does not belong to the project
-        return redirect('/login');
+        return redirect('/dashboard');
     }
 
     /**
