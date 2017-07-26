@@ -30,6 +30,29 @@
         {!! $project->description !!}
     </div>
 
+    <div class="row list-group">
+        @if(Auth()->user()->role_id != 4)
+            <div class="col-md-6">
+                <div class="list-group-item">
+                    <strong>URL Desarrollo:</strong> <a href="{{ $project->develop_url }}" target="_black">{{ $project->develop_url }}</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="list-group-item">
+                    <strong>URL Producción:</strong> <a href="{{ $project->develop_url }}" target="_black">{{ $project->develop_url }}</a>
+                </div>
+            </div>
+        @else
+            <div class="col-md-6 col-md-offset-6">
+                <div class="list-group-item">
+                    <strong>URL del Proyecto:</strong> <a href="{{ $project->develop_url }}" target="_black">{{ $project->production_url }}</a>
+                </div>
+            </div>
+        @endif
+    </div>
+
+    <div class="clearfix"></div>
+
     <div class="{{ Auth::user()->role_id == 4 ? "col-md-12" : "col-md-8" }}">
         <h5>
             <span class="glyphicon glyphicon-list"></span> <strong>Sprints</strong>
@@ -98,8 +121,8 @@
                             <ul class="list-group">
                                 @foreach($project->users as $user)
                                     @if($user->role_id == 3)
-                                        <div href="" class="list-group-item">
-                                                <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                        <div class="list-group-item">
+                                            <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
                                         </div>
                                     @endif
                                 @endforeach

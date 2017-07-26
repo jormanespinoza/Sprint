@@ -37,7 +37,7 @@ class ProjectController extends Controller
         }
 
         if (!$checked_user) {
-            return redirect('/login');
+            return redirect('/dashboard');
         }
 
         // obtain related users to the project

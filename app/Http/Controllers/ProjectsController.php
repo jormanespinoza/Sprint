@@ -65,13 +65,32 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name'          => 'required|string|min:2|max:255',
-            'description'   => 'required|min:4',
-            'develop_url'   => 'url',
-            'production_url'   => 'url'
+        if ($request->develop_url != null && $request->production_url != null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
+                'develop_url'   => 'url',
+                'production_url'   => 'url'
 
-        ]);
+            ]);
+        }
+
+        if ($request->develop_url != null && $request->production_url == null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
+                'develop_url'   => 'url'
+
+            ]);
+        }
+
+        if ($request->develop_url == null && $request->production_url != null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
+                'production_url'   => 'url'
+            ]);
+        }
 
         $project = new Project;
         $project->name              = $request->name;
@@ -80,12 +99,14 @@ class ProjectsController extends Controller
         $project->production_url    = $request->production_url;
         $project->save();
 
-        // Fetch assigned users from form
-        $users = [];
-        $users = array_merge($request->leaders, $request->developers, $request->clients);
+        if ($request->leaders != null || $request->developers != null || $request->clients != null) {
+            // Fetch assigned users from form
+            $users = [];
+            $users = array_merge($request->leaders, $request->developers, $request->clients);
 
-        // sync project/users relationship
-        $project->users()->sync($users, false);
+            // sync project/users relationship
+            $project->users()->sync($users, false);
+        }
 
         Session::flash('success', 'El proyecto fue generado sin problemas');
         return redirect()->route('projects.show', $project->id);
@@ -213,14 +234,32 @@ class ProjectsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name'          => 'required|string|min:2|max:255',
-            'description'   => 'required|min:4',
-            'develop_url'   => 'url',
-            'production_url'   => 'url'
-        ]);
+        if ($request->input('develop_url') != null && $request->input('production_url') != null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
+                'develop_url'   => 'url',
+                'production_url'   => 'url'
 
-        // dd($request->users);
+            ]);
+        }
+
+        if ($request->input('develop_url') != null && $request->input('production_url') == null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
+                'develop_url'   => 'url'
+
+            ]);
+        }
+
+        if ($request->input('develop_url') == null && $request->input('production_url') != null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
+                'production_url'   => 'url'
+            ]);
+        }
 
         $project = Project::find($id);
         $project->name              = $request->input('name');

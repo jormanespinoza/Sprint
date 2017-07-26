@@ -92,10 +92,20 @@
                     <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
                 </div>
                 <div class="list-group-item">
-                    <strong>URL Desarrollo:</strong> <a href="{{ $project->develop_url }}" target="_blank">{{ $project->develop_url }}</a>
+                    <strong>URL Desarrollo:</strong> 
+                    @if($project->develop_url != null)
+                        <a href="{{ $project->develop_url }}" target="_blank">{{ $project->develop_url }}</a>
+                    @else
+                        <span class="label label-default"> No asignada</span>
+                    @endif
                 </div>
                 <div class="list-group-item">
-                    <strong>URL Producción:</strong> <a href="{{ $project->production_url }}" target="_blank">{{ $project->production_url }}</a>
+                    <strong>URL Producción:</strong> 
+                    @if($project->production_url != null)
+                         <a href="{{ $project->production_url }}" target="_blank">{{ $project->production_url }}</a>
+                    @else
+                        <span class="label label-default"> No asignada</span>
+                    @endif
                 </div>
             </div>
         </div>
