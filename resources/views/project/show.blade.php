@@ -55,24 +55,23 @@
 
     <div class="{{ Auth::user()->role_id == 4 ? "col-md-12" : "col-md-8" }}">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-9 col-xs-6">
                 <h5>
                     <span class="glyphicon glyphicon-list"></span> <strong>Sprints</strong>
                 </h5>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-xs-6">
                 @if(Auth::user()->role_id == 2)
                     <div class="btn-new-task text-right">
                         <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-sm btn-success text-right"><span class="glyphicon glyphicon-inbox"></span> Añadir Sprint</a>
                     </div>
                 @endif
             </div>
-            <hr>
         </div>
 
         @if(count($project->sprints) > 0)
             <div class="list-group">
-            @foreach($project->sprints as $sprint)
+            @foreach($project->sprints->sortBy('created_at') as $sprint)
                 <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-action">
                     <strong><span class="glyphicon glyphicon-inbox"></span> {{ $sprint->name }}</strong>
                     @if($sprint->edited && Auth::user()->role_id != 4)

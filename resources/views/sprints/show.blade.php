@@ -72,41 +72,122 @@
         {!! $sprint->description !!}
     </div>
 
-    <div class="col-md-5 col-md-offset-7 text-right">
-        <span class="glyphicon glyphicon-calendar text-success"></span> <span class="text-success date-font-size"> Inicia: {{ $sprint->starts_on }}</span>
-        | 
-        <span class="glyphicon glyphicon-calendar text-danger"></span> <span class="text-danger date-font-size"> Cierra: {{ $sprint->ends_on }}</span>
+    <div class="row list-group">
+        <div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 text-center">
+            <div class="list-group-item">
+                <span class="glyphicon glyphicon-calendar text-success"></span> <span class="text-success date-font-size"> Inicia: {{ $sprint->starts_on }}</span>
+                | 
+                <span class="glyphicon glyphicon-calendar text-danger"></span> <span class="text-danger date-font-size"> Cierra: {{ $sprint->ends_on }}</span>
+            </div>
+        </div>
     </div>
 
     <br>
 
-    <h5><span class="glyphicon glyphicon-tasks"></span> Tareas </h5>
-    <hr>
-
-    <div class="well">
-        @if(Auth::user()->role_id != 4)
-            <div class="btn-new-task text-right">
-                <a href="{{ route('task.create', [$project->id, $sprint->id]) }}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-file"></span> Añadir Nueva Tarea</a>
-            </div>
-        @endif
-
-        <div class="clearfix"></div>
-
-        <div class="list-group">
-            <a href="" class="list-group-item list-group-item-action">
-                <span class="glyphicon glyphicon-file"></span> Tarea
-                <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
-            </a>
-            <a href="" class="list-group-item list-group-item-action">
-                <span class="glyphicon glyphicon-file"></span> Tarea 2
-                <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
-            </a>
-            <a href="" class="list-group-item list-group-item-action">
-                <span class="glyphicon glyphicon-file"></span> Tarea 3
-                <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
-            </a>
+    <div class="row">
+        <div class="col-md-9 col-xs-7">
+            <h5>
+                <span class="glyphicon glyphicon-tasks"></span> Tareas 
+                @if(Auth::user()->role_id != 4 && $task_total_hours > 0)
+                    | <small>
+                         Horas <span class="badge">{{ $task_total_hours }}
+                    </small>
+                @endif
+            </h5>
+        </div>
+        <div class="col-md-3 col-xs-5">
+            @if(Auth::user()->role_id != 4)
+                <div class="btn-new-task text-right">
+                    <a href="{{ route('task.create', [$project->id, $sprint->id]) }}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-file"></span> Añadir Tarea</a>
+                </div>
+            @endif
         </div>
     </div>
+
+    @if(count($tasks ) > 0)
+        @if(Auth::user()->role_id != 4)
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <th class="task-name">Nombre</th>
+                        <th>Descripción</th>
+                        <th>Horas</th>
+                        <th>
+                            Estatus 
+                            <a type="button" data-toggle="modal" data-target="#statusModal" title="Estados">
+                                 <span class="glyphicon glyphicon-info-sign"></span>
+                            </a>
+                        </th>
+                        <th class="task-actions">Acciones</th>
+                    </thead>
+                    <tbody>
+                        @foreach($tasks as $task)
+                            <tr>
+                                <td>{{ $task->name }}</td>
+                                <td>{{ substr(strip_tags($task->description), 0, 110) }} {{ strlen(strip_tags($task->description)) > 110 ? '...' : '' }}</td>
+                                <td>{{ $task->hours }}</td>
+                                <td>
+                                    @php
+                                        switch ($task->status->id) {
+                                            case 1:
+                                                $label_class = 'label-default';
+                                                break;
+                                            case 2:
+                                                $label_class = 'label-info';
+                                                break;
+                                            case 3:
+                                                $label_class = 'label-primary';
+                                                break;
+                                            case 4:
+                                                $label_class = 'label-danger';
+                                                break;
+                                            case 5:
+                                                $label_class = 'label-success';
+                                                break;
+                                            default:
+                                                $label_class = 'label-default';
+                                                break;
+                                        } 
+                                    @endphp
+                                     <span class="label {{ $label_class }}">
+                                        <b>{{ $task->status->name }}</b>
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center">
+                {{ $tasks->links() }}
+            </div>
+            @if($task_total_hours > 0)
+                <div class="row list-group">
+                    <div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 text-center">
+                        <div class="list-group-item">
+                            Cantidad de Horas Acumuladas <span class="badge">{{ $task_total_hours }}
+                        </div> 
+                    </div>
+                </div>
+            @endif
+        @else
+            <div class="list-group">
+                @foreach($tasks as $task)
+                    <a class="list-group-item list-group-item-action">
+                        <span class="glyphicon glyphicon-erase"></span> {{ $task->name }}
+                        <span class="glyphicon glyphicon-new-window pull-right" title="Abrir Tarea"></span>
+                    </a>
+                @endforeach
+            </div>
+            <div class="text-center">
+                {{ $tasks->links() }}
+            </div>
+        @endif
+    @else
+        <div class="alert alert-warning">
+            <span class="glyphicon glyphicon-info-sign"></span> No se han registrado tareas para el Sprint.
+        </div>
+    @endif
 
     {{-- Confirmation Modal --}}
     <div class="modal fade" tabindex="-1" role="dialog" id="confirmationModal">
@@ -132,6 +213,71 @@
                                 {{ Form::hidden('_method', 'DELETE') }}
                                 {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
                             {{ Form::close() }}
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    {{-- Status Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="statusModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Estados de las Tareas</h4>
+                </div>
+                <div class="modal-body">
+                    {{-- Statuses --}}
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapsePending" aria-expanded="false" aria-controls="collapsePending">Pendiente</button>
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseApproved" aria-expanded="false" aria-controls="collapseApproved">Aprobado</button>
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseToConfirm" aria-expanded="false" aria-controls="collapseToConfirm">Por Confirmar</button>
+                        <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#collapseRejected" aria-expanded="false" aria-controls="collapseRejected">Rechazado</button>
+                        <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseConfirmed" aria-expanded="false" aria-controls="collapseConfirmed">Confirmado</button>
+                    </div>
+                    {{-- Statuses Descriptions--}}
+                    <div class="status-description">
+                        <div class="collapse" id="collapsePending">
+                            <hr>
+                            <div class="alert alert-default">
+                                <span class="glyphicon glyphicon-file"></span> {{ $statuses[1] }}
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseApproved">
+                            <hr>
+                            <div class="alert alert-info">
+                                <span class="glyphicon glyphicon-ok-circle"></span> {{ $statuses[2] }}
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseToConfirm">
+                            <hr>
+                            <div class="alert alert-default">
+                                <span class="text-primary"><span class="glyphicon glyphicon-edit"></span> {{ $statuses[3] }}</span>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseRejected">
+                            <hr>
+                            <div class="alert alert-danger">
+                                <span class="glyphicon glyphicon-repeat"></span> {{ $statuses[4] }}
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseConfirmed">
+                            <hr>
+                            <div class="alert alert-success">
+                                <span class="glyphicon glyphicon-check"></span> {{ $statuses[5] }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-thumbs-up"></i> Bien!
+                            </button>
                         </li>
                     </ul>
                 </div>

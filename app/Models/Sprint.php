@@ -11,11 +11,11 @@ class Sprint extends Model
     
     public function project()
     {
-        $this->belongsTo('App\Models\Project');
+        return $this->belongsTo('App\Models\Project');
     }
 
     public function tasks()
     {
-        $this->hasMany('App\Models\Task');
+        return $this->hasMany('App\Models\Task');
     }
 }

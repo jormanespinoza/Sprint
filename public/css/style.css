@@ -21,6 +21,14 @@
     min-width: 120px;
 }
 
+.task-actions {
+    min-width: 125px;
+}
+
+.task-name {
+    min-width: 150px;
+}
+
 .list-name {
     min-width: 150px;
 }
@@ -88,6 +96,10 @@ h5 a.admin-dashboard-link {
 
 .btn-new-task {
     margin-bottom: 20px;
+}
+
+.status-description {
+    font-weight: bold;
 }
 
 @media (max-width: 480px) {

@@ -17,9 +17,9 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
+            $table->integer('hours');
             $table->integer('sprint_id')->unsigned();
             $table->foreign('sprint_id')->references('id')->on('sprints');
-            $table->integer('hours');
             $table->integer('status_id')->default(1);
             $table->boolean('edited')->default(false);
             $table->integer('edited_by')->nullable();

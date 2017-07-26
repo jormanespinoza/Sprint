@@ -6,6 +6,8 @@ use App\Models\Sprint;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Status;
+use App\Models\Task;
 use Session;
 use Purifier;
 
@@ -92,6 +94,19 @@ class SprintController extends Controller
         $sprint = Sprint::find($sprint_id);
         $project = Project::find($project_id);
         $editor = User::find($sprint->edited_by);
+        $tasks = $sprint->tasks;
+        $statuses = Status::orderBy('id', 'desc')->get();
+
+        $task_total_hours = 0;
+
+        if (count($tasks) > 0) {
+            foreach($tasks as $task) {
+                $task_total_hours += $task->hours;
+            }
+        }
+
+        // fecth all sprint tasks for pagination
+        $tasks = Task::where('sprint_id', $sprint_id)->orderBy('status_id', 'desc')->orderBy('updated_at', 'asc')->paginate(10);
 
         $leaders = [];
         $developers = [];
@@ -117,6 +132,13 @@ class SprintController extends Controller
             }
         }
 
+        // fetch statuses' descriptions
+        $statuses_description = [];
+
+        foreach($statuses as $status) {
+            $statuses_description[$status->id] = $status->description;
+        }
+
         // check user role
         if ($there_are_leaders) {
             foreach($leaders as $leader) {
@@ -125,6 +147,9 @@ class SprintController extends Controller
                         ->with('sprint', $sprint)
                         ->with('user', $leader)
                         ->with('project', $project)
+                        ->with('statuses', $statuses_description)
+                        ->with('tasks', $tasks)
+                        ->with('task_total_hours', $task_total_hours)
                         ->with('editor', $editor);
                 }
             }
@@ -137,6 +162,9 @@ class SprintController extends Controller
                         ->with('sprint', $sprint)
                         ->with('user', $developer)
                         ->with('project', $project)
+                        ->with('tasks', $tasks)
+                        ->with('statuses', $statuses_description)
+                        ->with('task_total_hours', $task_total_hours)
                         ->with('editor', $editor);
                 }
             }
@@ -149,6 +177,9 @@ class SprintController extends Controller
                         ->with('sprint', $sprint)
                         ->with('user', $client)
                         ->with('project', $project)
+                        ->with('tasks', $tasks)
+                        ->with('statuses', $statuses_description)
+                        ->with('task_total_hours', $task_total_hours)
                         ->with('editor', $editor);
                 }
             }

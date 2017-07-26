@@ -11,11 +11,11 @@ class Task extends Model
 
     public function sprint()
     {
-        $this->belongsTo('App\Models\Sprint');
+        return $this->belongsTo('App\Models\Sprint');
     }
 
     public function status()
     {
-        return $this->hasOne('App\Models\Status');
+        return $this->belongsTo('App\Models\Status');
     }
 }
