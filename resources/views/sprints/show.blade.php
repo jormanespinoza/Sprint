@@ -37,8 +37,8 @@
                 </div>
 
                 @if(Auth::user()->role_id != 4)
-                    @if(!$sprint->edited || Auth::user()->role_id == 2)
-                        <div class="col-md-4 col-xs-6">
+                    <div class="col-md-4 col-xs-6">
+                        @if(Auth::user()->role_id == 2)
                             <div class="pull-right">
                                 {{-- Web View --}}
                                 <a class="btn btn-block btn-default actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
@@ -49,6 +49,8 @@
                                     <span class="glyphicon glyphicon-remove-circle"></span>
                                 </a>
                             </div>
+                        @endif
+                        @if(Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
                             <div class="pull-right">
                                 {{-- Web View --}}
                                 <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}" class="btn btn-block btn-default actions-show-project-web" title="Editar">
@@ -59,9 +61,8 @@
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
                             </div>
-                        </div>
-                    @endif
-                    
+                        @endif
+                    </div>
                 @endif
             </div>
         </div>

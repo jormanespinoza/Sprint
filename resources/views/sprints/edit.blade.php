@@ -48,6 +48,7 @@
 
                     {{ Form::hidden('user_id', Auth::user()->id) }}
                 </div>
+
                 <div class="col-md-3">
                     <div class="form-group">
                         {{ Form::label('starts_on', 'Fecha de Inicio') }}

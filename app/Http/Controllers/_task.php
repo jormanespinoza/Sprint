@@ -234,9 +234,16 @@ class SprintController extends Controller
         $project = Project::find($project_id);
         $sprint = Sprint::find($sprint_id);
 
+        // chech if the sprint is being edited by a project leader
+        if($request->input('user_id') != $sprint->user_id) {
+            $sprint->edited = true;
+            $sprint->edited_by = $request->input('user_id');
+        }
+
         $sprint->name = $request->input('name');
         $sprint->description = Purifier::clean($request->input('description'));
         $sprint->project_id = $project->id;
+        $sprint->user_id = $sprint->user_id;
         $sprint->starts_on = $request->input('starts_on');
         $sprint->ends_on = $request->input('ends_on');
         $sprint->save();
@@ -260,5 +267,46 @@ class SprintController extends Controller
 
         Session::flash('success', 'El sprint fue eliminado sin problemas.');
         return redirect()->route('project.show', $project->id);
+    }
+}
+
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateSprintsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('sprints', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->text('description');
+            $table->integer('project_id')->unsigned();
+            $table->foreign('project_id')->references('id')->on('projects');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->date('starts_on');
+            $table->date('ends_on');
+            $table->boolean('edited')->default(false);
+            $table->integer('edited_by')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('sprints');
     }
 }

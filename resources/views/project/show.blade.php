@@ -37,7 +37,7 @@
         <hr>
 
         <div class="well">
-            @if(Auth::user()->role_id == 3)
+            @if(Auth::user()->role_id == 2)
                 <div class="btn-new-task text-right">
                     <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-sm btn-success text-right"><span class="glyphicon glyphicon-inbox"></span> Añadir Sprint</a>
                 </div>
