@@ -22,7 +22,7 @@ class CreateTasksTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('hours');
-            $table->boolean('approved')->default(false);
+            $table->integer('status_id')->default(1);
             $table->boolean('edited')->default(false);
             $table->integer('edited_by')->nullable();
             $table->timestamps();
