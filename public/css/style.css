@@ -18,15 +18,11 @@
 }
 
 .actions {
-    min-width: 120px;
-}
-
-.task-actions {
-    min-width: 125px;
+    min-width: 110px;
 }
 
 .task-name {
-    min-width: 150px;
+    min-width: 100px;
 }
 
 .list-name {

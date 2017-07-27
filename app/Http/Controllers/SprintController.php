@@ -284,6 +284,9 @@ class SprintController extends Controller
     public function destroy($project_id, $sprint_id)
     {
         $sprint = Sprint::find($sprint_id);
+        // delete sprint's tasks
+        $tasks = Task::where('sprint_id', $sprint_id)->delete();
+        // delete sprint
         $sprint->delete();
 
         $project = Project::find($project_id);

@@ -23,13 +23,13 @@ class StatusTableSeeder extends Seeder
         $status_approved->save();
 
         $status_to_confirm = new Status();
-        $status_to_confirm->name = "Por Confirmar";
-        $status_to_confirm->description = "Tarea realizada por el desarrollador, pendiente por confirmación del Líder de Proyecto";
+        $status_to_confirm->name = "En Revisión";
+        $status_to_confirm->description = "Tarea realizada por el desarrollador, pendiente por revisión y/o confirmación del Líder de Proyecto";
         $status_to_confirm->save();
 
         $status_rejected = new Status();
-        $status_rejected->name = "Rechazada";
-        $status_rejected->description = "Tarea rechazada por el Líder de Proyecto, requiere programación";
+        $status_rejected->name = "Devuelta";
+        $status_rejected->description = "Tarea devuelta por el Líder de Proyecto, requiere corrección";
         $status_rejected->save();
 
         $status_confirmed = new Status();

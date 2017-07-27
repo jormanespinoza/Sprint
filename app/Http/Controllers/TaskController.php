@@ -110,25 +110,62 @@ class TaskController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Task $task)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function edit(Task $task)
+    public function edit($project_id, $sprint_id, $task_id)
     {
-        //
+        $task = Task::find($task_id);
+        $sprint = Sprint::find($sprint_id);
+        $project = Project::find($project_id);
+
+        $leaders = [];
+        $developers = [];
+
+        $there_are_leaders = false;
+        $there_are_developers = false;
+
+        // fetch project's developers and leaders
+        foreach($project->users as $user) {
+            if ($user->role_id == 2) {
+                $leaders[] = $user;
+                $there_are_leaders = true;
+            }
+            if ($user->role_id == 3) {
+                $developers[] = $user;
+                $there_are_developers = true;
+            }
+        }
+
+        // check user role
+        if ($there_are_leaders) {
+            foreach($leaders as $leader) {
+                if (auth()->user()->id == $leader->id) {
+                    return view('tasks.edit')
+                        ->with('task', $task)
+                        ->with('sprint', $sprint)
+                        ->with('user', $leader)
+                        ->with('project', $project);
+                }
+            }
+        }
+
+        if ($there_are_developers) {
+            foreach($developers as $developer) {
+                if (auth()->user()->id == $developer->id) {
+                    return view('tasks.edit')
+                        ->with('task', $task)
+                        ->with('sprint', $sprint)
+                        ->with('user', $developer)
+                        ->with('project', $project);
+                }
+            }
+        }
+
+        // return to dashboard if this developer or user does not belong to the project
+        return redirect('/dashboard');
     }
 
     /**
@@ -138,9 +175,39 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request,  $project_id, $sprint_id, $task_id)
     {
-        //
+        $project = Project::find($project_id);
+        $sprint = Sprint::find($sprint_id);
+        $task = Task::find($task_id);
+
+        if ($request->input('changing_status')) {
+            $task->status_id = $request->input('status_id');
+        }else {
+            if ($task->status_id == 1 || auth()->user()->role_id == 2) {
+                $this->validate($request, [
+                    'name'          => 'required|min:2|max:255',
+                    'description'   => 'required|min:4',
+                    'hours'         => 'integer|min:1|max:12'
+                ]);
+
+                $task->name = $request->input('name');
+                $task->hours = $request->input('hours');
+                $task->description = Purifier::clean($request->input('description'));
+            }else {
+                $this->validate($request, [
+                    'description'   => 'required|min:4',
+                ]);
+
+                $task->description = Purifier::clean($request->input('description'));
+            }
+        }
+
+        // save task data
+        $task->save();
+
+        Session::flash('success', 'La tarea del sprint fue actualizada sin problemas.');
+        return redirect()->route('sprint.show', [$project->id, $sprint->id]);
     }
 
     /**
@@ -149,8 +216,16 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy($project_id, $sprint_id, $task_id)
     {
-        //
+        $task = Task::find($task_id);
+        $sprint = Sprint::find($sprint_id);
+
+        $task->delete();
+
+        $project = Project::find($project_id);
+
+        Session::flash('success', 'La tarea fue eliminada sin problemas.');
+        return redirect()->route('sprint.show', [$project->id, $sprint->id]);
     }
 }

@@ -39,6 +39,6 @@ Route::group(['prefix' => 'project/{project}'], function() {
     Route::resource('sprint', 'SprintController', ['except' => 'index']);
 });
 Route::group(['prefix' => 'project/{project}/sprint/{sprint}'], function() {
-    Route::resource('task', 'TaskController', ['except' => 'index']);
+    Route::resource('task', 'TaskController', ['except' => ['index', 'show']]);
 });
 Route::resource('profile', 'ProfileController', ['except' => ['index', 'create', 'store', 'destroy']]);
