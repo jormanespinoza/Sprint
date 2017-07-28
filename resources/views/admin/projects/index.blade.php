@@ -36,7 +36,7 @@
 
         <div class="panel-body">
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
+                <table class="table table-hover">
                     <thead>
                         <th>ID</th>
                         <th class="list-name">Nombre</th>
@@ -44,8 +44,19 @@
                         <th class="actions">Acciones</th>
                     </thead>
                     <tbody>
-                        @foreach($projects as $project)
-                            <tr>
+                        @foreach($projects->sortBy('id') as $project)
+                            {{ $all_sprints_done = false }}
+                            @if(count($project->sprints) > 0)
+                                @foreach($project->sprints as $sprint)
+                                    @php
+                                        $all_sprints_done = true;
+                                        if (!$sprint->done) {
+                                            $all_sprints_done = false;
+                                        }
+                                    @endphp
+                                @endforeach
+                            @endif
+                            <tr class="{{ $all_sprints_done ? "success" : ""}}">
                                 <th>{{ $project->id }}</th>
                                 <td>{{ $project->name }}</td>
                                 <td>{{ substr(strip_tags($project->description), 0, 110) }} {{ strlen(strip_tags($project->description)) > 110 ? '...' : '' }}</td>

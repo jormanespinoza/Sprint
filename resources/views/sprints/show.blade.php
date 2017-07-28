@@ -121,7 +121,7 @@
                             </a>
                         </th>
                         <th class="actions">Acciones</th>
-                        <th class="actions">Gestionar</th>
+                        <th class="gestions">Gestionar</th>
                     </thead>
                     <tbody>
                         @foreach($tasks as $task)
@@ -149,7 +149,7 @@
                             @endphp
 
                             <tr class="{{ $_class }}">
-                                <td>{{ $task->name }}</td>
+                                <td>{{ substr($task->name, 0, 50) }} {{ strlen($task->name) > 50 ? '...' : '' }}</td>
                                 <td>{{ substr(strip_tags($task->description), 0, 100) }} {{ strlen(strip_tags($task->description)) > 100 ? '...' : '' }}</td>
                                 <td>{{ $task->hours }}</td>
                                 <td>

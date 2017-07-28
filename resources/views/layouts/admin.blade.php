@@ -10,7 +10,6 @@
             <div id="wrapper" class="toggled">
                 <!-- Sidebar -->
                 @include('partials._sidebar')
-
                 <!-- Page Content -->
                 <div id="page-content-wrapper">
                     <div class="container-fluid">

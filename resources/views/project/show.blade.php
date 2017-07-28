@@ -34,18 +34,33 @@
         @if(Auth()->user()->role_id != 4)
             <div class="col-md-6">
                 <div class="list-group-item">
-                    <strong>URL Desarrollo:</strong> <a href="{{ $project->develop_url }}" target="_black">{{ $project->develop_url }}</a>
+                    <strong>URL Desarrollo: </strong> 
+                    @if($project->develop_url != null)
+                        <a href="{{ $project->develop_url }}" target="_black">{{ $project->develop_url }}</a>
+                    @else
+                        <span class="label label-default"><b>No asignada</b></span>
+                    @endif
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="list-group-item">
-                    <strong>URL Producción:</strong> <a href="{{ $project->develop_url }}" target="_black">{{ $project->develop_url }}</a>
+                    <strong>URL Producción: </strong>
+                    @if($project->production_url != null)
+                         <a href="{{ $project->production_url }}" target="_black">{{ $project->production_url }}</a>
+                    @else
+                        <span class="label label-default"><b>No asignada</b></span>
+                    @endif
                 </div>
             </div>
         @else
             <div class="col-md-6 col-md-offset-6">
                 <div class="list-group-item">
-                    <strong>URL del Proyecto:</strong> <a href="{{ $project->develop_url }}" target="_black">{{ $project->production_url }}</a>
+                    <strong>URL del Proyecto:</strong> 
+                    @if($project->production_url != null)
+                         <a href="{{ $project->production_url }}" target="_black">{{ $project->production_url }}</a>
+                    @else
+                        <span class="label label-default"><b>No asignada</b></span>
+                    @endif
                 </div>
             </div>
         @endif

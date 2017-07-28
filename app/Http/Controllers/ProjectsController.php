@@ -6,6 +6,8 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Sprint;
+use App\Models\Task;
 use Session;
 use Purifier;
 
@@ -301,7 +303,17 @@ class ProjectsController extends Controller
     public function destroy($id)
     {
         $project = Project::find($id);
+
+        // detach project's users
         $project->users()->detach();
+        // delete sprint's tasks
+        foreach($projecs->sprints as $sprint) {
+            Task::where('sprint_id', $sprint->id)->delete();
+        }
+        // delete sprint's tasks
+        $project->sprints->delete();
+        
+        // delete project
         $project->delete();
 
         Session::flash('success', 'El proyecto fue eliminado sin problemas.');

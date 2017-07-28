@@ -18,7 +18,11 @@
 }
 
 .actions {
-    min-width: 110px;
+    min-width: 130px;
+}
+
+.gestions {
+    min-width: 100px;
 }
 
 .task-name {

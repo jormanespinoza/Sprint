@@ -307,7 +307,7 @@ class SprintController extends Controller
     {
         $sprint = Sprint::find($sprint_id);
         // delete sprint's tasks
-        $tasks = Task::where('sprint_id', $sprint_id)->delete();
+        Task::where('sprint_id', $sprint_id)->delete();
         // delete sprint
         $sprint->delete();
 

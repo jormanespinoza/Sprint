@@ -17,9 +17,15 @@
         </li>
     </ol>
 
-    <h1>Formulario de Contacto</h1>
-    <p>Puedes ingresar observaciones mediante el siguiente formulario</p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Formulario de Contacto
+        </div>
+    </div>
+
+    <p class="well">Puedes ingresar observaciones mediante el siguiente formulario</p>
     <hr>
+
     <form action="{{ url('contact') }}" method="POST" data-parsley-validate="" enctype="multipart/form-data">
         {{ csrf_field() }}
         <input type="hidden" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}">

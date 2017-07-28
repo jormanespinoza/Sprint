@@ -33,6 +33,7 @@ class DashboardController extends Controller
         if ($user_role == 1) {
             $users = User::orderBy('last_name', 'desc')->get();
             $projects = Project::orderBy('created_at', 'desc')->paginate(6);
+            $all_projects = Project::all();
             $clients = [];
             $developers = [];
             $leaders = [];
