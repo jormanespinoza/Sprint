@@ -50,7 +50,7 @@ class SprintController extends Controller
         }
 
         // return to dashboard if this leader or user does not belong to the project
-        return redirect('/dashboard');
+        return redirect()->route('project.show', [$project_>id, $sprint->id]);
     }
 
     /**
@@ -63,7 +63,7 @@ class SprintController extends Controller
     {
         $this->validate($request, [
             'name'              => 'required|min:2|max:255',
-            'description'       => 'min:4',
+            'description'       => 'required|min:4',
             'starts_on'         => 'required|date|after_or_equal:yesterday',
             'ends_on'           => 'required|date|after_or_equal:starts_on'
         ]);
@@ -96,13 +96,28 @@ class SprintController extends Controller
         $editor = User::find($sprint->edited_by);
         $tasks = $sprint->tasks;
         $statuses = Status::orderBy('id', 'desc')->get();
+        $all_tasks_confirmed = false;
 
         $task_total_hours = 0;
 
         if (count($tasks) > 0) {
+            $all_tasks_confirmed = true;
             foreach($tasks as $task) {
                 $task_total_hours += $task->hours;
+                // check tasks confirmation to show Sprint in green color
+                if ($task->status_id != 5) {
+                    $all_tasks_confirmed = false;
+                }
             }
+        }
+
+        // updates the Sprint's Status wheter it's done or not
+        if($all_tasks_confirmed) {
+            $sprint->done = true;
+            $sprint->save();
+        }else {
+            $sprint->done = false;
+            $sprint->save();
         }
 
         // fecth all sprint tasks for pagination
@@ -150,6 +165,7 @@ class SprintController extends Controller
                         ->with('statuses', $statuses_description)
                         ->with('tasks', $tasks)
                         ->with('task_total_hours', $task_total_hours)
+                        ->with('sprint_done', $all_tasks_confirmed)
                         ->with('editor', $editor);
                 }
             }
@@ -165,6 +181,7 @@ class SprintController extends Controller
                         ->with('tasks', $tasks)
                         ->with('statuses', $statuses_description)
                         ->with('task_total_hours', $task_total_hours)
+                        ->with('sprint_done', $all_tasks_confirmed)
                         ->with('editor', $editor);
                 }
             }
@@ -180,13 +197,14 @@ class SprintController extends Controller
                         ->with('tasks', $tasks)
                         ->with('statuses', $statuses_description)
                         ->with('task_total_hours', $task_total_hours)
+                        ->with('sprint_done', $all_tasks_confirmed)
                         ->with('editor', $editor);
                 }
             }
         }
 
         // return to dashboard if this developer or user does not belong to the project
-        return redirect('/dashboard');
+        return redirect()->route('project.show', [$project_>id, $sprint->id]);
     }
 
     /**
@@ -212,10 +230,12 @@ class SprintController extends Controller
                 $leaders[] = $user;
                 $there_are_leaders = true;
             }
+            /*
             if ($user->role_id == 3) {
                 $developers[] = $user;
                 $there_are_developers = true;
             }
+            */
         }
 
         // check user role
@@ -230,6 +250,7 @@ class SprintController extends Controller
             }
         }
 
+        /*
         if ($there_are_developers) {
             foreach($developers as $developer) {
                 if (auth()->user()->id == $developer->id) {
@@ -240,9 +261,10 @@ class SprintController extends Controller
                 }
             }
         }
+        */
 
         // return to dashboard if this developer or user does not belong to the project
-        return redirect('/dashboard');
+        return redirect()->route('project.show', [$project_>id, $sprint->id]);
     }
 
     /**
@@ -256,7 +278,7 @@ class SprintController extends Controller
     {
         $this->validate($request, [
             'name'              => 'required|min:2|max:255',
-            'description'       => 'min:4',
+            'description'       => 'required|min:4',
             'starts_on'         => 'required|date|after_or_equal:yesterday',
             'ends_on'           => 'required|date|after_or_equal:starts_on'
         ]);

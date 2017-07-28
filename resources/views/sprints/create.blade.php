@@ -30,7 +30,7 @@
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-md-9">
-                    <div class="form-group">
+                    <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                         {{ Form::label('name', 'Nombre') }}
                         {{ Form::text('name', null, ['class' => 'form-control']) }}
                     </div>
@@ -42,12 +42,12 @@
 
                 </div>
                 <div class="col-md-3">
-                    <div class="form-group">
+                    <div class="form-group{{ $errors->has('starts_on') ? ' has-error' : '' }}">
                         {{ Form::label('starts_on', 'Fecha de Inicio') }}
                         {{ Form::date('starts_on', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
                     </div>
                 
-                    <div class="form-group">
+                    <div class="form-group{{ $errors->has('ends_on') ? ' has-error' : '' }}">
                         {{ Form::label('ends_on', 'Fecha de Cierre') }}
                         {{ Form::date('ends_on', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
                     </div>

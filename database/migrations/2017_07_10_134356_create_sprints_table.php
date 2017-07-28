@@ -21,6 +21,7 @@ class CreateSprintsTable extends Migration
             $table->foreign('project_id')->references('id')->on('projects');
             $table->date('starts_on');
             $table->date('ends_on');
+            $table->boolean('done')->default(false);
             $table->timestamps();
         });
     }

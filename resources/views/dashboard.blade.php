@@ -13,7 +13,15 @@
     <hr>
     @if(count(Auth::user()->projects) > 0) 
         @foreach($user->projects as $project)
-            <a href="{{ route('project.show', $project->id) }}" class="list-group-item list-group-item-action">
+            @foreach($project->sprints as $sprint)
+                @php
+                    $all_sprints_done = true;
+                    if (!$sprint->done) {
+                        $all_sprints_done = false;
+                    }
+                @endphp
+            @endforeach
+            <a href="{{ route('project.show', $project->id) }}" class="list-group-item list-group-item-{{ $all_sprints_done ? "success " : "action"}}">
                 <span class="glyphicon glyphicon-file"></span> {{ $project->name }}
                 <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
             </a>

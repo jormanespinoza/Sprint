@@ -57,7 +57,10 @@
         <div class="row">
             <div class="col-md-9 col-xs-6">
                 <h5>
-                    <span class="glyphicon glyphicon-list"></span> <strong>Sprints</strong>
+                    <span class="glyphicon glyphicon-inbox"></span> <strong>Sprints</strong> 
+                    <a type="button" data-toggle="modal" data-target="#statusSprintModal" title="Estados">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </a>
                 </h5>
             </div>
             <div class="col-md-3 col-xs-6">
@@ -72,8 +75,8 @@
         @if(count($project->sprints) > 0)
             <div class="list-group">
             @foreach($project->sprints->sortBy('created_at') as $sprint)
-                <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-action">
-                    <strong><span class="glyphicon glyphicon-inbox"></span> {{ $sprint->name }}</strong>
+                <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-{{ $sprint->done ? "success" : "action" }}">
+                    <strong><span class="glyphicon glyphicon-{{ $sprint->done ? "share-alt" : "random"  }}"></span> {{ $sprint->name }}</strong>
                     @if($sprint->edited && Auth::user()->role_id != 4)
                         (Editado)
                     @endif
@@ -154,6 +157,37 @@
             </div>
         </div>
     @endif
+    {{-- Status Sprint Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="statusSprintModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Sprint</h4>
+                </div>
+                <div class="modal-body">
+                    <span class="list-group-item list-group-item-default">
+                        <strong><span class=""><span class="glyphicon glyphicon-random"></span> En Desarrollo</span></strong>
+                         El Sprint se encuentra en desarrollo. 
+                    </span>
+                    <br>
+                    <span class="list-group-item list-group-item-success">
+                        <strong><span class=""><span class="glyphicon glyphicon-share-alt"></span> Completado</span></strong>
+                         Todas las tareas del Sprint fueron completadas. 
+                    </span>
+                </div>
+                <div class="modal-footer">
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-thumbs-up"></i> Bien!
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 
 @section('scripts')

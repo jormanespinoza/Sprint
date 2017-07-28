@@ -51,7 +51,7 @@ class TaskController extends Controller
         }
 
 
-        if ($user_as_developer) {
+        if ($user_as_developer && !$sprint->done) {
             // check if the developer belongs to the project, so he could create new sprints and tasks
             foreach($developers as $developer) {
                 if (auth()->user()->id == $developer->id) {
@@ -63,7 +63,7 @@ class TaskController extends Controller
             }
         }
 
-        if ($user_as_leader) {
+        if ($user_as_leader && !$sprint->done) {
             // check if the developer belongs to the project, so he could create new sprints and tasks
             foreach($leaders as $leader) {
                 if (auth()->user()->id == $leader->id) {
@@ -76,7 +76,7 @@ class TaskController extends Controller
         }
 
         // return to dashboard if this developer or user does not belong to the project
-        return redirect('/dashboard');
+        return redirect()->route('sprint.show', [$project->id, $sprint->id]);
     }
 
     /**
@@ -107,6 +107,24 @@ class TaskController extends Controller
 
         Session::flash('success', 'La tarea del sprint fue creada sin problemas.');
         return redirect()->route('sprint.show', [$project->id, $sprint->id]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Taskt  $stask
+     * @return \Illuminate\Http\Response
+     */
+    public function show($project_id, $sprint_id, $task_id)
+    {
+        $project = Project::find($project_id);
+        $sprint = Sprint::find($sprint_id);
+        $task = Task::find($task_id);
+
+        return view('tasks.show')
+            ->with('task', $task)
+            ->with('sprint', $sprint)
+            ->with('project', $project);
     }
 
     /**
@@ -164,8 +182,8 @@ class TaskController extends Controller
             }
         }
 
-        // return to dashboard if this developer or user does not belong to the project
-        return redirect('/dashboard');
+        // return to sprint if this developer or user does not belong to the project
+        return redirect()->route('sprint.show', [$project->id, $sprint->id]);
     }
 
     /**

@@ -29,16 +29,13 @@
             <div class="row">
                 <div class="col-md-8 col-xs-6">
                     <div class="{{ Auth::user()->role_id != 4 ? "project-title" : "" }}">
-                        <span>{{ $sprint->name }}</span>
-                        @if($sprint->edited && Auth::user()->role_id != 4)
-                            <span style="text-transform:none;">(Editado por {{ $editor->first_name }})</span>
-                        @endif
+                        <span><span class="glyphicon glyphicon-open-file"></span> {{ $sprint->name }}</span>
                     </div>
                 </div>
 
                 @if(Auth::user()->role_id != 4)
                     <div class="col-md-4 col-xs-6">
-                        @if(Auth::user()->role_id == 2)
+                        @if(Auth::user()->role_id == 2 && !$sprint->done)
                             <div class="pull-right">
                                 {{-- Web View --}}
                                 <a class="btn btn-block btn-default actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
@@ -50,7 +47,7 @@
                                 </a>
                             </div>
                         @endif
-                        @if(Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
+                        @if(Auth::user()->role_id == 2 && !$sprint->done)
                             <div class="pull-right">
                                 {{-- Web View --}}
                                 <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}" class="btn btn-block btn-default actions-show-project-web" title="Editar">
@@ -88,6 +85,11 @@
         <div class="col-md-9 col-xs-7">
             <h5>
                 <span class="glyphicon glyphicon-tasks"></span> Tareas 
+                @if(Auth::user()->role_id == 4)
+                    <a type="button" data-toggle="modal" data-target="#statusClientModal" title="Estados">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </a>
+                @endif
                 @if(Auth::user()->role_id != 4 && $task_total_hours > 0)
                     | <small>
                          Horas <span class="badge">{{ $task_total_hours }}
@@ -96,7 +98,7 @@
             </h5>
         </div>
         <div class="col-md-3 col-xs-5">
-            @if(Auth::user()->role_id != 4)
+            @if(Auth::user()->role_id != 4 && $sprint->done == false)
                 <div class="btn-new-task text-right">
                     <a href="{{ route('task.create', [$project->id, $sprint->id]) }}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-file"></span> Añadir Tarea</a>
                 </div>
@@ -143,7 +145,7 @@
                                     default:
                                         $_class = 'default';
                                         break;
-                                } 
+                                }
                             @endphp
 
                             <tr class="{{ $_class }}">
@@ -156,7 +158,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-xs btn-default" data-toggle="modal" role="button" data-target="#showTaskModal-{{ $task->id }}" title="Abrir">
+                                    <button type="button" class="btn btn-xs btn-link" data-toggle="modal" role="button" data-target="#showTaskModal-{{ $task->id }}" title="Expandir">
                                         <span class="glyphicon glyphicon-fullscreen" ></span>
                                     </button>
 
@@ -166,11 +168,24 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title">{{ $task->name }}</h4>
+                                                    <h4 class="modal-title">
+                                                        <span class="glyphicon glyphicon-erase"></span> {{ $task->name}}
+                                                         | <span class="label label-{{ $_class }}"><strong>{{ $task->status->name }}</strong></span>
+                                                    </h4>
                                                 </div>
+
                                                 <div class="modal-body">
                                                     {!! $task->description !!}
+                                                    <div class="list-group">
+                                                        <div class="col-md-3 col-md-offset-9 col-sm-5 col-sm-offset-7 text-center">
+                                                            <div class="list-group-item">
+                                                                Número de Horas <span class="badge">{{ $task->hours }}
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                    <br>
                                                 </div>
+
                                                 <div class="modal-footer">
                                                         <li>
                                                             <button type="button" class="btn btn-primary" data-dismiss="modal">
@@ -182,6 +197,9 @@
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->
+
+                                    {{-- Task View  --}}
+                                    <a href="{{ route('task.show', [$project->id, $sprint->id, $task->id]) }}" class="btn btn-xs btn-default" title="Abrir"><span class="glyphicon glyphicon-file"></span></a>
 
                                     {{-- Edit Task --}}
                                     @if($task->status_id != 5)
@@ -386,7 +404,7 @@
 
                                     {{-- Task Rejected --}}
                                     @if($task->status_id == 4)
-                                        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" role="button" data-target="#rejectedTaskModal-{{ $task->id }}" title="Confirmar Corrección">
+                                        <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" role="button" data-target="#rejectedTaskModal-{{ $task->id }}" title="Confirmar Corrección">
                                             <span class="glyphicon glyphicon-repeat"></span>
                                         </button>
 
@@ -482,9 +500,33 @@
                 </div>
             @endif
         @else
+            {{-- Client View --}}
             <div class="list-group">
                 @foreach($tasks as $task)
-                    <a class="list-group-item list-group-item-action">
+                    @php
+                        switch ($task->status->id) {
+                            case 1:
+                                $_class = 'default';
+                                break;
+                            case 2:
+                                $_class = 'info';
+                                break;
+                            case 3:
+                                $_class = 'warning';
+                                break;
+                            case 4:
+                                $_class = 'danger';
+                                break;
+                            case 5:
+                                $_class = 'success';
+                                break;
+                            default:
+                                $_class = 'default';
+                                break;
+                        }
+                    @endphp
+
+                    <a href="{{ route('task.show', [$project->id, $sprint->id, $task->id]) }}" class="list-group-item list-group-item-{{ $_class }}">
                         <span class="glyphicon glyphicon-erase"></span> {{ $task->name }}
                         <span class="glyphicon glyphicon-new-window pull-right" title="Abrir Tarea"></span>
                     </a>
@@ -575,6 +617,71 @@
                             </div>
                         </div>
                         <div class="collapse" id="collapseConfirmed">
+                            <hr>
+                            <div class="alert alert-success">
+                                <span class="glyphicon glyphicon-check"></span> {{ $statuses[5] }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-thumbs-up"></i> Bien!
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    {{-- Status Client Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="statusClientModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Tarea</h4>
+                </div>
+                <div class="modal-body">
+                    {{-- Statuses --}}
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapseClientPending" aria-expanded="false" aria-controls="collapsePending">Pendiente</button>
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseClientApproved" aria-expanded="false" aria-controls="collapseApproved">Aprobada</button>
+                        <button type="button" class="btn btn-warning" data-toggle="collapse" data-target="#collapseClientToConfirm" aria-expanded="false" aria-controls="collapseClientToConfirm">En Revisión</button>
+                        <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#collapseClientRejected" aria-expanded="false" aria-controls="collapseClientRejected">Devuelta</button>
+                        <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseClientConfirmed" aria-expanded="false" aria-controls="collapseClientConfirmed">Confirmada</button>
+                    </div>
+                    {{-- Statuses Descriptions--}}
+                    <div class="status-description">
+                        <div class="collapse" id="collapseClientPending">
+                            <hr>
+                            <div class="alert alert-default">
+                                <span class="glyphicon glyphicon-file"></span> {{ $statuses[1] }}
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseClientApproved">
+                            <hr>
+                            <div class="alert alert-info">
+                                <span class="glyphicon glyphicon-ok-circle"></span> {{ $statuses[2] }}
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseClientToConfirm">
+                            <hr>
+                            <div class="alert alert-default">
+                                <span class="text-warning"><span class="glyphicon glyphicon-ok-sign"></span> {{ $statuses[3] }}</span>
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseClientRejected">
+                            <hr>
+                            <div class="alert alert-danger">
+                                <span class="glyphicon glyphicon-repeat"></span> {{ $statuses[4] }}
+                            </div>
+                        </div>
+                        <div class="collapse" id="collapseClientConfirmed">
                             <hr>
                             <div class="alert alert-success">
                                 <span class="glyphicon glyphicon-check"></span> {{ $statuses[5] }}
