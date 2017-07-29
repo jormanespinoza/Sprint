@@ -307,11 +307,11 @@ class ProjectsController extends Controller
         // detach project's users
         $project->users()->detach();
         // delete sprint's tasks
-        foreach($projecs->sprints as $sprint) {
-            Task::where('sprint_id', $sprint->id)->delete();
+        foreach($project->sprints as $sprint) {
+            $sprint->tasks()->delete();
         }
         // delete sprint's tasks
-        $project->sprints->delete();
+        $project->sprints()->delete();
         
         // delete project
         $project->delete();

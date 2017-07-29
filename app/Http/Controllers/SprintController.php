@@ -115,7 +115,7 @@ class SprintController extends Controller
         if($all_tasks_confirmed) {
             $sprint->done = true;
             $sprint->save();
-        }else {
+        }else if ($sprint->done) {
             $sprint->done = false;
             $sprint->save();
         }
