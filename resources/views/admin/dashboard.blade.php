@@ -9,13 +9,17 @@
             <span class="glyphicon glyphicon-th-large"></span> Inicio
         </li>
     </ol>
-     <div class="col-md-7">
+    <div class="col-md-7">
         <h5>
-            <a href="/admin/projects" class="admin-dashboard-link">
+            <a href="/admin/projects" class="btn btn-success admin-dashboard-link">
                 <span class="glyphicon glyphicon-folder-close"></span> Proyectos
             </a> | <small>Total <span class="badge">{{ count($all_projects) }}</span></small>
+            <a href="{{ Route('projects.create') }}" class="btn btn-link pull-right" title="Crear Proyecto">
+                <span class="glyphicon glyphicon-file"></span> Nuevo
+            </a>
         </h5>
         <hr>
+
         <div class="list-group">
             @if(count($projects) > 0)
                 @foreach($projects->sortBy('created_at') as $project)
@@ -46,9 +50,12 @@
 
     <div class="col-md-5">
         <h5>
-            <a href="/admin/users" class="admin-dashboard-link">
+            <a href="/admin/users" class="btn btn-primary admin-dashboard-link">
             <span class="glyphicon glyphicon-tags"></span> Usuarios
             </a> | <small>Total <span class="badge">{{ count($leaders) + count($developers) + count($clients)  }}</span></small>
+            <a href="{{ Route('users.create') }}" class="btn btn-link pull-right" title="Crear Usuario">
+                <span class="glyphicon glyphicon-user"></span> Nuevo
+            </a>
         </h5>
         <hr>
 

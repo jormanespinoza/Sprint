@@ -102,6 +102,12 @@ h5 a.admin-dashboard-link {
     font-weight: bold;
 }
 
+
+/*
+    # Media Querys
+    -------------------------------------------
+*/
+
 @media (max-width: 480px) {
     .breadcrumb {
         font-size: 8.5px;

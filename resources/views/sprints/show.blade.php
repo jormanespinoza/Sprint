@@ -176,7 +176,7 @@
 
                                                 <div class="modal-body">
                                                     {!! $task->description !!}
-                                                    <div class="list-group">
+                                                    <div class="list-group" style="padding: 5px;">
                                                         <div class="col-md-3 col-md-offset-9 col-sm-5 col-sm-offset-7 text-center">
                                                             <div class="list-group-item">
                                                                 Número de Horas <span class="badge">{{ $task->hours }}
@@ -187,6 +187,7 @@
                                                 </div>
 
                                                 <div class="modal-footer">
+                                                     <ul class="list-inline">
                                                         <li>
                                                             <button type="button" class="btn btn-primary" data-dismiss="modal">
                                                                 <i class="glyphicon glyphicon-ok-sign"></i> Ok

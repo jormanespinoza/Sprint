@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-default navbar-static-top" style="margin-bottom: -0px;">
     <div class="container">
         <div class="navbar-header">
             <!-- Collapsed Hamburger -->
@@ -44,7 +44,6 @@
                     </li>
                 @else
                     <li class="{{ Request::is('dashboard') ? "active" : "" }}"><a href="{{ url('/dashboard') }}">Proyectos</a></li>
-                    <li class="{{ Request::is('contact') ? "active" : "" }}"><a href="/contact">Contacto</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             <img src="{{ "https://www.gravatar.com/avatar/" . md5(strtolower(trim(Auth::user()->email))) . "?d=retro" }}" class="img-circle user-image" alt="Avatar">

@@ -7,19 +7,44 @@
 
     <body>
         <div id="app">
-            <div id="wrapper" class="toggled">
+            <div id="wrapper" class="active">
                 <!-- Sidebar -->
-                @include('partials._sidebar')
+                @if(Auth::check())
+                    @include('partials._sidebar_admin')
+                @endif
                 <!-- Page Content -->
                 <div id="page-content-wrapper">
-                    <div class="container-fluid">
+                    <!-- Keep all page content within the page-content inset div! -->
+                    <div class="container-fluid page-content inset">
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-md-12">
                                 @include('partials._messages')
-                                @yield('data')
+                                @yield('data') 
                             </div>
                         </div>
                     </div>
+                    @if(Auth::check())
+                        <!-- User Options -->
+                        <div class="user-options" id="collapseUser">
+                            <ul class="sidebar-nav" id="sidebar">
+                                <li>
+                                    <a href="{{ route('users.show', Auth::user()->id) }}">
+                                        <span class="glyphicon glyphicon-cog"></span>  Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                            document.getElementById('logout-form').submit();">
+                                        <span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    @endif
                     <!-- Footer -->
                     @include('partials._footer')
                 </div>
@@ -29,20 +54,29 @@
         @yield('scripts')
         <!-- Menu Toggle Script -->
         <script>
-            if ($("#wrapper").hasClass("toggled")) {
-                $("#menu-show").hide();
-            }
+            $(function() {
+                var windowsize = $(window).width();
+                if (windowsize <= 1024 ) {
+                    $("#wrapper").removeClass("active");
+                }else {
+                    $("#wrapper").addClass("active");
+                }
 
-            $("#menu-hide").click(function(e) {
-                e.preventDefault();
-                $("#wrapper").removeClass("toggled");
-                $("#menu-show").show();
-            });
+                $(window).resize(function() {
+                    windowsize = $(window).width();
+                    if (windowsize <= 1024 ) {
+                        $("#wrapper").removeClass("active");
+                    }else {
+                        $("#wrapper").addClass("active");
+                    }
+                });
 
-            $("#menu-show").click(function(e) {
-                e.preventDefault();
-                $("#wrapper").addClass("toggled");
-                $("#menu-show").hide();
+                $('#collapseUser').hide();
+
+                $('#collapseUserOptions').click(function () {
+                    $('#collapseUser').toggle();
+                })
+                $.support.transition = false;
             });
         </script>
     </body>
