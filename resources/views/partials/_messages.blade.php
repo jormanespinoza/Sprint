@@ -6,6 +6,8 @@
 @endif
 
 {{-- Errors messages --}}
+
+{{--
 @if(count($errors) > 0)
     <div class="alert alert-danger" role="alert">
         <ul class="user-system-errors">
@@ -14,4 +16,5 @@
             @endforeach
         </ul>
     </div>
-@endif
+@endif 
+--}}

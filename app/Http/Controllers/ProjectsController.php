@@ -73,7 +73,6 @@ class ProjectsController extends Controller
                 'description'   => 'required|min:4',
                 'develop_url'   => 'url',
                 'production_url'   => 'url'
-
             ]);
         }
 
@@ -82,7 +81,6 @@ class ProjectsController extends Controller
                 'name'          => 'required|string|min:2|max:255',
                 'description'   => 'required|min:4',
                 'develop_url'   => 'url'
-
             ]);
         }
 
@@ -94,6 +92,13 @@ class ProjectsController extends Controller
             ]);
         }
 
+        if ($request->develop_url == null && $request->production_url == null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
+            ]);
+        }
+
         $project = new Project;
         $project->name              = $request->name;
         $project->description       = Purifier::clean($request->description);
@@ -101,10 +106,21 @@ class ProjectsController extends Controller
         $project->production_url    = $request->production_url;
         $project->save();
 
+        // Fetch assigned users from form
+        $users = [];
+
         if ($request->leaders != null || $request->developers != null || $request->clients != null) {
-            // Fetch assigned users from form
-            $users = [];
-            $users = array_merge($request->leaders, $request->developers, $request->clients);
+            if ($request->leaders != null) {
+                $users = array_merge($request->leaders);
+            }
+
+            if ($request->developers != null) {
+                $users = array_merge($request->developers);
+            }
+
+            if ($request->clients != null) {
+                $users = array_merge($request->clients);
+            }
 
             // sync project/users relationship
             $project->users()->sync($users, false);
@@ -242,7 +258,6 @@ class ProjectsController extends Controller
                 'description'   => 'required|min:4',
                 'develop_url'   => 'url',
                 'production_url'   => 'url'
-
             ]);
         }
 
@@ -251,7 +266,6 @@ class ProjectsController extends Controller
                 'name'          => 'required|string|min:2|max:255',
                 'description'   => 'required|min:4',
                 'develop_url'   => 'url'
-
             ]);
         }
 
@@ -260,6 +274,13 @@ class ProjectsController extends Controller
                 'name'          => 'required|string|min:2|max:255',
                 'description'   => 'required|min:4',
                 'production_url'   => 'url'
+            ]);
+        }
+
+        if ($request->input('develop_url') == null && $request->input('production_url') == null) {
+            $this->validate($request, [
+                'name'          => 'required|string|min:2|max:255',
+                'description'   => 'required|min:4',
             ]);
         }
 

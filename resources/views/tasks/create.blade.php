@@ -21,6 +21,11 @@
                             {{ Form::text('name', null, ['class' => 'form-control']) }}
                             <span class="input-group-addon" id='name'><span class="glyphicon glyphicon-tag"></span></span>
                         </div>
+                        @if ($errors->has('name'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('name') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 
@@ -28,7 +33,14 @@
                     <div class="form-group{{ $errors->has('hours') ? ' has-error' : '' }}">
                         {{ Form::label('hours', 'Número de Horas', ['class' => 'control-label']) }}
                         <div class="input-group">
-                            {{ Form::number('hours', 1, ['id' => 'hours', 'class' => 'form-control']) }}
+                            <select name="hours" class="form-control" id="hours">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="5">5</option>
+                                <option value="8">8</option>
+                                <option value="13">13</option>
+                            </select>
                             <span class="input-group-addon" id='hours'><span class="glyphicon glyphicon-time"></span></span>
                         </div>
                     </div>

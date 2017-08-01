@@ -23,13 +23,24 @@
                                 {{ Form::text('name', null, ['class' => 'form-control']) }}
                                 <span class="input-group-addon" id='name'><span class="glyphicon glyphicon-tag"></span></span>
                             </div>
+                            @if ($errors->has('name'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-3">
                         <div class="form-group{{ $errors->has('hours') ? ' has-error' : '' }}">
                             {{ Form::label('hours', 'Número de Horas', ['class' => 'control-label']) }}
                             <div class="input-group">
-                                {{ Form::number('hours', null, ['id' => 'hours', 'class' => 'form-control']) }}
+                                {{ Form::select('hours', [
+                                    '1' => 1,
+                                    '2' => 2,
+                                    '3' => 3,
+                                    '5' => 5,
+                                    '8' => 8,
+                                    '13' => 13], $task->hours, ['id' => 'hours', 'class' => 'form-control']) }}
                                 <span class="input-group-addon" id='hours'><span class="glyphicon glyphicon-time"></span></span>
                             </div>
                         </div>

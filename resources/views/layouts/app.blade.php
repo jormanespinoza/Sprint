@@ -6,7 +6,7 @@
     </head>
 
     <body>
-        <div id="app" style="">
+        <div id="app">
             @if(Auth::guest())
                 @include('partials._navbar')
             @endif
@@ -32,15 +32,14 @@
                             <ul class="sidebar-nav" id="sidebar">
                                 <li>
                                     <a href="{{ route('profile.show', Auth::user()->id) }}">
-                                        <span class="glyphicon glyphicon-cog"></span>  Perfil
+                                        <span class="glyphicon glyphicon-cog"></span> Perfil
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                            document.getElementById('logout-form').submit();">
+                                        document.getElementById('logout-form').submit();">
                                         <span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión
                                     </a>
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         {{ csrf_field() }}
                                     </form>
@@ -78,17 +77,18 @@
 
                 $('#collapseProjects').on('hidden.bs.collapse', function () {
                     $('#collapse').html('Proyectos<span class="sub_icon glyphicon glyphicon-folder-close"></span>'); 
-                })
+                });
 
                 $('#collapseProjects').on('shown.bs.collapse', function () {
                     $('#collapse').html('Proyectos<span class="sub_icon glyphicon glyphicon-folder-open"></span>'); 
-                })
+                });
 
                 $('#collapseUser').hide();
 
                 $('#collapseUserOptions').click(function () {
                     $('#collapseUser').toggle();
-                })
+                });
+
                 $.support.transition = false;
             });
         </script>

@@ -33,27 +33,49 @@
     {{ Form::open(['route' => 'projects.store', 'class' => 'form-vertical', 'data-parsley-validate' => '']) }}
         {{ csrf_field() }}
 
-        <div class="form-group">
+        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
             {{ Form::label('name', 'Nombre', ['class' => 'control-label', 'for' => 'name']) }}
             {{ Form::text('name', null, ['class' => 'form-control', 'required' => '', 'minlength' => '2', 'maxlength' => '255']) }}
+
+            @if ($errors->has('name'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('name') }}</strong>
+                </span>
+            @endif
         </div>
 
-        <div class="form-group">
-            {{ Form::label('description', 'Descripción', ['class' => 'control-label', 'for' => 'description']) }}
-            {{ Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])}}
+        <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+            {{ Form::label('description', 'Descripción', ['class' => 'control-label', 'for' => 'description', 'required' => '', 'minlength' => '4']) }}
+            {{ Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description'])}}
+
+            @if ($errors->has('description'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('description') }}</strong>
+                </span>
+            @endif
         </div>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="form-group{{ $errors->has('develop_url') ? ' has-error' : '' }}">
                     {{ Form::label('develop_url', 'URL Desarrollo', ['class' => 'control-label', 'for' => 'description']) }}
                     {{ Form::text('develop_url', null, ['class' => 'form-control', 'for' => 'develop_url', 'placeholder' => 'http://localhost:8080/'])}}
+                    @if ($errors->has('develop_url'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('develop_url') }}</strong>
+                        </span>
+                    @endif
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="form-group{{ $errors->has('production_url') ? ' has-error' : '' }}">
                     {{ Form::label('production_url', 'URL Producción', ['class' => 'control-label', 'for' => 'description']) }}
                     {{ Form::text('production_url', null, ['class' => 'form-control', 'for' => 'production_url', 'placeholder' => 'http://3dlinkweb.com/'])}}
+                    @if ($errors->has('production_url'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('production_url') }}</strong>
+                        </span>
+                    @endif
                 </div>
             </div>
         </div>

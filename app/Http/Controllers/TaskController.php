@@ -89,8 +89,7 @@ class TaskController extends Controller
     {
         $this->validate($request, [
             'name'          => 'required|min:2|max:255',
-            'description'   => 'required|min:4',
-            'hours'         => 'integer|min:1|max:12'
+            'description'   => 'required|min:4'
         ]);
 
         $project = Project::find($project_id);
@@ -204,19 +203,13 @@ class TaskController extends Controller
         }else {
             if ($task->status_id == 1 || auth()->user()->role_id == 2) {
                 $this->validate($request, [
-                    'name'          => 'required|min:2|max:255',
-                    'description'   => 'required|min:4',
-                    'hours'         => 'integer|min:1|max:12'
+                    'name'          => 'required|min:2|max:255'
                 ]);
 
                 $task->name = $request->input('name');
                 $task->hours = $request->input('hours');
                 $task->description = Purifier::clean($request->input('description'));
             }else {
-                $this->validate($request, [
-                    'description'   => 'required|min:4',
-                ]);
-
                 $task->description = Purifier::clean($request->input('description'));
             }
         }

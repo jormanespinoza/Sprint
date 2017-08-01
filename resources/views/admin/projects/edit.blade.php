@@ -4,7 +4,7 @@
 
 @section('stylesheets')
     {!! Html::style('css/parsley.css') !!}
-    {!! Html::style('css/select2.min.css') !!}
+    {!! Html::style('css/select2.css') !!}
     {!! Html::style('plugins/trumbowyg/ui/trumbowyg.css') !!}
 @endsection
 
@@ -33,27 +33,47 @@
                 {{ csrf_field() }}
                 {{ Form::hidden('_method', 'PUT') }}
 
-                <div class="form-group">
+                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     {{ Form::label('name', 'Nombre del Proyecto', ['class' => 'control-label', 'for' => 'name']) }}
                     {{ Form::text('name', null, ['class' => 'form-control', 'required' => '', 'minlength' => '2', 'maxlength' => '255']) }}
+                    @if ($errors->has('name'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('name') }}</strong>
+                        </span>
+                    @endif
                 </div>
 
-                <div class="form-group">
+                <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                     {{ Form::label('description', 'Descripción Proyecto', ['class' => 'control-label', 'for' => 'description']) }}
                     {!! Form::textarea('description', null, ['class' => 'form-control', 'for' => 'description', 'required' => '', 'minlength' => '4'])!!}
+                    @if ($errors->has('description'))
+                        <span class="help-block">
+                            <strong>{{ $errors->first('description') }}</strong>
+                        </span>
+                    @endif
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('develop_url') ? ' has-error' : '' }}">
                             {{ Form::label('develop_url', 'URL Desarrollo', ['class' => 'control-label', 'for' => 'description']) }}
-                            {{ Form::text('develop_url', null, ['class' => 'form-control', 'for' => 'develop_url'])}}
+                            {{ Form::text('develop_url', null, ['class' => 'form-control', 'for' => 'develop_url']) }}
+                            @if ($errors->has('develop_url'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('develop_url') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('production_url') ? ' has-error' : '' }}">
                             {{ Form::label('production_url', 'URL Producción', ['class' => 'control-label', 'for' => 'description']) }}
-                            {{ Form::text('production_url', null, ['class' => 'form-control', 'for' => 'production_url'])}}
+                            {{ Form::text('production_url', null, ['class' => 'form-control', 'for' => 'production_url']) }}
+                            @if ($errors->has('production_url'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('production_url') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                 </div>

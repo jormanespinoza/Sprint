@@ -102,7 +102,6 @@ h5 a.admin-dashboard-link {
     font-weight: bold;
 }
 
-
 /*
     # Media Querys
     -------------------------------------------
@@ -117,14 +116,5 @@ h5 a.admin-dashboard-link {
     }
     .date-font-size {
         font-size: 12px !important;
-    }
-}
-
-@media screen and (max-width: 680px) {
-    .actions-show-project-web {
-        display: none !important;
-    }
-    .actions-show-project-mobile {
-        display: block !important;
     }
 }

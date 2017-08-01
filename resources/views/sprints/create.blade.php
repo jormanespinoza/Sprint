@@ -33,11 +33,21 @@
                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                         {{ Form::label('name', 'Nombre') }}
                         {{ Form::text('name', null, ['class' => 'form-control']) }}
+                        @if ($errors->has('name'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('name') }}</strong>
+                            </span>
+                        @endif
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                         {{ Form::label('description', 'Descripción') }}
                         {{ Form::textarea('description', null, ['class' => 'form-control']) }}
+                        @if ($errors->has('description'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('description') }}</strong>
+                            </span>
+                        @endif
                     </div>
 
                 </div>
@@ -45,11 +55,21 @@
                     <div class="form-group{{ $errors->has('starts_on') ? ' has-error' : '' }}">
                         {{ Form::label('starts_on', 'Fecha de Inicio') }}
                         {{ Form::date('starts_on', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
+                        @if ($errors->has('starts_on'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('starts_on') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 
                     <div class="form-group{{ $errors->has('ends_on') ? ' has-error' : '' }}">
                         {{ Form::label('ends_on', 'Fecha de Cierre') }}
                         {{ Form::date('ends_on', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
+                        @if ($errors->has('ends_on'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('ends_on') }}</strong>
+                            </span>
+                        @endif
                     </div>
                 </div>
 
