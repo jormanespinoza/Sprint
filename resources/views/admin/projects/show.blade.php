@@ -3,7 +3,7 @@
 @section('title', '| Proyecto ' . $project->name)
 
 @section('stylesheets')
-    {!! Html::style('css/select2.min.css') !!}
+    {!! Html::style('css/select2.css') !!}
 @endsection
 
 @section('data')

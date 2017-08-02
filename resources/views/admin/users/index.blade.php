@@ -40,7 +40,7 @@
                         <th>Apellido</th>
                         <th>Nombre</th>
                         <th>Correo Electrónico</th>
-                        <th>Nivel</th>
+                        <th>Rol</th>
                         <th class="actions">Acciones</th>
                     </thead>
                     <tbody>

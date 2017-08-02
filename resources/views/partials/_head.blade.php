@@ -14,6 +14,6 @@
 <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 @yield('stylesheets')
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css">
+{!! Html::style('css/yeti.css') !!}
 {{--  <link rel="stylesheet" href="https://bootswatch.com/sandstone/bootstrap.min.css">  --}}
 {{--  <link rel="stylesheet" href="https://bootswatch.com/slate/bootstrap.min.css">  --}}

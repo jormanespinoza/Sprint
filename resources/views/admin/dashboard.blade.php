@@ -35,7 +35,7 @@
                         @endforeach
                     @endif
                     <a href="{{ route('projects.show', $project->id) }}" class="list-group-item list-group-item-{{ $all_sprints_done ? "success " : "action"}}">
-                        <span class="glyphicon glyphicon-file"></span> {{ $project->name }}
+                        <span class="glyphicon glyphicon-file"></span> {{ substr($project->name, 0, 20) }} {{ strlen($project->name) > 20 ? '...' : '' }}
                         <span class="glyphicon glyphicon-folder-open pull-right" title="Abrir Proyecto"></span>
                     </a>
                 @endforeach

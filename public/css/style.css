@@ -102,6 +102,11 @@ h5 a.admin-dashboard-link {
     font-weight: bold;
 }
 
+.card-project {
+    padding-bottom: 1% !important;
+    min-height: 240px !important;
+}
+
 /*
     # Media Querys
     -------------------------------------------

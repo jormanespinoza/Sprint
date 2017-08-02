@@ -4,7 +4,7 @@
 
 @section('stylesheets')
     {!! Html::style('css/parsley.css') !!}
-    {!! Html::style('css/select2.min.css') !!}
+    {!! Html::style('css/select2.css') !!}
     {!! Html::style('plugins/trumbowyg/ui/trumbowyg.css') !!}
 @endsection
 
