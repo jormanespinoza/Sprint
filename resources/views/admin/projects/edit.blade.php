@@ -10,10 +10,9 @@
 
 @section('data')
     <ol class="breadcrumb">
-        @include('partials._toggle_menu')
         <li>
             <a href="{{ url('admin') }}">
-                <span class="glyphicon glyphicon-th-large"></span> Inicio
+                <span class="glyphicon glyphicon-dashboard"></span> Dashboard
             </a>
         </li>
         <li>

@@ -19,8 +19,8 @@ class CreateSprintsTable extends Migration
             $table->text('description');
             $table->integer('project_id')->unsigned();
             $table->foreign('project_id')->references('id')->on('projects');
-            $table->date('starts_on');
-            $table->date('ends_on');
+            $table->date('starts_on')->nullable();
+            $table->date('ends_on')->nullable();
             $table->boolean('done')->default(false);
             $table->timestamps();
         });
@@ -33,8 +33,6 @@ class CreateSprintsTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::drop('projects');
         Schema::dropIfExists('sprints');
     }
 }

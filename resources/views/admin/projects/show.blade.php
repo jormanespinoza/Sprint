@@ -8,10 +8,9 @@
 
 @section('data')
     <ol class="breadcrumb">
-        @include('partials._toggle_menu')
         <li>
             <a href="{{ url('admin') }}">
-                <span class="glyphicon glyphicon-th-large"></span> Inicio
+                <span class="glyphicon glyphicon-dashboard"></span> Dashboard
             </a>
         </li>
         <li>
@@ -67,46 +66,44 @@
             <span class="glyphicon glyphicon-tags"></span> <strong>Asignar Usuarios</strong>
         </h5>
         <hr>
-        <div class="well">
-            <button type="button" class="btn btn-block btn-primary" data-toggle="modal" role="button" data-target="#updateLeadersModal-{{ $project->id }}">
-                <span class="glyphicon glyphicon-bookmark"></span> Líder de Proyecto <span class="glyphicon glyphicon-pushpin pull-right"></span>
-            </button>
-            <button type="button" class="btn btn-block btn-info" data-toggle="modal" role="button" data-target="#updateDevelopersModal-{{ $project->id }}">
-                <span class="glyphicon glyphicon-cog"></span> Desarrollador <span class="glyphicon glyphicon-pushpin pull-right"></span>
-            </button>
-            <button type="button" class="btn btn-block btn-default" data-toggle="modal" role="button" data-target="#updateClientsModal-{{ $project->id }}">
-                <span class="glyphicon glyphicon-user"></span> Cliente <span class="glyphicon glyphicon-pushpin pull-right"></span>
-            </button>
-        </div>
+
+        <button type="button" class="btn btn-block btn-primary" data-toggle="modal" role="button" data-target="#updateLeadersModal-{{ $project->id }}">
+            <span class="glyphicon glyphicon-bookmark"></span> Líder de Proyecto <span class="glyphicon glyphicon-pushpin pull-right"></span>
+        </button>
+        <button type="button" class="btn btn-block btn-info" data-toggle="modal" role="button" data-target="#updateDevelopersModal-{{ $project->id }}">
+            <span class="glyphicon glyphicon-cog"></span> Desarrollador <span class="glyphicon glyphicon-pushpin pull-right"></span>
+        </button>
+        <button type="button" class="btn btn-block btn-default" data-toggle="modal" role="button" data-target="#updateClientsModal-{{ $project->id }}">
+            <span class="glyphicon glyphicon-user"></span> Cliente <span class="glyphicon glyphicon-pushpin pull-right"></span>
+        </button>
 
         <h5>
             <span class="glyphicon glyphicon-list-alt"></span> <strong>Información del Proyecto</strong>
         </h5>
         <hr>
-        <div class="well">
-            <div class="list-group">
-                <div class="list-group-item">
-                    <strong>Creado:</strong> {{ $project->created_at->diffForHumans() }}
-                </div>
-                <div class="list-group-item">
-                    <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
-                </div>
-                <div class="list-group-item">
-                    <strong>URL Desarrollo:</strong> 
-                    @if($project->develop_url != null)
-                        <a href="{{ $project->develop_url }}" target="_blank">{{ $project->develop_url }}</a>
-                    @else
-                        <span class="label label-default"> No asignada</span>
-                    @endif
-                </div>
-                <div class="list-group-item">
-                    <strong>URL Producción:</strong> 
-                    @if($project->production_url != null)
-                         <a href="{{ $project->production_url }}" target="_blank">{{ $project->production_url }}</a>
-                    @else
-                        <span class="label label-default"> No asignada</span>
-                    @endif
-                </div>
+
+        <div class="list-group">
+            <div class="list-group-item">
+                <strong>Creado:</strong> {{ $project->created_at->diffForHumans() }}
+            </div>
+            <div class="list-group-item">
+                <strong>Última Actualización:</strong> {{ $project->updated_at->diffForHumans() }}
+            </div>
+            <div class="list-group-item">
+                <strong>URL Desarrollo:</strong> 
+                @if($project->develop_url != null)
+                    <a href="{{ $project->develop_url }}" target="_blank">{{ $project->develop_url }}</a>
+                @else
+                    <span class="label label-default"> No asignada</span>
+                @endif
+            </div>
+            <div class="list-group-item">
+                <strong>URL Producción:</strong> 
+                @if($project->production_url != null)
+                        <a href="{{ $project->production_url }}" target="_blank">{{ $project->production_url }}</a>
+                @else
+                    <span class="label label-default"> No asignada</span>
+                @endif
             </div>
         </div>
     </div>
@@ -116,69 +113,68 @@
             <span class="glyphicon glyphicon-list-alt"></span> <strong>Personal Asignado</strong>
         </h5>
         <hr>
-        <div class="well">
-            <div class="list-group">
-                <div class="list-group-item">
-                    <h4><strong class="label label-primary">Líder de Proyecto</strong></h4>
-                    @if($assigned_leader)
-                        <ul class="list-group">
-                            @foreach($project->users as $user)
-                                @if($user->role_id == 2)
-                                    <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
-                                        <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
+
+        <div class="list-group">
+            <div class="list-group-item">
+                <h4><strong class="label label-primary">Líder de Proyecto</strong></h4>
+                @if($assigned_leader)
+                    <ul class="list-group">
+                        @foreach($project->users as $user)
+                            @if($user->role_id == 2)
+                                <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item">
+                                    <span class="glyphicon glyphicon-bookmark"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                    <span class="glyphicon glyphicon-link pull-right"></span>
+                                </a>
+                            @endif
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="alert alert-default">
+                        <span class="glyphicon glyphicon-info-sign"></span> No se encuentra ningún <strong>líder</strong> asignado al proyecto. 
+                    </div>
+                @endif
+            </div>
+        </div>
+        <div class="list-group">
+            <div class="list-group-item">
+                <h4><strong class="label label-info">Desarrollador</strong></h4>
+                @if($assigned_developer)
+                    <ul class="list-group">
+                        @foreach($project->users as $user)
+                            @if($user->role_id == 3)
+                                <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
+                                    <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
+                                    <span class="glyphicon glyphicon-link pull-right"></span>
+                                </a>
+                            @endif
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="alert alert-default">
+                        <span class="glyphicon glyphicon-info-sign"></span> No se encuentra ningún <strong>desarrollador</strong> asignado al proyecto. 
+                    </div>
+                @endif
+            </div>
+        </div>
+        <div class="list-group">
+            <div class="list-group-item">
+                <h4><strong class="label label-default">Cliente</strong></h4>
+                @if($assigned_client)
+                    <ul class="list-group">
+                        @foreach($project->users as $user)
+                            @if($user->role_id == 4)
+                                <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
+                                        <span class="glyphicon glyphicon-user"></span> {{ $user->last_name }} {{ $user->first_name }}
                                         <span class="glyphicon glyphicon-link pull-right"></span>
-                                    </a>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>líder</strong> asignado al proyecto. 
-                        </div>
-                    @endif
-                </div>
-            </div>
-            <div class="list-group">
-                <div class="list-group-item">
-                    <h4><strong class="label label-info">Desarrollador</strong></h4>
-                    @if($assigned_developer)
-                        <ul class="list-group">
-                            @foreach($project->users as $user)
-                                @if($user->role_id == 3)
-                                    <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
-                                            <span class="glyphicon glyphicon-cog"></span> {{ $user->last_name }} {{ $user->first_name }}
-                                            <span class="glyphicon glyphicon-link pull-right"></span>
-                                    </a>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>desarrollador</strong> asignado al proyecto. 
-                        </div>
-                    @endif
-                </div>
-            </div>
-            <div class="list-group">
-                <div class="list-group-item">
-                    <h4><strong class="label label-default">Cliente</strong></h4>
-                    @if($assigned_client)
-                        <ul class="list-group">
-                            @foreach($project->users as $user)
-                                @if($user->role_id == 4)
-                                    <a href="{{ route('users.show', $user->id) }}" class="list-group-item list-group-item-action">
-                                            <span class="glyphicon glyphicon-user"></span> {{ $user->last_name }} {{ $user->first_name }}
-                                            <span class="glyphicon glyphicon-link pull-right"></span>
-                                    </a>
-                                @endif
-                            @endforeach
-                        </ul>
-                    @else
-                        <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-info-sign"></span>No se encuentra ningún <strong>cliente</strong> asignado al proyecto. 
-                        </div>
-                    @endif
-                </div>
+                                </a>
+                            @endif
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="alert alert-default">
+                        <span class="glyphicon glyphicon-info-sign"></span> No se encuentra ningún <strong>cliente</strong> asignado al proyecto.  
+                    </div>
+                @endif
             </div>
         </div>
     </div>

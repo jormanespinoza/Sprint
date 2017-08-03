@@ -7,6 +7,17 @@
 @endsection
 
 @section('data')
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ url('admin') }}">
+                <span class="glyphicon glyphicon-dashboard"></span> Dashboard
+            </a>
+        </li>
+        <li class="active">
+            <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+        </li>
+    </ol>
+
     <div class="row">
         <div class="col-md-8 col-xs-8">
             <div class="heading-title">
@@ -34,7 +45,7 @@
                     </div>  --}}
                     <div class="content">
                         <div class="header">
-                            {{ substr($project->name, 0, 20) }} {{ strlen($project->name) > 20 ? '...' : '' }}
+                            {{ substr($project->name, 0, 17) }} {{ strlen($project->name) > 17 ? '...' : '' }}
                             <div class="ui buttons pull-right">
                             <div class="ui floating dropdown icon button">
                                 <i class="glyphicon glyphicon-option-vertical"></i>
@@ -91,7 +102,9 @@
                                  <div class="event">
                                     <div class="content">
                                         <div class="summary">
-                                            No hay personal asignado a este proyecto
+                                            <span class="text-warning">
+                                                <span class="glyphicon glyphicon-info-sign"></span> No hay personal asignado.
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -141,17 +154,6 @@
     <div class="text-center">
         {{ $projects->links( )}}
     </div>
-
-    <ol class="breadcrumb">
-        <li>
-            <a href="{{ url('admin') }}">
-                <span class="glyphicon glyphicon-dashboard"></span> Dashboard
-            </a>
-        </li>
-        <li class="active">
-            <span class="glyphicon glyphicon-folder-close"></span> Proyectos
-        </li>
-    </ol>
 @endsection
 
 @section('scripts')

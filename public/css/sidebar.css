@@ -80,6 +80,7 @@
 .sidebar-nav li {
     line-height: 40px;
     text-indent: 20px;
+    font-size: 12.5px;
 }
 
 .sidebar-nav li.sidebar-projects {

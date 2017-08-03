@@ -65,8 +65,5 @@
                 Número de Horas <span class="badge">{{ $task->hours }}
             </div> 
         </div>
-    </div
-
-    <h5><span class="glyphicon glyphicon-comment"></span> Observaciones</h5>
-    <hr>
+    </div>
 @endsection

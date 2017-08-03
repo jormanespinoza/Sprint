@@ -19,6 +19,7 @@ class CreateProjectsTable extends Migration
             $table->text('description');
             $table->string('develop_url')->nullable();
             $table->string('production_url')->nullable();
+            $table->boolean('done')->default(false);
             $table->timestamps();
         });
     }
@@ -30,6 +31,7 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('sprints');
         Schema::dropIfExists('projects');
     }
 }

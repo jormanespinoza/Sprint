@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
         <li>
             <a href="{{ url('dashboard') }}">
-                <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+                <span class="glyphicon glyphicon-dashboard"></span> Dashboard
             </a>
         </li>
         <li>

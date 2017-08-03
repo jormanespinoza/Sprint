@@ -64,8 +64,9 @@ class SprintController extends Controller
         $this->validate($request, [
             'name'              => 'required|min:2|max:255',
             'description'       => 'required|min:4',
-            'starts_on'         => 'required|date|after_or_equal:yesterday',
-            'ends_on'           => 'required|date|after_or_equal:starts_on'
+            'starts_on'         => 'date|after_or_equal:yesterday',
+            'ends_on'           => 'date|after_or_equal:starts_on',
+            'hours'             => 'number|min:1|max:40'
         ]);
 
         $project = Project::find($project_id);
@@ -280,7 +281,8 @@ class SprintController extends Controller
             'name'              => 'required|min:2|max:255',
             'description'       => 'required|min:4',
             'starts_on'         => 'required|date|after_or_equal:yesterday',
-            'ends_on'           => 'required|date|after_or_equal:starts_on'
+            'ends_on'           => 'required|date|after_or_equal:starts_on',
+            'hours'             => 'number|min:1|max:40'
         ]);
 
         $project = Project::find($project_id);

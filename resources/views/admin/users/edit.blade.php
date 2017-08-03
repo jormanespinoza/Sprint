@@ -8,9 +8,10 @@
 
 @section('data')
     <ol class="breadcrumb">
-        @include('partials._toggle_menu')
         <li>
-            <a href="{{ url('admin') }}"><span class="glyphicon glyphicon-th-large"></span> Inicio</a>
+            <a href="{{ url('admin') }}">
+                <span class="glyphicon glyphicon-dashboard"></span> Dashboard
+            </a>
         </li>
         <li>
             <a href="{{ url('admin/users') }}"><span class="glyphicon glyphicon-user"></span> Usuarios</a>
