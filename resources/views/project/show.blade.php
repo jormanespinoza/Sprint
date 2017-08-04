@@ -18,13 +18,9 @@
         </li>
     </ol>
 
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-8 col-xs-6">
-                    <span>{{ $project->name }}</span>
-                </div>
-            </div>
+            <span>{{ $project->name }}</span>
         </div>
     </div>
 
@@ -75,9 +71,9 @@
             <div class="col-md-9 col-xs-6">
                 <h5>
                     <span class="glyphicon glyphicon-inbox"></span> <strong>Sprints</strong> 
-                    <a type="button" data-toggle="modal" data-target="#statusSprintModal" title="Estados">
+                    {{--  <a type="button" data-toggle="modal" data-target="#statusSprintModal" title="Estados">
                         <span class="glyphicon glyphicon-info-sign"></span>
-                    </a>
+                    </a>  --}}
                 </h5>
             </div>
             <div class="col-md-3 col-xs-6">
@@ -93,7 +89,7 @@
             <div class="list-group">
             @foreach($project->sprints->sortBy('created_at') as $sprint)
                 <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}" class="list-group-item list-group-item-{{ $sprint->done ? "success" : "action" }}">
-                    <strong><span class="glyphicon glyphicon-{{ $sprint->done ? "share-alt" : "random"  }}"></span> {{ $sprint->name }}</strong>
+                    <strong><span class="glyphicon glyphicon-tasks"></span> {{ $sprint->name }}</strong>
                     @if($sprint->edited && Auth::user()->role_id != 4)
                         (Editado)
                     @endif
@@ -102,9 +98,9 @@
             @endforeach
         </div>
         @else
-            <div class="alert alert-warning">
+            {{--  <div class="text-warning">
                 <span class="glyphicon glyphicon-info-sign"></span> No se encuentran <strong>sprints</strong> generados.
-            </div>
+            </div>  --}}
         @endif
     </div>
 

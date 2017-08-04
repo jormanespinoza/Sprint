@@ -65,7 +65,7 @@
                                     @endif
                                 @endif
                                     @if($project->description != null)
-                                        {{ substr($project->description, 0, 110) }} {{ strlen($project->description) > 110 ? '...' : '' }}
+                                        {{ substr($project->description, 0, 100) }} {{ strlen($project->description) > 100 ? '...' : '' }}
                                     @else
                                         <span class="text-warning">
                                             <span class="glyphicon glyphicon-info-sign"></span> Sin descripción

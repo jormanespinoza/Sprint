@@ -1,6 +1,7 @@
 {{-- Success messages --}}
 @if(Session::has('success'))
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         <strong><span class="glyphicon glyphicon-ok-sign"></span> Éxito:</strong> {{ Session::get('success') }}
     </div>
 @endif

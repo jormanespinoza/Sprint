@@ -38,7 +38,10 @@
                 <div class="col-md-9">
                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                         {{ Form::label('name', 'Nombre') }}
-                        {{ Form::text('name', null, ['class' => 'form-control']) }}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="name"><span class="glyphicon glyphicon-tag"></span></span>
+                            {{ Form::text('name', null, ['class' => 'form-control']) }}
+                        </div>
                         @if ($errors->has('name'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('name') }}</strong>
@@ -62,7 +65,10 @@
                 <div class="col-md-3">
                     <div class="form-group{{ $errors->has('starts_on') ? ' has-error' : '' }}">
                         {{ Form::label('starts_on', 'Fecha de Inicio') }}
-                        {{ Form::date('starts_on', null, ['class' => 'form-control']) }}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="ends_on"><span class="glyphicon glyphicon-calendar"></span></span>
+                            {{ Form::date('starts_on', null, ['class' => 'form-control']) }}
+                        </div>
                         @if ($errors->has('starts_on'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('starts_on') }}</strong>
@@ -72,10 +78,26 @@
                 
                     <div class="form-group{{ $errors->has('ends_on') ? ' has-error' : '' }}">
                         {{ Form::label('ends_on', 'Fecha de Cierre') }}
-                        {{ Form::date('ends_on', null, ['class' => 'form-control']) }}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="ends_on"><span class="glyphicon glyphicon-calendar"></span></span>
+                            {{ Form::date('ends_on', null, ['class' => 'form-control']) }}
+                        </div>
                         @if ($errors->has('ends_on'))
                             <span class="help-block">
                                 <strong>{{ $errors->first('ends_on') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+
+                    <div class="form-group{{ $errors->has('hours') ? ' has-error' : '' }}">
+                        {{ Form::label('hours', 'Horas') }}
+                        <div class="input-group">
+                            <span class="input-group-addon" id="ends_on"><span class="glyphicon glyphicon-time"></span></span>
+                            {{ Form::number('hours', null, ['class' => 'form-control', 'placeholder' => '40']) }}
+                        </div>
+                        @if ($errors->has('hours'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('hours') }}</strong>
                             </span>
                         @endif
                     </div>

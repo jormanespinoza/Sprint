@@ -34,6 +34,23 @@ class TaskController extends Controller
         $sprint = Sprint::find($sprint_id);
         $developers = [];
         $leaders = [];
+        $hours = [1,2,3,5,8,13];
+        $task_hours = [];
+        $tasks = $sprint->tasks;
+        $task_total_hours = 0;
+
+        if (count($tasks) > 0) {
+            $all_tasks_confirmed = true;
+            foreach($tasks as $task) {
+                $task_total_hours += $task->hours;
+            }
+        }
+
+        foreach($task_hours as $hour) {
+            if ($hour <= $sprint->hours - $task_total_hours) {
+                $task_hours[$hour] = $hour;
+            }
+        }
 
         $user_as_developer = false;
         $user_as_leader = false;
@@ -50,14 +67,14 @@ class TaskController extends Controller
             }
         }
 
-
         if ($user_as_developer && !$sprint->done) {
             // check if the developer belongs to the project, so he could create new sprints and tasks
             foreach($developers as $developer) {
                 if (auth()->user()->id == $developer->id) {
-                    return view('tasks.create')
+                    return view('sprints.show')
                         ->with('user', $developer)
                         ->with('sprint', $sprint)
+                        ->with('hours', $task_hours)
                         ->with('project', $project);
                 }
             }
@@ -67,9 +84,10 @@ class TaskController extends Controller
             // check if the developer belongs to the project, so he could create new sprints and tasks
             foreach($leaders as $leader) {
                 if (auth()->user()->id == $leader->id) {
-                    return view('tasks.create')
+                    return view('sprints.show')
                         ->with('user', $leader)
                         ->with('sprint', $sprint)
+                        ->with('hours', $task_hours)
                         ->with('project', $project);
                 }
             }
@@ -88,8 +106,7 @@ class TaskController extends Controller
     public function store(Request $request, $project_id, $sprint_id)
     {
         $this->validate($request, [
-            'name'          => 'required|min:2|max:255',
-            'description'   => 'required|min:4'
+            'name' => 'required|min:2|max:255'
         ]);
 
         $project = Project::find($project_id);
@@ -98,7 +115,6 @@ class TaskController extends Controller
 
         // save task data
         $task->name = $request->name;
-        $task->description = Purifier::clean($request->description);
         $task->hours = $request->hours;
         $task->sprint_id = $sprint->id;
 
@@ -192,7 +208,7 @@ class TaskController extends Controller
      * @param  \App\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,  $project_id, $sprint_id, $task_id)
+    public function update(Request $request, $project_id, $sprint_id, $task_id)
     {
         $project = Project::find($project_id);
         $sprint = Sprint::find($sprint_id);
@@ -214,10 +230,21 @@ class TaskController extends Controller
             }
         }
 
+        if ($request->editedByLeader) {
+            $this->validate($request, [
+                'name' => 'required|min:2|max:255'
+            ]);
+
+            $task->name = $request->input('name');
+            $task->hours = $request->input('hours');
+            $task->description = Purifier::clean($request->input('description'));
+            $task->status_id = $request->input('status_id');
+        }
+
         // save task data
         $task->save();
 
-        Session::flash('success', 'La tarea del sprint fue actualizada sin problemas.');
+        Session::flash('success', 'La tarea "' . $task->name . '" del sprint fue actualizada sin problemas.');
         return redirect()->route('sprint.show', [$project->id, $sprint->id]);
     }
 

@@ -40,9 +40,9 @@
         @foreach($projects as $project)
             <div class="col-lg-3 col-md-4 col-sm-6 card-project">
                 <div class="ui card">
-                    {{--  <div class="image">
+                    {{-- <div class="image">
                         <img src="https://laraveles.com/wp-content/uploads/2016/09/laravel-2.jpg" class="visible content">
-                    </div>  --}}
+                    </div> --}}
                     <div class="content">
                         <div class="header">
                             {{ substr($project->name, 0, 17) }} {{ strlen($project->name) > 17 ? '...' : '' }}

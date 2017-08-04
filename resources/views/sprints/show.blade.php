@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', '| Sprint ' . $sprint->name)
+@section('title', '| ' . $sprint->name)
+
+@section('stylesheets')
+    {!! Html::style('css/parsley.css') !!}
+@endsection
 
 @section('content')
     <ol class="breadcrumb">
@@ -24,523 +28,639 @@
         </li>
     </ol>
 
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-8 col-xs-6">
-                    <div class="{{ Auth::user()->role_id != 4 ? "project-title" : "" }}">
-                        <span><span class="glyphicon glyphicon-open-file"></span> {{ $sprint->name }}</span>
+    @if(Auth::user()->role_id != 4)
+        @if($task_total_hours == $sprint->hours)
+            <div class="col-md-12 list-group">
+                <div class="list-group-item">
+                {{ Form::open(['route' => ['task.store', $project->id, $sprint->id], 'novalidate' => '']) }}
+                    {{ csrf_field() }}
+
+                    <div class="row">
+                        <div class="col-md-9 col-sm-9">
+                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                <div class="input-group">
+                                    {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Agrega tareas acá...', 'disabled' => 'disabled']) }}
+                                    <span class="input-group-addon" id='name'><span class="glyphicon glyphicon-tag"></span></span>
+                                </div>
+                                @if ($errors->has('name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <div class="form-group{{ $errors->has('hours') ? ' has-error' : '' }}">
+                                <div class="input-group">
+                                    {!! Form::number('hours', $sprint->hours, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+                                    <span class="input-group-addon" id='hours'><span class="glyphicon glyphicon-time"></span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1 col-sm-1">
+                            <button type="submit" class="btn btn-block btn-success" title="Horas Completas" disabled><i class="glyphicon glyphicon-play-circle"></i></button>
+                        </div>
                     </div>
+                {{ Form::close() }}
                 </div>
+            </div>
+        @else
+            <div class="col-md-12 list-group">
+                <div class="list-group-item">
+                {{ Form::open(['route' => ['task.store', $project->id, $sprint->id], 'novalidate' => '']) }}
+                    {{ csrf_field() }}
 
-                @if(Auth::user()->role_id != 4)
-                    <div class="col-md-4 col-xs-6">
-                        @if(Auth::user()->role_id == 2 && !$sprint->done)
-                            <div class="pull-right">
-                                {{-- Web View --}}
-                                <a class="btn btn-block btn-default actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                                    <span class="glyphicon glyphicon-remove-circle"></span> Eliminar
-                                </a>
-                                {{-- Mobile View --}}
-                                <a class="btn btn-sm btn-default actions-show-project-mobile" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                                    <span class="glyphicon glyphicon-remove-circle"></span>
-                                </a>
+                    <div class="row">
+                        <div class="col-md-9 col-sm-9">
+                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                <div class="input-group">
+                                    {{ Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Agrega tareas acá...']) }}
+                                    <span class="input-group-addon" id='name'><span class="glyphicon glyphicon-tag"></span></span>
+                                </div>
+                                @if ($errors->has('name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-                        @endif
-                        @if(Auth::user()->role_id == 2 && !$sprint->done)
-                            <div class="pull-right">
-                                {{-- Web View --}}
-                                <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}" class="btn btn-block btn-default actions-show-project-web" title="Editar">
-                                    <span class="glyphicon glyphicon-edit"></span> Editar
-                                </a>
-                                {{-- Mobile View --}}
-                                <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}" class="btn btn-sm btn-default actions-show-project-mobile" title="Editar">
-                                    <span class="glyphicon glyphicon-edit"></span>
-                                </a>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2">
+                            <div class="form-group{{ $errors->has('hours') ? ' has-error' : '' }}">
+                                <div class="input-group">
+                                    {!! Form::select('hours', $task_hours, null, ['class' => 'form-control']) !!}
+                                    <span class="input-group-addon" id='hours'><span class="glyphicon glyphicon-time"></span></span>
+                                </div>
                             </div>
-                        @endif
+                        </div>
+
+                        <div class="col-md-1 col-sm-1">
+                            <button type="submit" class="btn btn-block btn-success" title="Crear Tarea"><i class="glyphicon glyphicon-play-circle"></i></button>
+                        </div>
                     </div>
-                @endif
+                {{ Form::close() }}
+                </div>
             </div>
-        </div>
-    </div>
+        @endif
+    @endif
 
-    <div class="well" title="Descripción del Proyecto">
-        {!! $sprint->description !!}
-    </div>
-
-    <div class="row list-group">
-        <div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 text-center">
-            <div class="list-group-item">
-                <span class="glyphicon glyphicon-calendar text-success"></span> <span class="text-success date-font-size"> Inicia: {{ $sprint->starts_on }}</span>
-                | 
-                <span class="glyphicon glyphicon-calendar text-danger"></span> <span class="text-danger date-font-size"> Cierra: {{ $sprint->ends_on }}</span>
-            </div>
-        </div>
-    </div>
-
-    <br>
-
-    <div class="row">
-        <div class="col-md-9 col-xs-7">
-            <h5>
-                <span class="glyphicon glyphicon-tasks"></span> Tareas 
-                @if(Auth::user()->role_id == 4)
-                    <a type="button" data-toggle="modal" data-target="#statusClientModal" title="Estados">
-                        <span class="glyphicon glyphicon-info-sign"></span>
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-9 col-xs-7">
+                <span class="glyphicon glyphicon-tasks"></span> {{ $sprint->name }} 
+                @if($sprint->description != null)
+                    <a type="button" data-toggle="modal" data-target="#sprintDescriptionModal" title="Información">
+                        <i class="glyphicon glyphicon-option-vertical"></i>
                     </a>
                 @endif
-                @if(Auth::user()->role_id != 4 && $task_total_hours > 0)
-                    | <small>
-                         Horas <span class="badge">{{ $task_total_hours }}
-                    </small>
-                @endif
-            </h5>
-        </div>
-        <div class="col-md-3 col-xs-5">
-            @if(Auth::user()->role_id != 4 && $sprint->done == false)
-                <div class="btn-new-task text-right">
-                    <a href="{{ route('task.create', [$project->id, $sprint->id]) }}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-file"></span> Añadir Tarea</a>
-                </div>
-            @endif
+            </div>
+            <div class="col-md-3 col-xs-5 text-right">
+                <b>{{ $task_total_hours }}</b>/{{ $sprint->hours }} horas
+            </div>
         </div>
     </div>
 
     @if(count($tasks ) > 0)
-        @if(Auth::user()->role_id != 4)
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <th class="task-name">Nombre</th>
-                        <th>Descripción</th>
-                        <th>Horas</th>
-                        <th>
-                            Estatus 
-                            <a type="button" data-toggle="modal" data-target="#statusModal" title="Estados">
-                                 <span class="glyphicon glyphicon-info-sign"></span>
-                            </a>
-                        </th>
-                        <th class="actions">Acciones</th>
-                        <th class="gestions">Gestionar</th>
-                    </thead>
-                    <tbody>
-                        @foreach($tasks as $task)
-                            @php
-                                switch ($task->status->id) {
-                                    case 1:
-                                        $_class = 'default';
-                                        break;
-                                    case 2:
-                                        $_class = 'info';
-                                        break;
-                                    case 3:
-                                        $_class = 'warning';
-                                        break;
-                                    case 4:
-                                        $_class = 'danger';
-                                        break;
-                                    case 5:
-                                        $_class = 'success';
-                                        break;
-                                    default:
-                                        $_class = 'default';
-                                        break;
-                                }
-                            @endphp
-
-                            <tr class="{{ $_class }}">
-                                <td>{{ substr($task->name, 0, 50) }} {{ strlen($task->name) > 50 ? '...' : '' }}</td>
-                                <td>{{ substr(strip_tags($task->description), 0, 100) }} {{ strlen(strip_tags($task->description)) > 100 ? '...' : '' }}</td>
-                                <td>{{ $task->hours }}</td>
-                                <td>
-                                     <span class="label label-{{ $_class }}">
-                                        <b>{{ $task->status->name }}</b>
-                                    </span>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-xs btn-link" data-toggle="modal" role="button" data-target="#showTaskModal-{{ $task->id }}" title="Expandir">
-                                        <span class="glyphicon glyphicon-fullscreen" ></span>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <th class="col-md-10"></th>
+                    <th class="col-md-1"></th>
+                    <th class="col-md-1"></th>
+                </thead>
+                <tbody>
+                    @foreach($tasks as $task)
+                        @php
+                            switch ($task->status->id) {
+                                case 1:
+                                    $_class = 'default';
+                                    $_icon = 'fullscreen';
+                                    break;
+                                case 2:
+                                    $_class = 'info';
+                                    $_icon = 'ok-circle';
+                                    break;
+                                case 3:
+                                    $_class = 'warning';
+                                    $_icon = 'pause';
+                                    break;
+                                case 4:
+                                    $_class = 'danger';
+                                    $_icon = 'repeat';
+                                    break;
+                                case 5:
+                                    $_class = 'success';
+                                    $_icon = 'ok-sign';
+                                    break;
+                                default:
+                                    $_class = 'default';
+                                    $_icon = 'fullscreen';
+                                    break;
+                            }
+                        @endphp
+                        <tr class="{{ $_class }}">
+                            <td>{{ substr($task->name, 0, 150) }} {{ strlen($task->name) > 150 ? '...' : '' }}</td>
+                            <td>
+                                @if(Auth::user()->role_id == 2 && $task->status_id == 1)
+                                    {{-- Edit Task --}}
+                                    <button type="button" class="btn btn-xs btn-link" data-toggle="modal" role="button" data-target="#editTaskModal-{{ $task->id }}" title="Editar" data-dismiss="modal">
+                                        <span class="glyphicon glyphicon-fullscreen"></span>
                                     </button>
+                                @else
+                                    <button type="button" class="btn btn-xs btn-link" data-toggle="modal" role="button" data-target="#showTaskModal-{{ $task->id }}" title="{{ $task->status->name }}">
+                                        <span class="glyphicon glyphicon-{{ $_icon }}" ></span>
+                                    </button>
+                                @endif
 
-                                    {{-- Show Task Modal --}}
-                                    <div class="modal fade" tabindex="-1" role="dialog" id="showTaskModal-{{ $task->id }}">
-                                        <div class="modal-dialog modal-lg" role="dialog" id="model-{{ $task->id }}">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title">
-                                                        <span class="glyphicon glyphicon-erase"></span> {{ $task->name}}
-                                                         | <span class="label label-{{ $_class }}"><strong>{{ $task->status->name }}</strong></span>
-                                                    </h4>
-                                                </div>
+                                {{-- Show Task Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="showTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog modal-lg" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">
+                                                    <span class="glyphicon glyphicon-erase"></span> {{ $task->name}}
+                                                        | <span class="label label-{{ $_class }}"><strong>{{ $task->status->name }}</strong></span>
+                                                </h4>
+                                            </div>
 
-                                                <div class="modal-body">
-                                                    {!! $task->description !!}
-                                                    <div class="list-group" style="padding: 5px;">
-                                                        <div class="col-md-3 col-md-offset-9 col-sm-5 col-sm-offset-7 text-center">
-                                                            <div class="list-group-item">
-                                                                Número de Horas <span class="badge">{{ $task->hours }}
-                                                            </div> 
-                                                        </div>
+                                            <div class="modal-body">
+                                                {!! $task->description !!}
+                                                <div class="list-group" style="padding: 5px;">
+                                                    <div class="col-md-2 col-md-offset-10 col-sm-6 col-sm-offset-6 text-center">
+                                                        <div class="list-group-item">
+                                                            Horas <span class="badge">{{ $task->hours }}
+                                                        </div> 
                                                     </div>
-                                                    <br>
                                                 </div>
+                                                <br>
+                                            </div>
 
-                                                <div class="modal-footer">
-                                                     <ul class="list-inline">
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    @if($task->status_id == 1 && Auth::user()->role_id != 4)
+                                                        <li>
+                                                            {{-- Edit Task --}}
+                                                            @if($task->status_id != 5)
+                                                                <button type="button" class="btn btndefault" data-toggle="modal" role="button" data-target="#editTaskModal-{{ $task->id }}" title="Eliminar" data-dismiss="modal">
+                                                                    <span class="glyphicon glyphicon-edit"></span> Editar
+                                                                </button>
+                                                            @endif
+                                                        </li>
+                                                        <li>
+                                                            {{-- Delete Task --}}
+                                                            <button type="button" class="btn btndefault" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Eliminar" data-dismiss="modal">
+                                                                <span class="glyphicon glyphicon-remove-sign"></span> Borrar
+                                                            </button>
+                                                        </li>
+                                                    @endif
+
+                                                    {{-- Approve Task (If the user it's a project leader) --}}
+                                                    @if(Auth::user()->role_id == 2)
+                                                        <li>
+                                                            {{-- Approved Task --}}
+                                                            @if($task->status_id == 1)
+                                                                    <button type="button" class="btn btn-info" data-toggle="modal" role="button" data-target="#approveTaskModal-{{ $task->id }}" title="Aprobar Tarea" data-dismiss="modal">
+                                                                        <span class="glyphicon glyphicon-ok-circle"></span> Aprobar
+                                                                    </button>
+                                                            @endif
+                                                        </li>
+                                                    @else
                                                         <li>
                                                             <button type="button" class="btn btn-primary" data-dismiss="modal">
                                                                 <i class="glyphicon glyphicon-ok-sign"></i> Ok
                                                             </button>
                                                         </li>
+                                                    @endif
+
+                                                    {{-- Task To Confirm (Task ready! Waits for project leader confirmation) --}}
+                                                    @if($task->status_id == 2 && Auth::user()->role_id != 4)
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" role="button" data-target="#taskToConfirmModal-{{ $task->id }}" title="Confirmar Tarea" data-dismiss="modal">
+                                                            <span class="glyphicon glyphicon-ok-sign"></span> Confirmar Gestión
+                                                        </button>
+                                                    @endif
+
+                                                    {{-- Task to Confirm/Reject (The project's leader most confirm or not the specific task) --}}
+                                                    @if(Auth::user()->role_id == 2 && $task->status_id == 3)
+                                                        <li>
+                                                            <button type="button" class="btn btn-danger" data-toggle="modal" role="button" data-target="#rejectTaskModal-{{ $task->id }}" title="Devolver Tarea" data-dismiss="modal">
+                                                                <span class="glyphicon glyphicon-repeat"></span> Devolver
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" class="btn btn-success" data-toggle="modal" role="button" data-target="#confirmTaskModal-{{ $task->id }}" title="Confirmar Gestión" data-dismiss="modal">
+                                                                <span class="glyphicon glyphicon-check"></span> Confirmar
+                                                            </button>
+                                                        </li>
+                                                    @endif
+
+                                                    {{-- Task Confirmed --}}
+                                                    @if($task->status_id == 5 && Auth::user()->role_id == 2)
+                                                        <button type="button" class="btn btn-default" data-toggle="modal" role="button" data-target="#reactivateTaskModal-{{ $task->id }}" title="Reactivar Tarea" data-dismiss="modal">
+                                                            <span class="glyphicon glyphicon-refresh"></span> Reactivar
+                                                        </button>
+                                                    @endif
+
+                                                    {{-- Task Rejected --}}
+                                                    @if($task->status_id == 4 && Auth::user()->role_id != 4)
+                                                        <button type="button" class="btn btn-warning" data-toggle="modal" role="button" data-target="#rejectedTaskModal-{{ $task->id }}" title="Confirmar Corrección" data-dismiss="modal">
+                                                            <span class="glyphicon glyphicon-repeat"></span> Corregida
+                                                        </button>
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+
+                                {{-- Edit Task Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="editTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog modal-lg" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">Editar Tarea</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                {!! Form::model($task, ['route' => ['task.update', $project->id, $sprint->id, $task->id], 'data-parsley-validate' => '']) !!}
+                                                    {{ csrf_field() }}
+                                                    {{ Form::hidden('_method', 'PUT') }}
+
+                                                    <div class="row">
+                                                        @if($task->status_id == 1 || Auth::user()->role_id == 2)
+                                                            <div class="col-md-9 col-sm-9">
+                                                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                                                    {{ Form::text('name', null, ['class' => 'form-control', 'required' => '']) }}
+                                                                    @if ($errors->has('name'))
+                                                                        <span class="help-block">
+                                                                            <strong>{{ $errors->first('name') }}</strong>
+                                                                        </span>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+
+                                                            @php
+                                                                $hours_left = $sprint->hours - $task_total_hours;
+                                                                $hours_for_tasks = [1,2,3,5,8,13];
+                                                                $hours_available = [];
+                                                                foreach($hours_for_tasks as $hour ){
+                                                                    if ($task->hours <= $hours_left) {
+                                                                        if ($hour <= $hours_left) {
+                                                                            $hours_available[$hour] = $hour;
+                                                                        }
+                                                                    }else {
+                                                                        if ($hour <= $task->hours) {
+                                                                            $hours_available[$hour] = $hour;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            @endphp
+
+                                                            <div class="col-md-3 col-sm-3">
+                                                                <div class="form-group{{ $errors->has('hours') ? ' has-error' : '' }}">
+                                                                    <div class="input-group">
+                                                                        {{ Form::select('hours', $hours_available, $task->hours, ['id' => 'hours', 'class' => 'form-control']) }}
+                                                                        <span class="input-group-addon" id='hours'><span class="glyphicon glyphicon-time"></span></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div class="col-md-9 col-sm-9">
+                                                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                                                    <div class="input-group">
+                                                                        {{ Form::text('name', null, ['class' => 'form-control', 'disabled' => 'disabled']) }}
+                                                                        <span class="input-group-addon" id='name'><span class="glyphicon glyphicon-tag"></span></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 col-sm-3">
+                                                                <div class="form-group{{ $errors->has('hours') ? ' has-error' : '' }}">
+                                                                    <div class="input-group">
+                                                                        {{ Form::number('hours', null, ['id' => 'hours', 'class' => 'form-control', 'disabled' => 'disabled']) }}
+                                                                        <span class="input-group-addon" id='hours'><span class="glyphicon glyphicon-time"></span></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+                                                        {{ Form::textarea('description', null, ['class' => 'form-control', 'rows' => 2, 'placeholder' => 'Información adicional...']) }}
+                                                    </div>
+
+                                                    <ul class="list-inline text-right">
+                                                        <li>
+                                                            {{-- Delete Task --}}
+                                                            <button type="button" class="btn btndefault" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Eliminar" data-dismiss="modal">
+                                                                <span class="glyphicon glyphicon-remove-sign"></span> Borrar
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                                <i class="glyphicon glyphicon-remove-circle"></i> Cancelar
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            @if (Auth::user()->role_id == 2)
+                                                                {{ Form::hidden('editedByLeader', true) }}
+                                                                {{ Form::hidden('status_id', 2) }}
+                                                                <button type="submit" class="btn btn-info">
+                                                                    <span class="glyphicon glyphicon-ok-circle"></span> Aprobar
+                                                                </button>
+                                                            @else
+                                                                {{ Form::submit('Actualizar', ['class' => 'btn btn-primary']) }}
+                                                            @endif
+                                                        </li>
                                                     </ul>
-                                                </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div><!-- /.modal -->
+                                                {{ Form::close() }}
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
 
-                                    {{-- Task View  --}}
-                                    <a href="{{ route('task.show', [$project->id, $sprint->id, $task->id]) }}" class="btn btn-xs btn-default" title="Abrir"><span class="glyphicon glyphicon-file"></span></a>
+                                {{-- Delete Task Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="removeTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">Eliminar Tarea</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Seguro deseas eliminar la tarea <strong>{{ $task->name }}</strong>?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                        </button>
+                                                    </li>
 
-                                    {{-- Edit Task --}}
-                                    @if($task->status_id != 5)
-                                         <a href="{{ route('task.edit', [$project->id, $sprint->id, $task->id]) }}" class="btn btn-xs btn-warning" title="Editar"><span class="glyphicon glyphicon-edit"></span></a>
-                                    @endif
+                                                    <li>
+                                                        {{ Form::open(['route' => ['task.destroy', $project->id, $sprint->id, $task->id]]) }}
+                                                            {{ Form::hidden('_method', 'DELETE') }}
+                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            </td>
+                            <td class="text-right"><strong>{{ $task->hours }} {{ $task->hours > 1 ? "horas" : "hora" }}</strong></td>
+                            <td>
+                                {{-- Approve Task Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="approveTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">{{ $task->name }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Confirmas la aprobación de la tarea?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                        </button>
+                                                    </li>
 
-                                    {{-- The delete task button it's only available if the Task's Status is Pending --}}
-                                    @if($task->status_id == 1)
-                                        <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Eliminar">
-                                            <span class="glyphicon glyphicon-remove-sign" ></span>
-                                        </button>
+                                                    <li>
+                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                            {{ Form::hidden('_method', 'PUT') }}
+                                                            {{ Form::hidden('changing_status', true) }}
+                                                            {{ Form::hidden('status_id', 2) }}
+                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-info']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
 
-                                        {{-- Delete Task Modal --}}
-                                        <div class="modal fade" tabindex="-1" role="dialog" id="removeTaskModal-{{ $task->id }}">
-                                            <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Eliminar Tarea</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Seguro deseas eliminar la tarea <strong>{{ $task->name }}</strong>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <ul class="list-inline">
-                                                            <li>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                                    <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                                </button>
-                                                            </li>
+                                {{-- Task to Confirm Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="taskToConfirmModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">{{ $task->name }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Confirmas la gestión de la tarea?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                        </button>
+                                                    </li>
 
-                                                            <li>
-                                                                {{ Form::open(['route' => ['task.destroy', $project->id, $sprint->id, $task->id]]) }}
-                                                                    {{ Form::hidden('_method', 'DELETE') }}
-                                                                    {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
-                                                                {{ Form::close() }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
-                                    @endif
-                                </td>
-                                <td>
-                                    {{-- Approve Task (If the user it's a project leader) --}}
-                                    @if(Auth::user()->role_id == 2 && $task->status_id == 1)
-                                        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" role="button" data-target="#approveTaskModal-{{ $task->id }}" title="Aprobar Tarea">
-                                            <span class="glyphicon glyphicon-ok-circle"></span>
-                                        </button>
+                                                    <li>
+                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                            {{ Form::hidden('_method', 'PUT') }}
+                                                            {{ Form::hidden('changing_status', true) }}
+                                                            {{ Form::hidden('status_id', 3) }}
+                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
 
-                                        {{-- Approve Task Modal --}}
-                                        <div class="modal fade" tabindex="-1" role="dialog" id="approveTaskModal-{{ $task->id }}">
-                                            <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Aprobar Tarea</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Confirmas la aprobación de la tarea <strong>{{ $task->name }}</strong>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <ul class="list-inline">
-                                                            <li>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                                    <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                                </button>
-                                                            </li>
+                                {{-- Task Reject Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="rejectTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">{{ $task->name }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Confirmas la devolución de la tarea?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                        </button>
+                                                    </li>
 
-                                                            <li>
-                                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                                    {{ Form::hidden('_method', 'PUT') }}
-                                                                    {{ Form::hidden('changing_status', true) }}
-                                                                    {{ Form::hidden('status_id', 2) }}
-                                                                    {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-info']) }}
-                                                                {{ Form::close() }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
-                                    @endif
+                                                    <li>
+                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                            {{ Form::hidden('_method', 'PUT') }}
+                                                            {{ Form::hidden('changing_status', true) }}
+                                                            {{ Form::hidden('status_id', 4) }}
+                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
 
-                                    {{-- Task To Confirm (Task ready! Waits for project leader confirmation) --}}
-                                    @if($task->status_id == 2)
-                                        <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" role="button" data-target="#taskToConfirmModal-{{ $task->id }}" title="Confirmar Tarea">
-                                            <span class="glyphicon glyphicon-ok-sign"></span>
-                                        </button>
+                                {{-- Task Confirm Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="confirmTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">{{ $task->name }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Confirmas que la gestión de la tarea se realizó de forma completa?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                        </button>
+                                                    </li>
 
-                                        {{-- Task to Confirm Modal --}}
-                                        <div class="modal fade" tabindex="-1" role="dialog" id="taskToConfirmModal-{{ $task->id }}">
-                                            <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Tarea Gestionada</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Confirmas la gestión de la tarea <strong>{{ $task->name }}</strong>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <ul class="list-inline">
-                                                            <li>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                                    <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                                </button>
-                                                            </li>
+                                                    <li>
+                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                            {{ Form::hidden('_method', 'PUT') }}
+                                                            {{ Form::hidden('changing_status', true) }}
+                                                            {{ Form::hidden('status_id', 5) }}
+                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-success']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
 
-                                                            <li>
-                                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                                    {{ Form::hidden('_method', 'PUT') }}
-                                                                    {{ Form::hidden('changing_status', true) }}
-                                                                    {{ Form::hidden('status_id', 3) }}
-                                                                    {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
-                                                                {{ Form::close() }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
-                                    @endif
+                                {{-- Task Reject Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="rejectedTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">Tarea Corregida</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Confirmas la correción de la tarea <strong>{{ $task->name }}</strong>?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                        </button>
+                                                    </li>
 
-                                    {{-- Task to Confirm/Reject (The project's leader most confirm or not the specific task) --}}
-                                    @if(Auth::user()->role_id == 2 && $task->status_id == 3)
-                                        <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" role="button" data-target="#rejectTaskModal-{{ $task->id }}" title="Devolver Tarea">
-                                            <span class="glyphicon glyphicon-repeat"></span>
-                                        </button>
+                                                    <li>
+                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                            {{ Form::hidden('_method', 'PUT') }}
+                                                            {{ Form::hidden('changing_status', true) }}
+                                                            {{ Form::hidden('status_id', 3) }}
+                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-warning']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
 
-                                        {{-- Task Reject Modal --}}
-                                        <div class="modal fade" tabindex="-1" role="dialog" id="rejectTaskModal-{{ $task->id }}">
-                                            <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Devolver Tarea</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Confirmas la devolución de la tarea <strong>{{ $task->name }}</strong>, ya que requiere corrección?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <ul class="list-inline">
-                                                            <li>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                                    <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                                </button>
-                                                            </li>
+                                {{-- Task Reject Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="reactivateTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">{{ $task->name }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>¿Deseas reactivar la tarea?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <ul class="list-inline">
+                                                    <li>
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                        </button>
+                                                    </li>
 
-                                                            <li>
-                                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                                    {{ Form::hidden('_method', 'PUT') }}
-                                                                    {{ Form::hidden('changing_status', true) }}
-                                                                    {{ Form::hidden('status_id', 4) }}
-                                                                    {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
-                                                                {{ Form::close() }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
-
-                                        <button type="button" class="btn btn-xs btn-success" data-toggle="modal" role="button" data-target="#confirmTaskModal-{{ $task->id }}" title="Confirmar Gestión">
-                                            <span class="glyphicon glyphicon-check"></span>
-                                        </button>
-
-                                        {{-- Task Confirm Modal --}}
-                                        <div class="modal fade" tabindex="-1" role="dialog" id="confirmTaskModal-{{ $task->id }}">
-                                            <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Confirmar Tarea</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Confirmas que la gestión de la tarea <strong>{{ $task->name }}</strong> se realizó de forma completa?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <ul class="list-inline">
-                                                            <li>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                                    <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                                </button>
-                                                            </li>
-
-                                                            <li>
-                                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                                    {{ Form::hidden('_method', 'PUT') }}
-                                                                    {{ Form::hidden('changing_status', true) }}
-                                                                    {{ Form::hidden('status_id', 5) }}
-                                                                    {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-success']) }}
-                                                                {{ Form::close() }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
-                                    @endif
-
-                                    {{-- Task Rejected --}}
-                                    @if($task->status_id == 4)
-                                        <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" role="button" data-target="#rejectedTaskModal-{{ $task->id }}" title="Confirmar Corrección">
-                                            <span class="glyphicon glyphicon-repeat"></span>
-                                        </button>
-
-                                        {{-- Task Reject Modal --}}
-                                        <div class="modal fade" tabindex="-1" role="dialog" id="rejectedTaskModal-{{ $task->id }}">
-                                            <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Tarea Corregida</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Confirmas la correción de la tarea <strong>{{ $task->name }}</strong>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <ul class="list-inline">
-                                                            <li>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                                    <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                                </button>
-                                                            </li>
-
-                                                            <li>
-                                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                                    {{ Form::hidden('_method', 'PUT') }}
-                                                                    {{ Form::hidden('changing_status', true) }}
-                                                                    {{ Form::hidden('status_id', 3) }}
-                                                                    {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-warning']) }}
-                                                                {{ Form::close() }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
-                                    @endif
-
-                                    {{-- Task Confirmed --}}
-                                    @if($task->status_id == 5 && Auth::user()->role_id == 2)
-                                        <button type="button" class="btn btn-xs btn-default" data-toggle="modal" role="button" data-target="#reactivateTaskModal-{{ $task->id }}" title="Reactivar Tarea">
-                                            <span class="glyphicon glyphicon-refresh"></span>
-                                        </button>
-
-                                        {{-- Task Reject Modal --}}
-                                        <div class="modal fade" tabindex="-1" role="dialog" id="reactivateTaskModal-{{ $task->id }}">
-                                            <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Reactivar Tarea</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>¿Deseas reactivar la tarea <strong>{{ $task->name }}</strong>?</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <ul class="list-inline">
-                                                            <li>
-                                                                <button type="button" class="btn btn-success" data-dismiss="modal">
-                                                                    <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                                </button>
-                                                            </li>
-
-                                                            <li>
-                                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                                    {{ Form::hidden('_method', 'PUT') }}
-                                                                    {{ Form::hidden('changing_status', true) }}
-                                                                    {{ Form::hidden('status_id', 2) }}
-                                                                    {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-warning']) }}
-                                                                {{ Form::close() }}
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center">
-                {{ $tasks->links() }}
-            </div>
-            @if($task_total_hours > 0)
-                <div class="row list-group">
-                    <div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 text-center">
-                        <div class="list-group-item">
-                            Cantidad de Horas Acumuladas <span class="badge">{{ $task_total_hours }}
-                        </div> 
-                    </div>
-                </div>
-            @endif
-        @else
-            {{-- Client View --}}
-            <div class="list-group">
-                @foreach($tasks as $task)
-                    @php
-                        switch ($task->status->id) {
-                            case 1:
-                                $_class = 'default';
-                                break;
-                            case 2:
-                                $_class = 'info';
-                                break;
-                            case 3:
-                                $_class = 'warning';
-                                break;
-                            case 4:
-                                $_class = 'danger';
-                                break;
-                            case 5:
-                                $_class = 'success';
-                                break;
-                            default:
-                                $_class = 'default';
-                                break;
-                        }
-                    @endphp
-
-                    <a href="{{ route('task.show', [$project->id, $sprint->id, $task->id]) }}" class="list-group-item list-group-item-{{ $_class }}">
-                        <span class="glyphicon glyphicon-erase"></span> {{ $task->name }}
-                        <span class="glyphicon glyphicon-new-window pull-right" title="Abrir Tarea"></span>
-                    </a>
-                @endforeach
-            </div>
-            <div class="text-center">
-                {{ $tasks->links() }}
-            </div>
-        @endif
-    @else
-        <div class="alert alert-warning">
-            <span class="glyphicon glyphicon-info-sign"></span> No se han registrado tareas para el Sprint.
+                                                    <li>
+                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                            {{ Form::hidden('_method', 'PUT') }}
+                                                            {{ Form::hidden('changing_status', true) }}
+                                                            {{ Form::hidden('status_id', 2) }}
+                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-default']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+        <div class="text-center">
+            {{ $tasks->links() }}
+        </div>
+
+        {{-- Client View --}}
+
+        {{--  <div class="list-group">
+            @foreach($tasks as $task)
+                @php
+                    switch ($task->status->id) {
+                        case 1:
+                            $_class = 'default';
+                            break;
+                        case 2:
+                            $_class = 'info';
+                            break;
+                        case 3:
+                            $_class = 'warning';
+                            break;
+                        case 4:
+                            $_class = 'danger';
+                            break;
+                        case 5:
+                            $_class = 'success';
+                            break;
+                        default:
+                            $_class = 'default';
+                            break;
+                    }
+                @endphp
+
+                <a href="{{ route('task.show', [$project->id, $sprint->id, $task->id]) }}" class="list-group-item list-group-item-{{ $_class }}">
+                    <span class="glyphicon glyphicon-erase"></span> {{ $task->name }}
+                    <span class="glyphicon glyphicon-new-window pull-right" title="Abrir Tarea"></span>
+                </a>
+            @endforeach
+        </div>
+        <div class="text-center">
+            {{ $tasks->links() }}
+        </div>
+    @endif  --}}
+    @else
+        {{--  <div class="alert alert-warning">
+            <span class="glyphicon glyphicon-info-sign"></span> No se han registrado tareas para el Sprint.
+        </div>  --}}
     @endif
 
     {{-- Confirmation Modal --}}
@@ -639,68 +759,57 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    {{-- Status Client Modal --}}
-    <div class="modal fade" tabindex="-1" role="dialog" id="statusClientModal">
-        <div class="modal-dialog" role="document">
+    {{-- Sprint Information Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="sprintDescriptionModal">
+        <div class="modal-dialog" role="dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Tarea</h4>
+                    <h4 class="modal-title">
+                        {{ $sprint->name }} | <small>{{ $sprint->hours }} horas</small>
+                    </h4>
                 </div>
-                <div class="modal-body">
-                    {{-- Statuses --}}
-                    <div class="text-center">
-                        <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapseClientPending" aria-expanded="false" aria-controls="collapsePending">Pendiente</button>
-                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseClientApproved" aria-expanded="false" aria-controls="collapseApproved">Aprobada</button>
-                        <button type="button" class="btn btn-warning" data-toggle="collapse" data-target="#collapseClientToConfirm" aria-expanded="false" aria-controls="collapseClientToConfirm">En Revisión</button>
-                        <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#collapseClientRejected" aria-expanded="false" aria-controls="collapseClientRejected">Devuelta</button>
-                        <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseClientConfirmed" aria-expanded="false" aria-controls="collapseClientConfirmed">Confirmada</button>
-                    </div>
-                    {{-- Statuses Descriptions--}}
-                    <div class="status-description">
-                        <div class="collapse" id="collapseClientPending">
-                            <hr>
-                            <div class="alert alert-default">
-                                <span class="glyphicon glyphicon-file"></span> {{ $statuses[1] }}
-                            </div>
-                        </div>
-                        <div class="collapse" id="collapseClientApproved">
-                            <hr>
-                            <div class="alert alert-info">
-                                <span class="glyphicon glyphicon-ok-circle"></span> {{ $statuses[2] }}
-                            </div>
-                        </div>
-                        <div class="collapse" id="collapseClientToConfirm">
-                            <hr>
-                            <div class="alert alert-default">
-                                <span class="text-warning"><span class="glyphicon glyphicon-ok-sign"></span> {{ $statuses[3] }}</span>
-                            </div>
-                        </div>
-                        <div class="collapse" id="collapseClientRejected">
-                            <hr>
-                            <div class="alert alert-danger">
-                                <span class="glyphicon glyphicon-repeat"></span> {{ $statuses[4] }}
-                            </div>
-                        </div>
-                        <div class="collapse" id="collapseClientConfirmed">
-                            <hr>
-                            <div class="alert alert-success">
-                                <span class="glyphicon glyphicon-check"></span> {{ $statuses[5] }}
-                            </div>
-                        </div>
-                    </div>
 
+                <div class="modal-body">
+                    {!! $sprint->description !!}
+                    <div class="row list-group">
+                        <div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 text-center">
+                            <div class="list-group-item">
+                                <span class="glyphicon glyphicon-calendar text-success"></span> <span class="text-success date-font-size"> Inicia: {{ $sprint->starts_on }}</span>
+                            </div>
+                            <div class="list-group-item">
+                                <span class="glyphicon glyphicon-calendar text-danger"></span> <span class="text-danger date-font-size"> Cierra: {{ $sprint->ends_on }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="modal-footer">
                     <ul class="list-inline">
+                        @if(Auth::user()->role_id != 4)
+                            <li>
+                                <a type="button" href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}" class="btn btn-default" title="Editar">
+                                    <span class="glyphicon glyphicon-edit"></span> Editar
+                                </a>
+                            </li>
+                            <li>
+                                <a type="button" class="btn btn-default" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar" data-dismiss="modal">
+                                    <span class="glyphicon glyphicon-remove-circle"></span> Eliminar
+                                </a>
+                            </li>
+                        @endif
                         <li>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">
-                                <i class="glyphicon glyphicon-thumbs-up"></i> Bien!
-                            </button>
+                            <a type="button" class="btn btn-primary" data-dismiss="modal">
+                                <i class="glyphicon glyphicon-ok-sign"></i> Ok
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+@endsection
+
+@section('scripts')
+    {!! Html::script('js/parsley.js') !!}
 @endsection

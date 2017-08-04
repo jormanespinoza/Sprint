@@ -23,7 +23,7 @@
         </li>
     </ol>
 
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-8 col-xs-6">

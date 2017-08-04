@@ -66,7 +66,7 @@ class SprintController extends Controller
             'description'       => 'required|min:4',
             'starts_on'         => 'date|after_or_equal:yesterday',
             'ends_on'           => 'date|after_or_equal:starts_on',
-            'hours'             => 'number|min:1|max:40'
+            'hours'             => 'integer|min:1|max:40'
         ]);
 
         $project = Project::find($project_id);
@@ -77,6 +77,7 @@ class SprintController extends Controller
         $sprint->project_id = $project->id;
         $sprint->starts_on = $request->starts_on;
         $sprint->ends_on = $request->ends_on;
+        $sprint->hours = $request->hours;
         $sprint->save();
 
         Session::flash('success', 'Sprint generado sin problemas.');
@@ -98,6 +99,8 @@ class SprintController extends Controller
         $tasks = $sprint->tasks;
         $statuses = Status::orderBy('id', 'desc')->get();
         $all_tasks_confirmed = false;
+        $hours = [1,2,3,5,8,13];
+        $task_hours = [];
 
         $task_total_hours = 0;
 
@@ -108,6 +111,16 @@ class SprintController extends Controller
                 // check tasks confirmation to show Sprint in green color
                 if ($task->status_id != 5) {
                     $all_tasks_confirmed = false;
+                }
+            }
+        }
+
+        foreach($hours as $hour) {
+            if ($hour <= $sprint->hours - $task_total_hours) {
+                if ($hour == 1) {
+                    $task_hours[$hour] = $hour + ' hora';
+                }else{
+                    $task_hours[$hour] = $hour + ' horas';
                 }
             }
         }
@@ -167,6 +180,7 @@ class SprintController extends Controller
                         ->with('tasks', $tasks)
                         ->with('task_total_hours', $task_total_hours)
                         ->with('sprint_done', $all_tasks_confirmed)
+                        ->with('task_hours', $task_hours)
                         ->with('editor', $editor);
                 }
             }
@@ -183,6 +197,7 @@ class SprintController extends Controller
                         ->with('statuses', $statuses_description)
                         ->with('task_total_hours', $task_total_hours)
                         ->with('sprint_done', $all_tasks_confirmed)
+                        ->with('task_hours', $task_hours)
                         ->with('editor', $editor);
                 }
             }
@@ -199,6 +214,7 @@ class SprintController extends Controller
                         ->with('statuses', $statuses_description)
                         ->with('task_total_hours', $task_total_hours)
                         ->with('sprint_done', $all_tasks_confirmed)
+                        ->with('task_hours', $task_hours)
                         ->with('editor', $editor);
                 }
             }
@@ -277,13 +293,30 @@ class SprintController extends Controller
      */
     public function update(Request $request, $project_id, $sprint_id)
     {
-        $this->validate($request, [
-            'name'              => 'required|min:2|max:255',
-            'description'       => 'required|min:4',
-            'starts_on'         => 'required|date|after_or_equal:yesterday',
-            'ends_on'           => 'required|date|after_or_equal:starts_on',
-            'hours'             => 'number|min:1|max:40'
-        ]);
+        if ($request->input('stars_on') != null && $request->input('ends_on') != null && $request->input('hours') != null) {
+            $this->validate($request, [
+                'name'              => 'required|min:2|max:255',
+                'description'       => 'required|min:4',
+                'starts_on'         => 'required|date|after_or_equal:yesterday',
+                'ends_on'           => 'required|date|after_or_equal:starts_on',
+                'hours'             => 'integer|min:1|max:40'
+            ]);
+        }
+
+        if ($request->input('hours') != null) {
+            $this->validate($request, [
+                'name'              => 'required|min:2|max:255',
+                'description'       => 'required|min:4',
+                'hours'             => 'integer|min:1|max:40'
+            ]);
+        }else {
+            $this->validate($request, [
+                'name'              => 'required|min:2|max:255',
+                'description'       => 'required|min:4',
+                'starts_on'         => 'required|date|after_or_equal:yesterday',
+                'ends_on'           => 'required|date|after_or_equal:starts_on',
+            ]);
+        }
 
         $project = Project::find($project_id);
         $sprint = Sprint::find($sprint_id);
@@ -293,6 +326,7 @@ class SprintController extends Controller
         $sprint->project_id = $project->id;
         $sprint->starts_on = $request->input('starts_on');
         $sprint->ends_on = $request->input('ends_on');
+        $sprint->hours = $request->input('hours');
         $sprint->save();
 
         Session::flash('success', 'Sprint actualizado sin problemas.');
