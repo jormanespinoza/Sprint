@@ -56,7 +56,7 @@
                     <div class="col-md-6">
                         <div class="form-group{{ $errors->has('develop_url') ? ' has-error' : '' }}">
                             {{ Form::label('develop_url', 'URL Desarrollo', ['class' => 'control-label', 'for' => 'description']) }}
-                            {{ Form::text('develop_url', null, ['class' => 'form-control', 'for' => 'develop_url']) }}
+                            {{ Form::text('develop_url', $sprint->starts_on->format('d-m-y'), ['class' => 'form-control', 'for' => 'develop_url']) }}
                             @if ($errors->has('develop_url'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('develop_url') }}</strong>
@@ -67,7 +67,7 @@
                     <div class="col-md-6">
                         <div class="form-group{{ $errors->has('production_url') ? ' has-error' : '' }}">
                             {{ Form::label('production_url', 'URL Producción', ['class' => 'control-label', 'for' => 'description']) }}
-                            {{ Form::text('production_url', null, ['class' => 'form-control', 'for' => 'production_url']) }}
+                            {{ Form::text('production_url', $sprint->ends_on->format('d-m-y'), ['class' => 'form-control', 'for' => 'production_url']) }}
                             @if ($errors->has('production_url'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('production_url') }}</strong>

@@ -10,6 +10,7 @@ use App\Models\Status;
 use App\Models\Task;
 use Session;
 use Purifier;
+use Carbon\Carbon;
 
 class SprintController extends Controller
 {
@@ -61,13 +62,24 @@ class SprintController extends Controller
      */
     public function store(Request $request, $project_id)
     {
-        $this->validate($request, [
-            'name'              => 'required|min:2|max:255',
-            'description'       => 'required|min:4',
-            'starts_on'         => 'date|after_or_equal:yesterday',
-            'ends_on'           => 'date|after_or_equal:starts_on',
-            'hours'             => 'integer|min:1|max:40'
-        ]);
+        if ($request->starts_on != null || $request->ends_on != null ) {
+            $this->validate($request, [
+                'name'              => 'required|min:2|max:255',
+                'description'       => 'required|min:4',
+                'starts_on'         => 'date|before_or_equal:ends_on',
+                'ends_on'           => 'date|after_or_equal:starts_on',
+                'hours'             => 'integer|min:1|max:40'
+            ]);
+
+            $sprint->starts_on = $request->starts_on;
+            $sprint->ends_on = $request->ends_on;
+        }else {
+            $this->validate($request, [
+                'name'              => 'required|min:2|max:255',
+                'description'       => 'required|min:4',
+                'hours'             => 'integer|min:1|max:40'
+            ]);
+        }
 
         $project = Project::find($project_id);
 
@@ -75,9 +87,8 @@ class SprintController extends Controller
         $sprint->name = $request->name;
         $sprint->description = Purifier::clean($request->description);
         $sprint->project_id = $project->id;
-        $sprint->starts_on = $request->starts_on;
-        $sprint->ends_on = $request->ends_on;
         $sprint->hours = $request->hours;
+
         $sprint->save();
 
         Session::flash('success', 'Sprint generado sin problemas.');
@@ -293,39 +304,34 @@ class SprintController extends Controller
      */
     public function update(Request $request, $project_id, $sprint_id)
     {
-        if ($request->input('stars_on') != null && $request->input('ends_on') != null && $request->input('hours') != null) {
-            $this->validate($request, [
-                'name'              => 'required|min:2|max:255',
-                'description'       => 'required|min:4',
-                'starts_on'         => 'required|date|after_or_equal:yesterday',
-                'ends_on'           => 'required|date|after_or_equal:starts_on',
-                'hours'             => 'integer|min:1|max:40'
-            ]);
-        }
+        $project = Project::find($project_id);
+        $sprint = Sprint::find($sprint_id);
 
-        if ($request->input('hours') != null) {
+        if ($request->input('starts_on ') != null || $request->input('ends_on') != null ) {
             $this->validate($request, [
                 'name'              => 'required|min:2|max:255',
                 'description'       => 'required|min:4',
+                'starts_on'         => 'date|before_or_equal:ends_on',
+                'ends_on'           => 'date|after_or_equal:starts_on',
                 'hours'             => 'integer|min:1|max:40'
             ]);
+
+            $sprint->starts_on = $request->input('starts_on');
+            $sprint->ends_on = $request->input('ends_on');
         }else {
             $this->validate($request, [
                 'name'              => 'required|min:2|max:255',
                 'description'       => 'required|min:4',
-                'starts_on'         => 'required|date|after_or_equal:yesterday',
-                'ends_on'           => 'required|date|after_or_equal:starts_on',
+                'hours'             => 'integer|min:1|max:40'
             ]);
-        }
 
-        $project = Project::find($project_id);
-        $sprint = Sprint::find($sprint_id);
+            $sprint->starts_on = $request->input('starts_on');
+            $sprint->ends_on = $request->input('ends_on');
+        }
 
         $sprint->name = $request->input('name');
         $sprint->description = Purifier::clean($request->input('description'));
         $sprint->project_id = $project->id;
-        $sprint->starts_on = $request->input('starts_on');
-        $sprint->ends_on = $request->input('ends_on');
         $sprint->hours = $request->input('hours');
         $sprint->save();
 

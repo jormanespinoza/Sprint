@@ -20,7 +20,7 @@
             </a>
         </li>
         <li class="active">
-            <span class="glyphicon glyphicon-inbox"></span> Nuevo Sprint
+            <span class="glyphicon glyphicon-tasks"></span> Nuevo Sprint
         </li>
     </ol>
 
@@ -61,7 +61,7 @@
                         {{ Form::label('starts_on', 'Fecha de Inicio') }}
                         <div class="input-group">
                             <span class="input-group-addon" id="ends_on"><span class="glyphicon glyphicon-calendar"></span></span>
-                            {{ Form::date('starts_on', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
+                            {{ Form::date('starts_on', \Carbon\Carbon::today()->format('d-m-y'), ['class' => 'form-control']) }}
                         </div>
                         @if ($errors->has('starts_on'))
                             <span class="help-block">
@@ -74,7 +74,7 @@
                         {{ Form::label('ends_on', 'Fecha de Cierre') }}
                         <div class="input-group">
                             <span class="input-group-addon" id="ends_on"><span class="glyphicon glyphicon-calendar"></span></span>
-                            {{ Form::date('ends_on', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
+                            {{ Form::date('ends_on', \Carbon\Carbon::today()->format('d-m-y'), ['class' => 'form-control']) }}
                         </div>
                         @if ($errors->has('ends_on'))
                             <span class="help-block">

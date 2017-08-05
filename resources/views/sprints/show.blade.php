@@ -20,11 +20,11 @@
         </li>
         <li>
             <a href="{{ route('project.show', $project->id) }}">
-                <span class="glyphicon glyphicon-inbox"></span> Sprints
+                <span class="glyphicon glyphicon-tasks"></span> Sprints
             </a>
         </li>
         <li class="active">
-            <span class="glyphicon glyphicon-open-file"></span> {{ $sprint->name }}
+            <span class="glyphicon glyphicon-copy"></span> {{ $sprint->name }}
         </li>
     </ol>
 
@@ -353,7 +353,7 @@
                                                     <ul class="list-inline text-right">
                                                         <li>
                                                             {{-- Delete Task --}}
-                                                            <button type="button" class="btn btndefault" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Eliminar" data-dismiss="modal">
+                                                            <button type="button" class="btn btn-danger" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Eliminar" data-dismiss="modal">
                                                                 <span class="glyphicon glyphicon-remove-sign"></span> Borrar
                                                             </button>
                                                         </li>
@@ -772,16 +772,19 @@
 
                 <div class="modal-body">
                     {!! $sprint->description !!}
-                    <div class="row list-group">
-                        <div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 text-center">
-                            <div class="list-group-item">
-                                <span class="glyphicon glyphicon-calendar text-success"></span> <span class="text-success date-font-size"> Inicia: {{ $sprint->starts_on }}</span>
-                            </div>
-                            <div class="list-group-item">
-                                <span class="glyphicon glyphicon-calendar text-danger"></span> <span class="text-danger date-font-size"> Cierra: {{ $sprint->ends_on }}</span>
+
+                    @if ($sprint->start_on != null || $sprint->ends_on != null)
+                        <div class="row list-group">
+                            <div class="col-md-4 col-md-offset-8 col-sm-6 col-sm-offset-6 text-center">
+                                <div class="list-group-item">
+                                    <span class="glyphicon glyphicon-calendar text-success"></span> <span class="text-success date-font-size"> Inicia: {{ $sprint->starts_on->format('d/m/Y') }}</span>
+                                </div>
+                                <div class="list-group-item">
+                                    <span class="glyphicon glyphicon-calendar text-danger"></span> <span class="text-danger date-font-size"> Cierra: {{ $sprint->ends_on->format('d/m/Y') }}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
 
                 <div class="modal-footer">

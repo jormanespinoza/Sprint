@@ -20,7 +20,7 @@
         </li>
         <li>
             <a href="{{ route('sprint.show', [$project->id, $sprint->id]) }}">
-                <span class="glyphicon glyphicon-inbox"></span> {{ $sprint->name }}
+                <span class="glyphicon glyphicon-tasks"></span> {{ $sprint->name }}
             </a>
         </li>
         <li class="active">
@@ -67,7 +67,7 @@
                         {{ Form::label('starts_on', 'Fecha de Inicio') }}
                         <div class="input-group">
                             <span class="input-group-addon" id="ends_on"><span class="glyphicon glyphicon-calendar"></span></span>
-                            {{ Form::date('starts_on', null, ['class' => 'form-control']) }}
+                            {{ Form::date('starts_on', $sprint->starts_on, ['class' => 'form-control']) }}
                         </div>
                         @if ($errors->has('starts_on'))
                             <span class="help-block">
@@ -80,7 +80,7 @@
                         {{ Form::label('ends_on', 'Fecha de Cierre') }}
                         <div class="input-group">
                             <span class="input-group-addon" id="ends_on"><span class="glyphicon glyphicon-calendar"></span></span>
-                            {{ Form::date('ends_on', null, ['class' => 'form-control']) }}
+                            {{ Form::date('ends_on', $sprint->ends_on, ['class' => 'form-control']) }}
                         </div>
                         @if ($errors->has('ends_on'))
                             <span class="help-block">
