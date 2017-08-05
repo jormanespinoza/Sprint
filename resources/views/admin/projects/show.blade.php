@@ -25,34 +25,11 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-8 col-xs-6">
-                    <div class="project-title">
-                        <span>{{ $project->name }}</span>
-                    </div>
-                </div>
-                <div class="col-md-4 col-xs-6">
-                    <div class="pull-right">
-                        {{-- Web View --}}
-                        <a class="btn btn-block btn-default actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                            <span class="glyphicon glyphicon-remove-circle"></span> Eliminar
-                        </a>
-                        {{-- Mobile View --}}
-                         <a class="btn btn-sm btn-default actions-show-project-mobile" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
-                            <span class="glyphicon glyphicon-remove-circle"></span>
-                        </a>
-                    </div>
-                     <div class="pull-right">
-                        {{-- Web View --}}
-                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-block btn-default actions-show-project-web" title="Editar">
-                            <span class="glyphicon glyphicon-edit"></span> Editar
-                        </a>
-                        {{-- Mobile View --}}
-                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-default actions-show-project-mobile" title="Editar">
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </a>
-                    </div>
-                </div>
+            <div class="project-title">
+                <span>{{ $project->name }}</span>
+                <a type="button" data-toggle="modal" data-target="#projectOptionsModal" title="Información">
+                    <i class="glyphicon glyphicon-option-vertical"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -310,6 +287,36 @@
                             </ul>
                         </div>
                     {{ Form::close() }}
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    {{-- Project Options Modal --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="projectOptionsModal">
+        <div class="modal-dialog" role="dialog" id="model-{{ $project->id }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-cog"></span> Opciones</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="text-right">
+                        <ul class="list-inline">
+                            <li>
+                                {{-- Web View --}}
+                                <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-block btn-warning actions-show-project-web" title="Editar">
+                                    <span class="glyphicon glyphicon-edit"></span> Editar
+                                </a>
+                            </li>
+                            <li>
+                                {{-- Web View --}}
+                                <a class="btn btn-block btn-danger actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                                    <span class="glyphicon glyphicon-remove-circle"></span> Eliminar
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

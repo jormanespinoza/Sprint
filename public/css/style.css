@@ -74,7 +74,6 @@ h5 a.admin-dashboard-link {
 
 .project-title {
     text-transform: uppercase;
-    margin-top: 5px;
     font-size: 16px;
 }
 
@@ -112,6 +111,61 @@ h5 a.admin-dashboard-link {
     width: 1%
 }
 
+tr.task-pending button .glyphicon {
+    color: #000 !important;
+}
+
+tr.task-approved {
+    background-color: #00deec;
+}
+
+tr.task-approved button .glyphicon {
+    color: #000 !important;
+}
+
+tr.task-check {
+    background-color: #FFFC66;
+}
+
+tr.task-check button .glyphicon {
+    color: #000 !important;
+}
+
+tr.task-rejected {
+    background-color: #FF2D14;
+}
+
+tr.task-rejected button .glyphicon {
+    color: #000 !important;
+}
+
+tr.task-confirmed {
+    background-color: #63E3A1;
+}
+
+tr.task-confirmed button .glyphicon {
+    color: #000 !important;
+}
+
+#tasks-table.table>tbody>tr>th, #tasks-table.table>tfoot>tr>th, #tasks-table.table>thead>tr>td, #tasks-table.table>tbody>tr>td, #tasks-table.table>tfoot>tr>td {
+    padding: 8px !important;
+    line-height: 3 !important;
+    border-top: 1px solid #000 !important;
+}
+
+#tasks-table.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: 0px solid #dddddd;
+}
+
+.task-table-text {
+    font-weight: bold;
+}
+
+.options-approved {
+        display: block !important;
+    }
+
 /*
     # Media Querys
     -------------------------------------------
@@ -126,5 +180,8 @@ h5 a.admin-dashboard-link {
     }
     .date-font-size {
         font-size: 12px !important;
+    }
+    .options-approved {
+        display: none !important;
     }
 }

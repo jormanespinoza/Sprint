@@ -124,7 +124,7 @@
 
     @if(count($tasks ) > 0)
         <div class="table-responsive">
-            <table class="table">
+            <table class="table" id="tasks-table">
                 <thead>
                     <th class="col-md-10"></th>
                     <th class="col-md-1"></th>
@@ -137,32 +137,38 @@
                                 case 1:
                                     $_class = 'default';
                                     $_icon = 'fullscreen';
+                                    $_status = 'task-pending';
                                     break;
                                 case 2:
                                     $_class = 'info';
-                                    $_icon = 'ok-circle';
+                                    $_icon = 'ok';
+                                    $_status = 'task-approved';
                                     break;
                                 case 3:
                                     $_class = 'warning';
-                                    $_icon = 'pause';
+                                    $_icon = 'unchecked';
+                                    $_status = 'task-check';
                                     break;
                                 case 4:
                                     $_class = 'danger';
                                     $_icon = 'repeat';
+                                    $_status = 'task-rejected';
                                     break;
                                 case 5:
                                     $_class = 'success';
-                                    $_icon = 'ok-sign';
+                                    $_icon = 'check';
+                                    $_status = 'task-confirmed';
                                     break;
                                 default:
                                     $_class = 'default';
                                     $_icon = 'fullscreen';
+                                    $_status = 'task-pending';
                                     break;
                             }
                         @endphp
-                        <tr class="{{ $_class }}">
-                            <td>{{ substr($task->name, 0, 150) }} {{ strlen($task->name) > 150 ? '...' : '' }}</td>
-                            <td>
+                        <tr class="{{ $_status }}">
+                            <td class="task-table-text">{{ substr($task->name, 0, 150) }} {{ strlen($task->name) > 150 ? '...' : '' }}</td>
+                            <td class="task-table-text">
                                 @if(Auth::user()->role_id == 2 && $task->status_id == 1)
                                     {{-- Edit Task --}}
                                     <button type="button" class="btn btn-xs btn-link" data-toggle="modal" role="button" data-target="#editTaskModal-{{ $task->id }}" title="Editar" data-dismiss="modal">
@@ -188,10 +194,10 @@
 
                                             <div class="modal-body">
                                                 {!! $task->description !!}
-                                                <div class="list-group" style="padding: 5px;">
+                                                <div class="list-group" style="padding-bottom: 5px;">
                                                     <div class="col-md-2 col-md-offset-10 col-sm-6 col-sm-offset-6 text-center">
                                                         <div class="list-group-item">
-                                                            Horas <span class="badge">{{ $task->hours }}
+                                                            {{ $task->hours }} {{ $task->hours > 1 ? "horas" : "hora" }}
                                                         </div> 
                                                     </div>
                                                 </div>
@@ -222,9 +228,9 @@
                                                         <li>
                                                             {{-- Approved Task --}}
                                                             @if($task->status_id == 1)
-                                                                    <button type="button" class="btn btn-info" data-toggle="modal" role="button" data-target="#approveTaskModal-{{ $task->id }}" title="Aprobar Tarea" data-dismiss="modal">
-                                                                        <span class="glyphicon glyphicon-ok-circle"></span> Aprobar
-                                                                    </button>
+                                                                <button type="button" class="btn btn-info" data-toggle="modal" role="button" data-target="#approveTaskModal-{{ $task->id }}" title="Aprobar Tarea" data-dismiss="modal">
+                                                                    <span class="glyphicon glyphicon-ok-circle"></span> Aprobar
+                                                                </button>
                                                             @endif
                                                         </li>
                                                     @else
@@ -266,7 +272,7 @@
                                                     {{-- Task Rejected --}}
                                                     @if($task->status_id == 4 && Auth::user()->role_id != 4)
                                                         <button type="button" class="btn btn-warning" data-toggle="modal" role="button" data-target="#rejectedTaskModal-{{ $task->id }}" title="Confirmar Corrección" data-dismiss="modal">
-                                                            <span class="glyphicon glyphicon-repeat"></span> Corregida
+                                                            <span class="glyphicon glyphicon-repeat"></span> Confirmar Corrección
                                                         </button>
                                                     @endif
                                                 </ul>
@@ -353,21 +359,21 @@
                                                     <ul class="list-inline text-right">
                                                         <li>
                                                             {{-- Delete Task --}}
-                                                            <button type="button" class="btn btn-danger" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Eliminar" data-dismiss="modal">
-                                                                <span class="glyphicon glyphicon-remove-sign"></span> Borrar
+                                                            <button type="button" class="btn btn-danger" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Borrar" data-dismiss="modal">
+                                                                <span class="glyphicon glyphicon-remove-sign"></span> <span class="options-approved">Borrar</span>
                                                             </button>
                                                         </li>
                                                         <li>
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                                <i class="glyphicon glyphicon-remove-circle"></i> Cancelar
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal" title="Cancelar">
+                                                                <i class="glyphicon glyphicon-remove-circle"></i> <span class="options-approved">Cancelar</span>
                                                             </button>
                                                         </li>
                                                         <li>
                                                             @if (Auth::user()->role_id == 2)
                                                                 {{ Form::hidden('editedByLeader', true) }}
                                                                 {{ Form::hidden('status_id', 2) }}
-                                                                <button type="submit" class="btn btn-info">
-                                                                    <span class="glyphicon glyphicon-ok-circle"></span> Aprobar
+                                                                <button type="submit" class="btn btn-info" title="Aprobar">
+                                                                    <span class="glyphicon glyphicon-ok-circle"></span> <span class="options-approved">Aprobar</span>
                                                                 </button>
                                                             @else
                                                                 {{ Form::submit('Actualizar', ['class' => 'btn btn-primary']) }}
@@ -411,7 +417,7 @@
                                     </div><!-- /.modal-dialog -->
                                 </div><!-- /.modal -->
                             </td>
-                            <td class="text-right"><strong>{{ $task->hours }} {{ $task->hours > 1 ? "horas" : "hora" }}</strong></td>
+                            <td class="text-right task-table-text">{{ $task->hours }} {{ $task->hours > 1 ? "horas" : "hora" }}</td>
                             <td>
                                 {{-- Approve Task Modal --}}
                                 <div class="modal fade" tabindex="-1" role="dialog" id="approveTaskModal-{{ $task->id }}">
