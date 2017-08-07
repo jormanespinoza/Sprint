@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\User;
 use App\Models\Status;
+use Mail;
 use Session;
 use Purifier;
 
@@ -120,6 +121,35 @@ class TaskController extends Controller
 
         $task->save();
 
+        // send an email with a notification
+        $personal = [];
+
+        // fetch project's users
+        foreach($project->users as $user) {
+            if ($user->role_id != 4) {
+                $personal[] = $user->email;
+            }
+        }
+
+        $url = '';
+        $task_url = config('app.url') . "/project/$project->id/sprint/$sprint->id/task/$task->id";
+
+        $subject = 'Tarea Creada';
+        $message = "La tarea <strong>$task->name</strong> fue generada en el sistema y se encuentra a la espera de aprobación.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+
+        $data = [
+            'email'=> 'jespinoza@3dlinkweb.com',
+            'subject' => $subject,
+            'bodyMessage' => $message,
+            'personal' => $personal
+        ];
+
+        Mail::send('emails.observation', $data, function ($message) use ($data) {
+            $message->from($data['email']);
+            $message->to($data['personal']);
+            $message->subject($data['subject']);
+        });
+
         Session::flash('success', 'La tarea del sprint fue creada sin problemas.');
         return redirect()->route('sprint.show', [$project->id, $sprint->id]);
     }
@@ -213,9 +243,100 @@ class TaskController extends Controller
         $project = Project::find($project_id);
         $sprint = Sprint::find($sprint_id);
         $task = Task::find($task_id);
+        $personal = [];
+        $clients = [];
+        $observation = '';
 
-        if ($request->input('changing_status')) {
+        if ($request->input('changing_status') || $request->editedByLeader || $request->input('status_id') == 6) {
             $task->status_id = $request->input('status_id');
+
+            // fetch project's users
+            foreach($project->users as $user) {
+                if ($user->role_id != 4) {
+                    $personal[] = $user->email;
+                }else {
+                    $clients[] = $user->email;
+                }
+            }
+
+            $url = '';
+            $task_url = config('app.url') . "/project/$project->id/sprint/$sprint->id/task/$task->id";
+
+            if ($task->status_id == 2) {
+                $subject = 'Tarea Aprobada';
+                $message = "La tarea <strong>$task->name</strong> fue aprobada por el líder de proyecto.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+            }
+
+            if ($task->status_id == 3) {
+                $subject = 'Tarea En Revisión';
+                if ($request->input('observation') != null) {
+                    $observation = $request->input('observation');
+                    $message = "La tarea <strong>$task->name</strong> fue gestionada, la misma se encuentra en revisión.<br>
+                    <strong>Observación:</strong> $observation
+                    <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+                }else {
+                    $message = "La tarea <strong>$task->name</strong> fue gestionada, la misma se encuentra en revisión.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+                }
+            }
+
+            if ($task->status_id == 4) {
+                $subject = 'Tarea Devuelta';
+                $observation = $request->input('observation');
+                $message = "La tarea <strong>$task->name</strong> fue devuelta por el líder de proyecto.<br>
+                <strong>Observación:</strong> $observation
+                <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+            }
+
+            if ($task->status_id == 5) {
+                $subject = 'Tarea Confirmada';
+                if ($request->input('observation') != null) {
+                    $observation = $request->input('observation');
+                    $message = "La tarea <strong>$task->name</strong> fue confirmada.<br>
+                    <strong>Observación:</strong> $observation
+                    <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+                }else {
+                    $message = "La tarea <strong>$task->name</strong> fue confirmada.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+                }
+
+                $subject2 = 'Tarea Completada';
+                $message2 = "La tarea <strong>$task->name</strong> fue sido completada.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ver Tarea</a>";
+
+                $data2client = [
+                    'email'=> 'jespinoza@3dlinkweb.com',
+                    'subject' => $subject2,
+                    'bodyMessage' => $message2,
+                    'clients' => $clients
+                ];
+
+                // send an email with a notification to the client(s)
+                Mail::send('emails.observation', $data2client, function ($message) use ($data2client) {
+                    $message->from($data2client['email']);
+                    $message->to($data2client['clients']);
+                    $message->subject($data2client['subject']);
+                });
+            }
+
+            if ($task->status_id == 6) {
+                $subject = 'Tarea Reactivada';
+                $observation = $request->input('observation');
+                $message = "La tarea <strong>$task->name</strong> fue reactivada por el líder de proyecto.<br>
+                <strong>Observación:</strong> $observation
+                <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+                $task->status_id = 2;
+            }
+
+            $data = [
+                'email'=> 'jespinoza@3dlinkweb.com',
+                'subject' => $subject,
+                'bodyMessage' => $message,
+                'personal' => $personal
+            ];
+            // send an email with a notification
+            Mail::send('emails.observation', $data, function ($message) use ($data) {
+                $message->from($data['email']);
+                $message->to($data['personal']);
+                $message->subject($data['subject']);
+            });
         }else {
             if ($task->status_id == 1 || auth()->user()->role_id == 2) {
                 $this->validate($request, [

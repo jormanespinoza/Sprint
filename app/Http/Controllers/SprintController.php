@@ -146,7 +146,7 @@ class SprintController extends Controller
         }
 
         // fecth all sprint tasks for pagination
-        $tasks = Task::where('sprint_id', $sprint_id)->orderBy('status_id', 'desc')->orderBy('updated_at', 'asc')->paginate(10);
+        $tasks = Task::where('sprint_id', $sprint_id)->orderBy('status_id', 'desc')->orderBy('updated_at', 'asc')->paginate(15);
 
         $leaders = [];
         $developers = [];

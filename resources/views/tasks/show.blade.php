@@ -6,7 +6,7 @@
     <ol class="breadcrumb">
         <li>
             <a href="{{ url('dashboard') }}">
-                <span class="glyphicon glyphicon-folder-close"></span> Proyectos
+                <span class="glyphicon glyphicon-dashboard"></span> Dashboard
             </a>
         </li>
         <li>
@@ -55,9 +55,11 @@
          | <span class="label label-{{ $_class }}"><strong>{{ $task->status->name }}</strong></span>
     </h5>
 
-    <div class="well">
-        {!! $task->description!!}
-    </div>
+    @if ($task->description != null)
+        <div class="well">
+            {!! $task->description!!}
+        </div>
+    @endif
 
     <div class="row list-group">
         <div class="col-md-3 col-md-offset-9 col-sm-5 col-sm-offset-7 text-center">

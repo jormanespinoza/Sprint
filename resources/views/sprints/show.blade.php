@@ -360,12 +360,12 @@
                                                         <li>
                                                             {{-- Delete Task --}}
                                                             <button type="button" class="btn btn-danger" data-toggle="modal" role="button" data-target="#removeTaskModal-{{ $task->id }}" title="Borrar" data-dismiss="modal">
-                                                                <span class="glyphicon glyphicon-remove-sign"></span> <span class="options-approved">Borrar</span>
+                                                                <span class="glyphicon glyphicon-remove-sign"></span> <span class="hidden-xs">Borrar</span>
                                                             </button>
                                                         </li>
                                                         <li>
                                                             <button type="button" class="btn btn-default" data-dismiss="modal" title="Cancelar">
-                                                                <i class="glyphicon glyphicon-remove-circle"></i> <span class="options-approved">Cancelar</span>
+                                                                <i class="glyphicon glyphicon-remove-circle"></i> <span class="hidden-xs">Cancelar</span>
                                                             </button>
                                                         </li>
                                                         <li>
@@ -373,7 +373,7 @@
                                                                 {{ Form::hidden('editedByLeader', true) }}
                                                                 {{ Form::hidden('status_id', 2) }}
                                                                 <button type="submit" class="btn btn-info" title="Aprobar">
-                                                                    <span class="glyphicon glyphicon-ok-circle"></span> <span class="options-approved">Aprobar</span>
+                                                                    <span class="glyphicon glyphicon-ok-circle"></span> <span class="hidden-xs">Aprobar</span>
                                                                 </button>
                                                             @else
                                                                 {{ Form::submit('Actualizar', ['class' => 'btn btn-primary']) }}
@@ -462,9 +462,12 @@
                                             </div>
                                             <div class="modal-body">
                                                 <p>¿Confirmas la gestión de la tarea?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <ul class="list-inline">
+                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                    <div class="form-group">
+                                                        {{ Form::textarea('observation', null, ['class' => 'form-control', 'rows' => 2, 'placeholder' => 'Observación (Opcional)']) }}
+                                                    </div>
+
+                                                <ul class="list-inline text-right">
                                                     <li>
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">
                                                             <i class="glyphicon glyphicon-remove-sign"></i> No
@@ -472,11 +475,10 @@
                                                     </li>
 
                                                     <li>
-                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                            {{ Form::hidden('_method', 'PUT') }}
-                                                            {{ Form::hidden('changing_status', true) }}
-                                                            {{ Form::hidden('status_id', 3) }}
-                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
+                                                        {{ Form::hidden('_method', 'PUT') }}
+                                                        {{ Form::hidden('changing_status', true) }}
+                                                        {{ Form::hidden('status_id', 3) }}
+                                                        {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
                                                         {{ Form::close() }}
                                                     </li>
                                                 </ul>
@@ -495,24 +497,26 @@
                                             </div>
                                             <div class="modal-body">
                                                 <p>¿Confirmas la devolución de la tarea?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <ul class="list-inline">
-                                                    <li>
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                        </button>
-                                                    </li>
+                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id],  'data-parsley-validate' => '']) }}
+                                                    <div class="form-group">
+                                                        {{ Form::textarea('observation', null, ['class' => 'form-control', 'rows' => 2, 'placeholder' => 'Observación (Requerida)', 'required' => '']) }}
+                                                    </div>
 
-                                                    <li>
-                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                    <ul class="list-inline text-right">
+                                                        <li>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                                <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
                                                             {{ Form::hidden('_method', 'PUT') }}
                                                             {{ Form::hidden('changing_status', true) }}
                                                             {{ Form::hidden('status_id', 4) }}
                                                             {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-danger']) }}
-                                                        {{ Form::close() }}
-                                                    </li>
-                                                </ul>
+                                                            {{ Form::close() }}
+                                                        </li>
+                                                    </ul>
                                             </div>
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
@@ -528,24 +532,27 @@
                                             </div>
                                             <div class="modal-body">
                                                 <p>¿Confirmas que la gestión de la tarea se realizó de forma completa?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <ul class="list-inline">
-                                                    <li>
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                            <i class="glyphicon glyphicon-remove-sign"></i> No
-                                                        </button>
-                                                    </li>
+                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                    <div class="form-group">
+                                                        {{ Form::textarea('observation', null, ['class' => 'form-control', 'rows' => 2, 'placeholder' => 'Observación (Opcional)']) }}
+                                                    </div>
 
-                                                    <li>
-                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                    <ul class="list-inline text-right">
+                                                        <li>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                                <i class="glyphicon glyphicon-remove-sign"></i> No
+                                                            </button>
+                                                        </li>
+
+                                                        <li>
                                                             {{ Form::hidden('_method', 'PUT') }}
                                                             {{ Form::hidden('changing_status', true) }}
                                                             {{ Form::hidden('status_id', 5) }}
                                                             {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-success']) }}
-                                                        {{ Form::close() }}
-                                                    </li>
-                                                </ul>
+                                                            {{ Form::close() }}
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal-dialog -->
@@ -594,9 +601,11 @@
                                             </div>
                                             <div class="modal-body">
                                                 <p>¿Deseas reactivar la tarea?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <ul class="list-inline">
+                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
+                                                <div class="form-group">
+                                                    {{ Form::textarea('observation', null, ['class' => 'form-control', 'rows' => 2, 'placeholder' => 'Observación (Requerido)', 'required' => '']) }}
+                                                </div>
+                                                <ul class="list-inline text-right">
                                                     <li>
                                                         <button type="button" class="btn btn-success" data-dismiss="modal">
                                                             <i class="glyphicon glyphicon-remove-sign"></i> No
@@ -604,11 +613,10 @@
                                                     </li>
 
                                                     <li>
-                                                        {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id]]) }}
-                                                            {{ Form::hidden('_method', 'PUT') }}
-                                                            {{ Form::hidden('changing_status', true) }}
-                                                            {{ Form::hidden('status_id', 2) }}
-                                                            {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-default']) }}
+                                                        {{ Form::hidden('_method', 'PUT') }}
+                                                        {{ Form::hidden('changing_status', true) }}
+                                                        {{ Form::hidden('status_id', 6) }}
+                                                        {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-default']) }}
                                                         {{ Form::close() }}
                                                     </li>
                                                 </ul>

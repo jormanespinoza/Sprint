@@ -311,7 +311,7 @@
                             </li>
                             <li>
                                 {{-- Web View --}}
-                                <a class="btn btn-block btn-danger actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar">
+                                <a class="btn btn-block btn-danger actions-show-project-web" type="button" data-toggle="modal" data-target="#confirmationModal" title="Eliminar" data-dismiss="modal">
                                     <span class="glyphicon glyphicon-remove-circle"></span> Eliminar
                                 </a>
                             </li>
