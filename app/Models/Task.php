@@ -18,4 +18,9 @@ class Task extends Model
     {
         return $this->belongsTo('App\Models\Status');
     }
+
+    public function observations()
+    {
+        return $this->hasMany('App\Models\Observation');
+    }
 }

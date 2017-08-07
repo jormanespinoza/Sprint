@@ -23,10 +23,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
     Route::get('/', 'AdminController@getInfo');
     Route::resource('users', 'UserController');
     Route::resource('projects', 'ProjectsController');
+
     Route::put('projects/{project}/update', [
         'uses' => 'ProjectsController@updateAssignedUsers',
         'as' => 'projects.updateAssignedUsers'
     ]);
+
     Route::get('contact', 'PageController@getAdminContact');
     Route::post('contact', 'PageController@postAdminContact');
 });
@@ -35,10 +37,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
 Route::get('contact', 'PageController@getContact');
 Route::post('contact', 'PageController@postContact');
 Route::get('project/{project}', 'ProjectController@show')->name('project.show');
+
 Route::group(['prefix' => 'project/{project}'], function() {
     Route::resource('sprint', 'SprintController', ['except' => 'index']);
 });
+
 Route::group(['prefix' => 'project/{project}/sprint/{sprint}'], function() {
     Route::resource('task', 'TaskController', ['except' => 'index']);
 });
+
+Route::group(['prefix' => 'project/{project}/sprint/{sprint}/task/{task}'], function() {
+    Route::resource('observation', 'ObservationController', ['only' => 'store']);
+});
+
 Route::resource('profile', 'ProfileController', ['except' => ['index', 'create', 'store', 'destroy']]);

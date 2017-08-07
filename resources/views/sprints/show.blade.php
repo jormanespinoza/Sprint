@@ -202,6 +202,50 @@
                                                     </div>
                                                 </div>
                                                 <br>
+
+                                                @if(count($task->observations) > 0)
+                                                    <span class="glyphicon glyphicon-send"></span> Notas
+
+                                                    <div class="row">
+                                                        <div class="col-md-10 col-md-offset-1">
+                                                            @foreach($task->observations as $observation)
+                                                                <div class="row task-comments">
+                                                                    <div class="col-md-1 col-sm-2 col-xs-3">
+                                                                        <img src="{{ "https://www.gravatar.com/avatar/" . md5(strtolower(trim($observation->user->email))) . "?d=retro" }}" class="img-circle user-observation" alt="Avatar">
+                                                                    </div>
+
+                                                                    <div class="col-md-2 col-sm-10 col-xs-9">
+                                                                        {{ $observation->user->first_name }}
+                                                                        @php
+                                                                            switch ($observation->user->role_id) {
+                                                                                case 1:
+                                                                                    $_class = 'success';
+                                                                                    break;
+                                                                                case 2:
+                                                                                    $_class = 'info';
+                                                                                    break;
+                                                                                case 3:
+                                                                                    $_class = 'primary';
+                                                                                    break;
+                                                                                case 4:
+                                                                                    $_class = 'default';
+                                                                                    break;
+                                                                                default:
+                                                                                    $_class = 'default';
+                                                                                    break;
+                                                                            }
+                                                                        @endphp
+                                                                        <span class="label label-{{ $_class }}"><b>{{ $observation->user->role->name }}</b></span>
+                                                                    </div>
+
+                                                                    <div class="col-md-9 col-sm-12 col-xs-12" style="font-weight: normal;">
+                                                                        {{ $observation->comment }}
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
 
                                             <div class="modal-footer">
@@ -262,6 +306,13 @@
                                                         </li>
                                                     @endif
 
+                                                    {{-- Task Rejected --}}
+                                                    @if($task->status_id == 4 && Auth::user()->role_id != 4)
+                                                        <button type="button" class="btn btn-warning" data-toggle="modal" role="button" data-target="#rejectedTaskModal-{{ $task->id }}" title="Confirmar Corrección" data-dismiss="modal">
+                                                            <span class="glyphicon glyphicon-repeat"></span> Confirmar Corrección
+                                                        </button>
+                                                    @endif
+
                                                     {{-- Task Confirmed --}}
                                                     @if($task->status_id == 5 && Auth::user()->role_id == 2)
                                                         <button type="button" class="btn btn-default" data-toggle="modal" role="button" data-target="#reactivateTaskModal-{{ $task->id }}" title="Reactivar Tarea" data-dismiss="modal">
@@ -269,11 +320,16 @@
                                                         </button>
                                                     @endif
 
-                                                    {{-- Task Rejected --}}
-                                                    @if($task->status_id == 4 && Auth::user()->role_id != 4)
-                                                        <button type="button" class="btn btn-warning" data-toggle="modal" role="button" data-target="#rejectedTaskModal-{{ $task->id }}" title="Confirmar Corrección" data-dismiss="modal">
-                                                            <span class="glyphicon glyphicon-repeat"></span> Confirmar Corrección
+                                                    @if($task->status_id == 5 && Auth::user()->role_id == 4 && count($task->observations) % 2 == 0)
+                                                        <button type="button" class="btn btn-success" data-toggle="modal" role="button" data-target="#observationTaskModal-{{ $task->id }}" title="Comentar Tarea" data-dismiss="modal">
+                                                            <span class="glyphicon glyphicon-comment"></span> Comentar
                                                         </button>
+                                                    @else
+                                                        @if(Auth::user()->role_id == 2 && count($task->observations) > 0 && count($task->observations) % 2 != 0)
+                                                            <button type="button" class="btn btn-warning" data-toggle="modal" role="button" data-target="#observationTaskModal-{{ $task->id }}" title="Comentar Tarea" data-dismiss="modal">
+                                                                <span class="glyphicon glyphicon-comment"></span> Responder
+                                                            </button>
+                                                        @endif
                                                     @endif
                                                 </ul>
                                             </div>
@@ -497,7 +553,7 @@
                                             </div>
                                             <div class="modal-body">
                                                 <p>¿Confirmas la devolución de la tarea?</p>
-                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id],  'data-parsley-validate' => '']) }}
+                                                {{ Form::open(['route' => ['task.update', $project->id, $sprint->id, $task->id], 'data-parsley-validate' => '']) }}
                                                     <div class="form-group">
                                                         {{ Form::textarea('observation', null, ['class' => 'form-control', 'rows' => 2, 'placeholder' => 'Observación (Requerida)', 'required' => '']) }}
                                                     </div>
@@ -617,6 +673,40 @@
                                                         {{ Form::hidden('changing_status', true) }}
                                                         {{ Form::hidden('status_id', 6) }}
                                                         {{ Form::button('<i class="glyphicon glyphicon-ok-sign"></i> Sí', ['type' => 'submit', 'class' => 'btn btn-default']) }}
+                                                        {{ Form::close() }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+
+                                {{-- Observation Task Modal --}}
+                                <div class="modal fade" tabindex="-1" role="dialog" id="observationTaskModal-{{ $task->id }}">
+                                    <div class="modal-dialog" role="dialog" id="model-{{ $task->id }}">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title"><span class="glyphicon glyphicon-send"></span> Notas</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="well">
+                                                    <strong>Tarea:</strong> {{ $task->name }}
+                                                </div>
+                                                {{ Form::open(['route' => ['observation.store', $project->id, $sprint->id, $task->id], 'data-parsley-validate' => '']) }}
+                                                <div class="form-group">
+                                                    {{ Form::textarea('comment', null, ['class' => 'form-control', 'rows' => 3, 'placeholder' => 'Ingrese alguna observación acá...', 'required' => '', 'minlenght' => 5, 'maxlength' => 2000]) }}
+                                                </div>
+                                                <ul class="list-inline text-right">
+                                                    <li>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            <i class="glyphicon glyphicon-remove-sign"></i> Cancelar
+                                                        </button>
+                                                    </li>
+
+                                                    <li>
+                                                        {{ Form::hidden('user_id', Auth::user()->id) }}
+                                                        {{ Form::button('<i class="glyphicon glyphicon-send"></i> Comentar', ['type' => 'submit', 'class' => 'btn btn-success']) }}
                                                         {{ Form::close() }}
                                                     </li>
                                                 </ul>

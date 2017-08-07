@@ -28,9 +28,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    /*
-        Model relationships
-    */
     public function role()
     {
         return $this->belongsTo('App\Models\Role');
@@ -43,5 +40,9 @@ class User extends Authenticatable
 
     public function profile() {
         return $this->hasOne('App\Models\Profile');
+    }
+
+    public function observation() {
+        return $this->hasMany('App\Models\Observation');
     }
 }
