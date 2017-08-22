@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Profile;
 use Session;
+use Mail;
 use Propaganistas\LaravelIntl\Facades\Country;
 
 class UserController extends Controller
@@ -70,6 +71,30 @@ class UserController extends Controller
         $profile = new Profile;
         $profile->user_id = $user->id;
         $profile->save();
+
+        // send email to new user
+        $url = config('app.url');
+        $subject = '3D Sprint - Nuevo usuario registrado';
+        $message = "Hola $request->first_name,<br><br>
+        Hemos generado un nuevo usuario para ti en la aplicación <a href=\"$url\">3D Sprint</a>, éstas son tus credenciales:<br><br>
+        <ul style=\"list-style: none;\" >
+        <li><strong>Usuario:</strong> $request->email</li>
+        <li><strong>Contraseña:</strong> $request->password</li>
+        </ul><br><br>
+        <a class=\"btn btn-primary\" href=\"$url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a 3D Sprint</a>";
+
+        $data = [
+            'email'=> 'info@3dlinkweb.com',
+            'subject' => $subject,
+            'bodyMessage' => $message,
+            'user' =>  $request->email
+        ];
+        // send an email with a notification
+        Mail::send('emails.new_user', $data, function ($message) use ($data) {
+        $message->from($data['email']);
+        $message->to($data['user']);
+        $message->subject($data['subject']);
+        });
 
         // send notification and redirects to a view
         Session::flash('success', 'El usuario ha sido creado satisfactoriamente.');

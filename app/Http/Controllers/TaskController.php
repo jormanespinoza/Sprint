@@ -8,9 +8,11 @@ use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\User;
 use App\Models\Status;
+use App\Models\Observation;
 use Mail;
 use Session;
 use Purifier;
+use Config;
 
 class TaskController extends Controller
 {
@@ -126,7 +128,7 @@ class TaskController extends Controller
 
         // fetch project's users
         foreach($project->users as $user) {
-            if ($user->role_id != 4) {
+            if ($user->role_id == 2) {
                 $personal[] = $user->email;
             }
         }
@@ -138,7 +140,7 @@ class TaskController extends Controller
         $message = "La tarea <strong>$task->name</strong> fue generada en el sistema y se encuentra a la espera de aprobación.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
 
         $data = [
-            'email'=> 'jespinoza@3dlinkweb.com',
+            'email'=> 'info@3dlinkweb.com',
             'subject' => $subject,
             'bodyMessage' => $message,
             'personal' => $personal
@@ -243,18 +245,26 @@ class TaskController extends Controller
         $project = Project::find($project_id);
         $sprint = Sprint::find($sprint_id);
         $task = Task::find($task_id);
+        $email = Config::get('mail.username');
         $personal = [];
+        $leaders = [];
+        $developers = [];
         $clients = [];
         $observation = '';
+        
 
         if ($request->input('changing_status') || $request->editedByLeader || $request->input('status_id') == 6) {
             $task->status_id = $request->input('status_id');
 
             // fetch project's users
             foreach($project->users as $user) {
-                if ($user->role_id != 4) {
-                    $personal[] = $user->email;
-                }else {
+                if ($user->role_id == 2) {
+                    $leaders[] = $user->email;
+                }
+                if($user->role_id == 3) {
+                    $developers[] = $user->email;
+                }
+                if($user->role_id == 4) {
                     $clients[] = $user->email;
                 }
             }
@@ -268,13 +278,21 @@ class TaskController extends Controller
             }
 
             if ($task->status_id == 3) {
-                $subject = 'Tarea En Revisión';
                 if ($request->input('observation') != null) {
+                    $subject = 'Tarea En Revisión (Observación añadida)';
                     $observation = $request->input('observation');
                     $message = "La tarea <strong>$task->name</strong> fue gestionada, la misma se encuentra en revisión.<br>
                     <strong>Observación:</strong> $observation
                     <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+
+                    // create observation
+                    $observation = new Observation;
+                    $observation->comment = $request->input('observation');
+                    $observation->user_id = auth()->user()->id;
+                    $observation->task_id = $task->id;
+                    $observation->save();
                 }else {
+                    $subject = 'Tarea En Revisión';
                     $message = "La tarea <strong>$task->name</strong> fue gestionada, la misma se encuentra en revisión.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
                 }
             }
@@ -285,16 +303,29 @@ class TaskController extends Controller
                 $message = "La tarea <strong>$task->name</strong> fue devuelta por el líder de proyecto.<br>
                 <strong>Observación:</strong> $observation
                 <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+                // create observation
+                $observation = new Observation;
+                $observation->comment = $request->input('observation');
+                $observation->user_id = auth()->user()->id;
+                $observation->task_id = $task->id;
+                $observation->save();
             }
 
             if ($task->status_id == 5) {
-                $subject = 'Tarea Confirmada';
                 if ($request->input('observation') != null) {
+                    $subject = 'Tarea Confirmada (Observación añadida)';
                     $observation = $request->input('observation');
                     $message = "La tarea <strong>$task->name</strong> fue confirmada.<br>
                     <strong>Observación:</strong> $observation
                     <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
+                    // create observation
+                    $observation = new Observation;
+                    $observation->comment = $request->input('observation');
+                    $observation->user_id = auth()->user()->id;
+                    $observation->task_id = $task->id;
+                    $observation->save();
                 }else {
+                    $subject = 'Tarea Confirmada';
                     $message = "La tarea <strong>$task->name</strong> fue confirmada.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
                 }
 
@@ -302,7 +333,7 @@ class TaskController extends Controller
                 $message2 = "La tarea <strong>$task->name</strong> fue sido completada.<br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ver Tarea</a>";
 
                 $data2client = [
-                    'email'=> 'jespinoza@3dlinkweb.com',
+                    'email'=> 'info@3dlinkweb.com',
                     'subject' => $subject2,
                     'bodyMessage' => $message2,
                     'clients' => $clients
@@ -324,9 +355,29 @@ class TaskController extends Controller
                 <br><br><a class=\"btn btn-primary\" href=\"$task_url\"><span class=\"glyphicon glyphicon-export\"></span> Ir a la Tarea</a>";
                 $task->status_id = 2;
             }
+            
+            switch ($task->status_id) {
+                case 2:
+                    $personal = $developers;
+                    break;
+                case 3:
+                    $personal = $leaders;
+                    break;
+                case 4:
+                    $personal = $developers;
+                    break;
+                case 5:
+                    $personal = $developers + $leaders;
+                    break;
+                case 6:
+                    $personal = $developers;
+                    break;
+                default:
+                    break;
+            }
 
             $data = [
-                'email'=> 'jespinoza@3dlinkweb.com',
+                'email'=> 'info@3dlinkweb.com',
                 'subject' => $subject,
                 'bodyMessage' => $message,
                 'personal' => $personal

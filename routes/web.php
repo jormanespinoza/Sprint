@@ -24,6 +24,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'administrator'], function() 
     Route::resource('users', 'UserController');
     Route::resource('projects', 'ProjectsController');
 
+    Route::get('projects/list', 'ProjectsController@index');
+    Route::get('users/list', 'UserController@index');
+
     Route::put('projects/{project}/update', [
         'uses' => 'ProjectsController@updateAssignedUsers',
         'as' => 'projects.updateAssignedUsers'

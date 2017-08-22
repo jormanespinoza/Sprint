@@ -70,9 +70,6 @@ class SprintController extends Controller
                 'ends_on'           => 'date|after_or_equal:starts_on',
                 'hours'             => 'integer|min:1|max:40'
             ]);
-
-            $sprint->starts_on = $request->starts_on;
-            $sprint->ends_on = $request->ends_on;
         }else {
             $this->validate($request, [
                 'name'              => 'required|min:2|max:255',
@@ -88,6 +85,11 @@ class SprintController extends Controller
         $sprint->description = Purifier::clean($request->description);
         $sprint->project_id = $project->id;
         $sprint->hours = $request->hours;
+        
+        if ($request->starts_on != null || $request->ends_on != null ) {
+            $sprint->starts_on = $request->starts_on;
+            $sprint->ends_on = $request->ends_on;
+        }
 
         $sprint->save();
 
@@ -118,7 +120,14 @@ class SprintController extends Controller
         if (count($tasks) > 0) {
             $all_tasks_confirmed = true;
             foreach($tasks as $task) {
-                $task_total_hours += $task->hours;
+                if (auth()->user()->role_id == 4) {
+                    if ($task->status_id > 1) {
+                        $task_total_hours += $task->hours;
+                    }
+                }else {
+                    $task_total_hours += $task->hours;
+                }
+                
                 // check tasks confirmation to show Sprint in green color
                 if ($task->status_id != 5) {
                     $all_tasks_confirmed = false;

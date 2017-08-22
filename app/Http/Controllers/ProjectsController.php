@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\Sprint;
 use App\Models\Task;
 use Session;
+use Mail;
 use Purifier;
 
 class ProjectsController extends Controller
@@ -86,9 +87,9 @@ class ProjectsController extends Controller
 
         if ($request->develop_url == null && $request->production_url != null) {
             $this->validate($request, [
-                'name'          => 'required|string|min:2|max:255',
-                'description'   => 'required|min:4',
-                'production_url'   => 'url'
+                'name'              => 'required|string|min:2|max:255',
+                'description'       => 'required|min:4',
+                'production_url'    => 'url'
             ]);
         }
 
@@ -112,10 +113,58 @@ class ProjectsController extends Controller
         if ($request->leaders != null || $request->developers != null || $request->clients != null) {
             if ($request->leaders != null) {
                 $users = array_merge($request->leaders);
+
+                $user = User::find($users)->first();
+                $user = $user->toArray();
+
+                // send email to new user
+                $url = config('app.url') . "/project/$project->id";
+                $subject = '3D Sprint - Nuevo Proyecto';
+                $message = "<strong>Proyecto:</strong> $project->name<br><br>
+                Has sido asignado a este proyecto.<br><br>
+                <a class=\"btn btn-primary\" href=\"$url\"><span class=\"glyphicon glyphicon-export\"></span>Ir al Proyecto</a>";
+
+                $data = [
+                    'email'         => 'info@3dlinkweb.com',
+                    'subject'       => $subject,
+                    'bodyMessage'   => $message,
+                    'user'          => $user['email']
+                ];
+
+                // send an email with a notification
+                Mail::send('emails.new_project', $data, function ($message) use ($data) {
+                $message->from($data['email']);
+                $message->to($data['user']);
+                $message->subject($data['subject']);
+                });
             }
 
             if ($request->developers != null) {
                 $users = array_merge($request->developers);
+
+                $user = User::find($users)->first();
+                $user = $user->toArray();
+
+                // send email to new user
+                $url = config('app.url') . "/project/$project->id";
+                $subject = '3D Sprint - Nuevo Proyecto';
+                $message = "<strong>Proyecto:</strong> $project->name<br><br>
+                Has sido asignado a este proyecto.<br><br>
+                <a class=\"btn btn-primary\" href=\"$url\"><span class=\"glyphicon glyphicon-export\"></span>Ir al Proyecto</a>";
+
+                $data = [
+                    'email'         => 'info@3dlinkweb.com',
+                    'subject'       => $subject,
+                    'bodyMessage'   => $message,
+                    'user'          => $user['email']
+                ];
+
+                // send an email with a notification
+                Mail::send('emails.new_project', $data, function ($message) use ($data) {
+                $message->from($data['email']);
+                $message->to($data['user']);
+                $message->subject($data['subject']);
+                });
             }
 
             if ($request->clients != null) {
